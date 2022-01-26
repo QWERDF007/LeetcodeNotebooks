@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.13)
 
 
 set(PROJECT_NAME leetcodenotes)
@@ -37,4 +37,12 @@ link_libraries(
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/main.cpp)
 
+add_subdirectory(${PROJECT_SOURCE_DIR}/cc)
+
+include_directories(
+    ${PROJECT_SOURCE_DIR}/cc/array
+    ${PROJECT_SOURCE_DIR}/cc/link
+)
+
 target_include_directories(${PROJECT_NAME} PUBLIC ${CXXOPTS} ${CPUINFO})
+
