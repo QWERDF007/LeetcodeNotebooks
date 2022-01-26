@@ -39,10 +39,5 @@ add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/main.cpp)
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/cc)
 
-include_directories(
-    ${PROJECT_SOURCE_DIR}/cc/array
-    ${PROJECT_SOURCE_DIR}/cc/link
-)
-
 target_include_directories(${PROJECT_NAME} PUBLIC ${CXXOPTS} ${CPUINFO})
 
