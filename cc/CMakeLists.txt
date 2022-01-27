@@ -13,17 +13,20 @@ foreach(item ${SUB_DIR_FILES})
         aux_source_directory(${item} ${item}_SRC)
         message(STATUS "add '${${item}_SRC}' to '${TARGET_NAME}'")
         list(APPEND SUB_DIR_SRCS ${${item}_SRC})
-        list(APPEND SUB_DIR_INCS ${CMAKE_CURRENT_SOURCE_DIR}/${item})
+        list(APPEND SUB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${item})
     endif()
 endforeach()
+
+file(GLOB SUB_INCS *.h *.hpp */*.h */*.hpp)
 
 target_sources(${TARGET_NAME}
     PRIVATE
     ${SUB_DIR_SRCS}
+    ${SUB_INCS}
 )
 
 target_include_directories(${TARGET_NAME}
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${SUB_DIR_INCS}
+    ${SUB_INCLUDE_DIR}
 )
