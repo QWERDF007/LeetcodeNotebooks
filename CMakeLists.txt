@@ -20,15 +20,27 @@ if (NOT TARGET benchmark::benchmark)
 endif()
 
 # cxxopts
-set(CXXOPTS ${PROJECT_SOURCE_DIR}/external/cxxopts/include)
+# set(CXXOPTS ${PROJECT_SOURCE_DIR}/external/cxxopts/include)
+# include_directories(
+#     ${PROJECT_SOURCE_DIR}/external/cxxopts/include
+# )
 
-link_libraries(
-    benchmark::benchmark
-)
+# link_libraries(
+#     benchmark::benchmark
+# )
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/main.cpp)
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/cc)
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${CXXOPTS})
+# 
+target_include_directories(${PROJECT_NAME} 
+    PUBLIC 
+    ${PROJECT_SOURCE_DIR}/external/cxxopts/include
+)
+
+target_link_libraries(${PROJECT_NAME} 
+    PRIVATE
+    benchmark::benchmark
+)
 
