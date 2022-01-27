@@ -22,22 +22,13 @@ endif()
 # cxxopts
 set(CXXOPTS ${PROJECT_SOURCE_DIR}/external/cxxopts/include)
 
-# cpuinfo
-set(CPUINFO_BUILD_UNIT_TESTS OFF CACHE BOOL "Disable cpuinfo unit testing.")
-set(CPUINFO_BUILD_MOCK_TESTS OFF CACHE BOOL "Disable cpuinfo mock test.")
-set(CPUINFO_BUILD_BENCHMARKS OFF CACHE BOOL "Disable cpuinfo build benchmark.")
-set(CPUINFO_BUILD_PKG_CONFIG OFF CACHE BOOL "Disable cpuinfo build pkg config.")
-add_subdirectory(${PROJECT_SOURCE_DIR}/external/cpuinfo)
-set(CPUINFO ${PROJECT_SOURCE_DIR}/external/cpuinfo/include)
-
 link_libraries(
     benchmark::benchmark
-    cpuinfo
 )
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/main.cpp)
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/cc)
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${CXXOPTS} ${CPUINFO})
+target_include_directories(${PROJECT_NAME} PUBLIC ${CXXOPTS})
 
