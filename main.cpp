@@ -11,6 +11,7 @@
 int main(int argc, char* argv[])
 {
     cxxopts::Options options(argv[0], "Leetcode C++ Solutions");
+    options.allow_unrecognised_options();
     options.add_options()
         ("t,type", "problem type", cxxopts::value<std::string>())
         ("i,pid", "problem id", cxxopts::value<int>())
@@ -39,6 +40,6 @@ int main(int argc, char* argv[])
     benchmark::Initialize(&argc, argv);
     // if (benchmark::ReportUnrecognizedArguments(argc, argv)) 
     //     return 1;
-    benchmark::RunSpecifiedBenchmarks();                              
+    benchmark::RunSpecifiedBenchmarks();    
     benchmark::Shutdown();
 }
