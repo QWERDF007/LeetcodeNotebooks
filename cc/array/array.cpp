@@ -69,20 +69,19 @@ std::string TwoSum::Benchmark() {
 
 std::vector<int> TwoSum::Solution1(std::vector<int>& nums, int target)
 {
-    for (int i = 0; i < nums.size() - 1; i++)
+    int n = nums.size();
+    for (int i = 0; i < n; i++)
     {
-        for (int j = i + 1; j < nums.size(); j++)
+        for (int j = i + 1; j < n; j++)
         {
             if (nums[i] + nums[j] == target)
             {
-                std::vector<int> result;
-                result.push_back(i);
-                result.push_back(j);
-                return result;
+                return { i,j };
             }
 
         }
     }
+    return {};
 }
 
 
