@@ -1,14 +1,28 @@
 # Leetcode 题解
 
-Windows:
+- Windows:
 
-```shell
-build.bat --build --config Release --parallel --update
-```
+  build
 
-Linux:
+  ```shell
+  build.bat --build --config Release --parallel --update
+  ```
 
-```bash
-build.sh --build --config Release --parallel --update
-```
+  build & test
+
+  ```shell
+  build.bat --build --update --config Release --test
+  ```
+
+- Linux:
+
+  ```shell
+  ./build.sh --build --config Release --parallel --update
+  ```
+
+  build & test
+
+  ```shell
+  ./build.sh --build --config Release --parallel --update --test
+  ```
 
