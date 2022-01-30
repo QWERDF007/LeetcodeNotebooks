@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 
-
-set(PROJECT_NAME leetcodenotes)
-project(${PROJECT_NAME} C CXX)
+project(leetcodenotes C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -19,28 +17,34 @@ if (NOT TARGET benchmark::benchmark)
     add_library(benchmark::benchmark ALIAS benchmark)
 endif()
 
-# cxxopts
-# set(CXXOPTS ${PROJECT_SOURCE_DIR}/external/cxxopts/include)
-# include_directories(
-#     ${PROJECT_SOURCE_DIR}/external/cxxopts/include
-# )
-
-# link_libraries(
-#     benchmark::benchmark
-# )
-
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/main.cpp)
+add_executable(leetcodenotes ${PROJECT_SOURCE_DIR}/main.cpp)
+add_executable(leetcodenotes_test)
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/cc)
+add_subdirectory(${PROJECT_SOURCE_DIR}/test)
 
-# 
-target_include_directories(${PROJECT_NAME} 
+# googletest
+set(gtest_force_shared_crt ON)
+add_subdirectory(${PROJECT_SOURCE_DIR}/external/googletest)
+
+target_include_directories(leetcodenotes
     PUBLIC 
     ${PROJECT_SOURCE_DIR}/external/cxxopts/include
 )
 
-target_link_libraries(${PROJECT_NAME} 
+target_link_libraries(leetcodenotes
     PRIVATE
-    benchmark::benchmark
+    benchmark
 )
 
+target_include_directories(leetcodenotes_test
+    PUBLIC 
+    ${PROJECT_SOURCE_DIR}/external/cxxopts/include
+    ${PROJECT_SOURCE_DIR}/external/googletest/googletest/include
+)
+
+target_link_libraries(leetcodenotes_test
+    PRIVATE
+    benchmark
+    gtest_main
+)
