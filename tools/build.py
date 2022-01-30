@@ -154,6 +154,16 @@ def build_targets(args, cmake_path, build_dir, configs, num_parallel_jobs, targe
 
         run_subprocess(cmd_args, env=env)
 
+def run_tests(args, source_dir, configs):
+    for config in configs:
+        if is_windows():
+            test_path = os.path.join(source_dir,"bin",config,"leetcodenotes_test.exe")
+        else:
+            test_path = os.path.join(source_dir,"bin","leetcodenotes_test")
+        cmd_args = [test_path,]
+        run_subprocess(cmd_args)
+
+
 
 def parse_arguments():
     parser = argparse.ArgumentParser(
@@ -185,6 +195,7 @@ def parse_arguments():
         "--parallel", nargs='?', const='0', default='1', type=int,
         help="Use parallel build. The optional value specifies the maximum number of parallel jobs. "
              "If the optional value is 0 or unspecified, it is interpreted as the number of CPUs.")
+    parser.add_argument("--test", action='store_true', help="Test project")
     
     # Arguments needed by CI
     parser.add_argument(
@@ -246,6 +257,9 @@ def main():
     if args.build:
         num_parallel_jobs = os.cpu_count() if args.parallel == 0 else args.parallel
         build_targets(args, cmake_path, build_dir, configs, num_parallel_jobs, args.target)
+    
+    if args.test:
+        run_tests(args, source_dir, configs)
 
 if __name__ == '__main__':
     try:
