@@ -1,7 +1,7 @@
 #pragma once
 
 namespace leetcode {
-namespace ll {
+namespace linkedlist {
     
-} // namespace ll
+} // namespace linkedlist
 } // namespace leetcode
