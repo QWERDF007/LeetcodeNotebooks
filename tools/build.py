@@ -108,6 +108,9 @@ def generate_build_tree(cmake_path, source_dir, build_dir, configs, cmake_extra_
         cmake_path, cmake_dir,
     ]
 
+    cmake_args += ["-D{}".format(define) for define in cmake_extra_defines]
+    cmake_args += cmake_extra_args
+
     for config in configs:
         config_build_dir = get_config_build_dir(build_dir, config)
         os.makedirs(config_build_dir, exist_ok=True)
