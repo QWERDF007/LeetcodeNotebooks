@@ -1,6 +1,8 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
+
 #include "leetcode_solution.h"
 
 namespace leetcode {
@@ -10,13 +12,17 @@ void ArraySolution(int pid);
 
 class TwoSum : public LeetcodeSolution {
 public:
-    std::string problem() override;
+    std::string Title() override;
 
-    void solution() override;
+    std::string Problem() override;
 
-    std::string benchmark() override;
+    std::string Link() override;
 
-    void _benchmark();
+    void Solution() override;
+
+    std::string Benchmark() override;
+
+    std::vector<int> Solution1(std::vector<int>& nums, int target);
 };
 
 } // namespace array
