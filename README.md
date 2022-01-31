@@ -11,7 +11,7 @@
   build & test
 
   ```shell
-  build.bat --build --update --config Release --test
+  build.bat --build --config Release --parallel --update--test
   ```
 
 - Linux:
