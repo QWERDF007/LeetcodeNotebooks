@@ -6,7 +6,7 @@ namespace leetcode
 {
 
 enum ProblemType {
-    ARRAY = 0,
+    ARRAY = 1,
     LINKED_LIST,
 };
 
@@ -43,7 +43,7 @@ public:
      * @brief leetcode 解决方案
      * 
      */
-    virtual void Solution() = 0;
+    virtual std::string Solution() = 0;
 
     /**
      * @brief 评估 solution 的性能

@@ -8,33 +8,35 @@
 #include "leetcode_solution.h"
 
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
     cxxopts::Options options(argv[0], "Leetcode C++ Solutions");
     options.allow_unrecognised_options();
     options.add_options()
-        ("t,type", "problem type", cxxopts::value<std::string>())
+        ("t,type", "problem type", cxxopts::value<int>())
         ("i,pid", "problem id", cxxopts::value<int>())
         ("h,help", "Print usage");
-    auto opts = options.parse(argc, argv);
+    cxxopts::ParseResult opts = options.parse(argc, argv);
     if (opts.count("help")) {
         std::cout << options.help() << std::endl;
         exit(EXIT_SUCCESS);
     }
 
-    std::string type = "";
-    int pid = -1;
+    int type = -1, pid = -1;
     if (opts.count("type")) {
-        type = opts["type"].as<std::string>();
+        type = opts["type"].as<int>();
     }
     if (opts.count("pid")) {
         pid = opts["pid"].as<int>();
     }
-    if (type == "array") {
+    switch (type) {
+    case leetcode::ARRAY: {
         leetcode::array::ArraySolution(pid);
-    } else {
+        break;
+    }
+    default:
         std::cerr << "no such type: \"" << type << "\"\n";
         exit(EXIT_FAILURE);
+        break;
     }
 
     benchmark::Initialize(&argc, argv);
