@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <unordered_map>
 
 #include <benchmark/benchmark.h>
 
@@ -24,15 +25,14 @@ void ArraySolution(int pid) {
         std::cout << typeid(*solution).name() << std::endl;
         std::cout << solution->Title() << std::endl;
         std::cout << solution->Problem() << std::endl;
-        solution->Solution();
+        std::cout << solution->Solution() << std::endl;
         solution->Benchmark();
         delete solution;
     }
 }
 
 
-std::string TwoSum::Title()
-{
+std::string TwoSum::Title() {
     return "1.两数之和";
 }
 
@@ -48,40 +48,56 @@ std::string TwoSum::Link()
     return "https://leetcode-cn.com/problems/two-sum";
 }
 
-void TwoSum::Solution() {
-    // TODO
+std::string TwoSum::Solution() {
+    return "使用哈希表，时间：O(n)，空间：O(n);";
 }
 
 std::string TwoSum::Benchmark() {
-    for (auto& test_input : { std::vector<int>{1,2,3}, std::vector<int>{1,2,3} }) {
-        
+    TwoSum solution;
+    int n = 10001;
+    std::vector<int> nums(n);
+    for (int i = 0; i < n; ++i) {
+        nums[i] = i+1;
     }
-    benchmark::RegisterBenchmark("BM_TwoSum_Solution1", [](benchmark::State& state) {
-        TwoSum solution;
-        int target = 9;
-        std::vector<int> inputs({ 2,7,11,15 }), res({ 0, 1 });
+    int target = 19999;
+    benchmark::RegisterBenchmark("BM_TwoSum_BruteForceSearch", [](benchmark::State& state, TwoSum solution, std::vector<int> nums, int target) {
         for (auto _ : state)
-            solution.Solution1(inputs, target);
-    });
+            solution.Solution1(nums, target);
+    }, solution, nums, target);
+
+    benchmark::RegisterBenchmark("BM_TwoSum_HashTable", [](benchmark::State& state, TwoSum solution, std::vector<int> nums, int target) {
+        for (auto _ : state)
+            solution.Solution2(nums, target);
+    }, solution, nums, target);
 
     return "TwoSum Benchmark.";
 }
 
-std::vector<int> TwoSum::Solution1(std::vector<int>& nums, int target)
-{
+std::vector<int> TwoSum::Solution1(std::vector<int>& nums, int target) {
     int n = nums.size();
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = i + 1; j < n; j++)
-        {
-            if (nums[i] + nums[j] == target)
-            {
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (nums[i] + nums[j] == target) {
                 return { i,j };
             }
 
         }
     }
     return {};
+}
+
+std::vector<int> TwoSum::Solution2(std::vector<int>& nums, int target) {
+    std::unordered_map<int, int> hashtable;
+    int n = nums.size();
+    for (int i = 0; i < n; ++i) {
+        int d = target - nums[i];
+        auto finded = hashtable.find(d);
+        if (finded != hashtable.end()) {
+            return { hashtable[d], i };
+        }
+        hashtable[nums[i]] = i;
+    }
+    return std::vector<int>();
 }
 
 
