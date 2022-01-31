@@ -43,13 +43,12 @@ std::string TwoSum::Problem() {
         "你可以按任意顺序返回答案。\n";
 }
 
-std::string TwoSum::Link()
-{
+std::string TwoSum::Link() {
     return "https://leetcode-cn.com/problems/two-sum";
 }
 
 std::string TwoSum::Solution() {
-    return "使用哈希表，时间：O(n)，空间：O(n);";
+    return "使用哈希表，时间：O(n)，空间：O(n)。\n";
 }
 
 std::string TwoSum::Benchmark() {
