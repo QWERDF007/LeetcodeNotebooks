@@ -1,5 +1,12 @@
 # Leetcode 题解
 
+| :tiger:              | :cat: | :dog: | :dragon: | :snake: |
+| -------------------- | ----- | ----- | -------- | ------- |
+| [数组](doc/array.md) |       |       |          |         |
+
+## build
+
+
 - Windows:
 
   build
@@ -11,7 +18,7 @@
   build & test
 
   ```shell
-  build.bat --build --config Release --parallel --update--test
+  build.bat --build --config Release --parallel --update --test
   ```
 
 - Linux:
