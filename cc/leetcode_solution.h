@@ -2,21 +2,9 @@
 
 #include <string>
 
-namespace leetcode
-{
+namespace leetcode {
 
-enum ProblemType {
-    ARRAY = 1,
-    LINKED_LIST,
-};
-
-enum SolutionsId {
-    TWO_SUM = 1,
-    ADD_TWO_NUMBERS,
-};
-
-class LeetcodeSolution
-{
+class LeetcodeSolution {
 public:
     /**
      * @brief leetcode 题目
@@ -35,22 +23,41 @@ public:
     /**
      * @brief 链接
      *
-     * @return 链接
+     * @return 
      */
     virtual std::string Link() = 0;
 
     /**
-     * @brief leetcode 解决方案
+     * @brief 解决方案
      * 
+     * @return std::string 
      */
     virtual std::string Solution() = 0;
 
     /**
-     * @brief 评估 solution 的性能
+     * @brief 性能测试
      * 
-     * @return std::string 性能报告
      */
-    virtual std::string Benchmark() = 0;
+    virtual void Benchmark() = 0;
+};
+
+/**
+ * @brief 问题类型
+ * 
+ */
+enum ProblemType {
+    ARRAY = 1,
+    LINKED_LIST,
+};
+
+/**
+ * @brief 题目号，对应leetcode上的题目
+ * 
+ */
+enum SolutionsId {
+    TWO_SUM = 1,
+    ADD_TWO_NUMBERS = 2,
+    REMOVE_DUPLICATES = 26,
 };
     
 } // namespace leetcode
