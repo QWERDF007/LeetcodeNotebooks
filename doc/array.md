@@ -1,6 +1,13 @@
+| :tiger:                     | :cat:                                                     | :dog: | :dragon: | :snake: |
+| --------------------------- | --------------------------------------------------------- | ----- | -------- | ------- |
+| [1. 两数之和](#1. 两数之和) | [26. 删除有序数组中的重复项](#26. 删除有序数组中的重复项) |       |          |         |
+
+
+
 # 1. 两数之和
 
 - [链接](https://leetcode-cn.com/problems/two-sum/)
+- [code](../cc/array/array.cpp#L35-L101)
 
 
 > 给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。
@@ -9,15 +16,13 @@
 >
 > 你可以按任意顺序返回答案。
 
-- [solutions](../cc/array/array.cpp#L35-L101)：
-
 ## 暴力求解
 
 遍历数组中的每个数 `x`，寻找数组中是否存在 `y = target - x`，使 `x + y = target`。需要注意遍历过程中 `x` 之前的元素都和 `x` 匹配过，且每个元素不能出现两次，所以只需要在 `x` 之后的元素寻找 `y`。
 
 **复杂度分析**：
 
-- 时间复杂度：$O(N^2)$，最坏情况下数组中任意两个数都要被匹配一次
+- 时间复杂度：$O(n^2)$。最坏情况下数组中任意两个数都要被匹配一次
 - 空间复杂度：$O(1)$
 
 ```c++
@@ -43,8 +48,8 @@ public:
 
 **复杂度分析：**
 
-- 时间复杂度：$O(N)$，最坏情况下遍历整个数组，建立哈希表。对每个 `x`， $O(1)$ 时间查询 `y = target - x` 
-- 空间复杂度：$O(N)$
+- 时间复杂度：$O(n)$。最坏情况下遍历整个数组，建立哈希表。对每个 `x`， $O(1)$ 时间查询 `y = target - x` 
+- 空间复杂度：$O(n)$
 
 ```c++
 class Solution {
@@ -59,6 +64,78 @@ public:
             hashtable[nums[i]] = i;
         }
         return {};
+    }
+};
+```
+
+# 26. 删除有序数组中的重复项
+
+- [链接](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/)
+- [code](../cc/array/array.cpp#L112-L189)
+
+>给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 只出现一次 ，返回删除后数组的新长度。
+>
+>不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
+
+## 暴力求解
+
+遍历数组，每次遇到重复项时，将数组从重复的地方整体向前移动，且数组长度减去 1。**(leetcode测试超时)**
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n^2)$。除第一和最后一个数外，都要移动数组当前位置之后元素
+- 空间复杂度：$O(1)$。
+
+```c++
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        int n = nums.size();
+        int i = 1;
+        while (i < n) {
+            if (nums[i] == nums[i - 1]) {
+                int j = i + 1;
+                while (j < n) {
+                    nums[j - 1] = nums[j];
+                    ++j;
+                }
+                --n;
+            }
+            else {
+                ++i;
+            }
+        }
+        return n;
+    }
+};
+```
+
+## 双指针 (快慢指针)
+
+用快慢指针来完成，指针初始位置为 1。将快指针 `fast` 依次遍历 1 到 n -1 的每个位置，遇到 `nums[fast] != nums[fast-1]`，说明 `nums[fast]` 和之前的元素都不同，使  `nums[slow] = nums[fast]`， `slow` 加 1。需要单独处理数组长度为 0 的情况。
+
+复杂度分析：
+
+- 时间复杂度：$O(n)$。只需遍历一次数组
+- 空间复杂度：$O(1)$。两个指针所需空间与数组大小无关
+
+```c++
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        int n = nums.size();
+        if (n==0) {
+            return 0;
+        }
+        int slow = 1, fast = 1;
+        while (fast < n) {
+            if (nums[fast] !=  nums[fast - 1]) {
+                nums[slow] = nums[fast];
+                ++slow;
+            }
+            ++fast;
+        }
+        return slow;
     }
 };
 ```
