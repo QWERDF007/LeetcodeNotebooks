@@ -20,7 +20,7 @@ public:
 
     std::string Solution() override;
 
-    std::string Benchmark() override;
+    void Benchmark() override;
     
     /**
      * @brief 两数之和：暴力枚举
@@ -42,6 +42,36 @@ public:
      */
     std::vector<int> Solution2(std::vector<int>& nums, int target);
 };
+
+class RemoveDuplicates : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 删除有序数组中的重复项：暴力解法
+     * 
+     * @return int 删除重复项后数组的长度
+     */
+    int Solution1(std::vector<int>& nums);
+
+    /**
+     * @brief 删除有序数组中的重复项：双指针
+     * 
+     * @return int 删除重复项后数组的长度
+     */
+    int Solution2(std::vector<int>& nums);
+
+};
+
+
 
 } // namespace array
 } // namespace leetcode
