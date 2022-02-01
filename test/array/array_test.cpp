@@ -4,7 +4,7 @@
 namespace leetcode {
 namespace array {
 
-TEST(TwoSumTest, TwoSunSolution) {
+TEST(TwoSumTest, TwoSunWorker) {
     TwoSum solution;
     
     std::vector<std::vector<int>> nums({
@@ -37,6 +37,32 @@ TEST(TwoSumTest, TwoSunSolution) {
     EXPECT_EQ(solution.Solution2(nums[1], targets[1]), results[1]);
     EXPECT_EQ(solution.Solution2(nums[2], targets[2]), results[2]);
     EXPECT_EQ(solution.Solution2(nums[3], targets[3]), results[3]);
+}
+
+TEST(RemoveDuplicatesTest, RemoveDuplicatesWorker) {
+    RemoveDuplicates solution;
+    std::vector<std::vector<int>> nums({
+        {},
+        { 1,1,2 },
+        { 0,0,1,1,1,2,2,3,3,4 },
+        { 0,0,1,1,1,2,2,3,3,4,5,5,7,8,9,9,9,10,10,11 },
+    });
+
+    std::vector<int> results({
+        0,
+        2,
+        5,
+        11,
+    });
+
+    EXPECT_EQ(solution.Solution1(nums[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(nums[1]), results[1]);
+    EXPECT_EQ(solution.Solution1(nums[2]), results[2]);
+    EXPECT_EQ(solution.Solution1(nums[3]), results[3]);
+
+    EXPECT_EQ(solution.Solution2(nums[0]), results[0]);
+    EXPECT_EQ(solution.Solution2(nums[1]), results[1]);
+    EXPECT_EQ(solution.Solution2(nums[3]), results[3]);
 }
 
 };
