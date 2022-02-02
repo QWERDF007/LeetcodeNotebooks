@@ -1,7 +1,10 @@
 ﻿#include <ctime>
+#include <random>
 #include <stdlib.h>
 #include <iostream>
+#include <algorithm>
 #include <unordered_map>
+#include <unordered_set>
 
 #include <benchmark/benchmark.h>
 
@@ -23,15 +26,22 @@ void ArraySolution(int pid) {
         solution = new RemoveDuplicates();
         break;
     }
+    case SolutionsId::MISSING_NUMBER: {
+        solution = new MissingNumber();
+        break;
+    }
     default:
         std::cerr << "no such pid: " << pid << std::endl;
         exit(EXIT_FAILURE);
         break;
     }
     if (solution != nullptr) {
-        std::cout << typeid(*solution).name() << std::endl;
+        //std::cout << typeid(*solution).name() << std::endl;
         std::cout << solution->Title() << std::endl;
+        std::cout << solution->Link() << std::endl << std::endl;
+        std::cout << "Problem:\n";
         std::cout << solution->Problem() << std::endl;
+        std::cout << "Solution:\n";
         std::cout << solution->Solution() << std::endl;
         solution->Benchmark();
         delete solution;
@@ -186,6 +196,122 @@ int RemoveDuplicates::Solution2(std::vector<int>& nums) {
         ++fast;
     }
     return slow;
+}
+
+std::string MissingNumber::Title() {
+    return "268. 丢失的数字\n";
+}
+
+std::string MissingNumber::Problem() {
+    return 
+        "给定一个包含 [0, n] 中 n 个数的数组 nums，找出 [0, n] 这个范围内没有出现在数组中的那个数。\n";
+}
+
+std::string MissingNumber::Link() {
+    return "https://leetcode-cn.com/problems/missing-number/";
+}
+
+std::string MissingNumber::Solution() {
+    return "数学，等差数列求和，减去数组中元素。时间：O(n)，空间：O(1)。\n";
+}
+
+void MissingNumber::Benchmark() {
+    MissingNumber solution;
+
+    int n = 20;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, n);
+    int missing_num = dis(gen);
+    std::vector<int> nums;
+    for (int i = 0; i <= n; ++i) {
+        if (i == missing_num) {
+            continue;
+        } else {
+            nums.emplace_back(i);
+        }
+    }
+    
+    for (int i = 0; i < n; ++i) {
+        std::cout << nums[i] << " ";
+    }
+    std::cout << std::endl;
+    std::shuffle(nums.begin(), nums.end(), gen);
+    for (int i = 0; i < n; ++i) {
+        std::cout << nums[i] << " ";
+    }
+    std::cout << std::endl;
+    std::cout << "missing num: " << missing_num << std::endl;
+
+    benchmark::RegisterBenchmark("BM_MissingNumber_Sort", [](benchmark::State& state, MissingNumber solution, std::vector<int> nums) {
+        for (auto _ : state) {
+            solution.Solution1(nums);
+        }
+    }, solution, nums);
+
+    benchmark::RegisterBenchmark("BM_MissingNumber_HashSet", [](benchmark::State& state, MissingNumber solution, std::vector<int> nums) {
+        for (auto _ : state) {
+            solution.Solution2(nums);
+        }
+    }, solution, nums);
+
+    benchmark::RegisterBenchmark("BM_MissingNumber_Xor", [](benchmark::State& state, MissingNumber solution, std::vector<int> nums) {
+        for (auto _ : state) {
+            solution.Solution3(nums);
+        }
+    }, solution, nums);
+
+    benchmark::RegisterBenchmark("BM_MissingNumber_Arithmetic1", [](benchmark::State& state, MissingNumber solution, std::vector<int> nums) {
+        for (auto _ : state) {
+            solution.Solution4(nums);
+        }
+    }, solution, nums);
+}
+
+int MissingNumber::Solution1(std::vector<int>& nums) {
+    std::sort(nums.begin(), nums.end());
+    int n = nums.size();
+    for (int i = 0; i < n; ++i) {
+        if (i != nums[i]) {
+            return i;
+        }
+    }
+    return n;
+}
+
+int MissingNumber::Solution2(std::vector<int>& nums) {
+    std::unordered_set<int> set;
+    int n = nums.size();
+    for (int& num : nums) {
+        set.insert(num);
+    }
+    for (int i = 0; i < n; ++i) {
+        if (!set.count(i)) {
+            return i;
+        }
+    }
+    return n;
+}
+
+int MissingNumber::Solution3(std::vector<int>& nums) {
+    int n = nums.size();
+    int ret = 0;
+    for (int i = 0; i <= n; ++i) {
+        ret ^= i;
+    }
+    for (int i = 0; i < n; ++i) {
+        ret ^= nums[i];
+    }
+    return ret;
+}
+
+int MissingNumber::Solution4(std::vector<int>& nums) {
+    int n = nums.size();
+    int total = (n + 1) * n / 2, sum = 0;
+    for (int i = 0; i < n; ++i) {
+        sum += nums[i];
+    }
+    return total - sum;
 }
 
 } // namespace array
