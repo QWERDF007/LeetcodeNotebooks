@@ -62,7 +62,39 @@ TEST(RemoveDuplicatesTest, RemoveDuplicatesWorker) {
 
     EXPECT_EQ(solution.Solution2(nums[0]), results[0]);
     EXPECT_EQ(solution.Solution2(nums[1]), results[1]);
+    EXPECT_EQ(solution.Solution2(nums[2]), results[2]);
     EXPECT_EQ(solution.Solution2(nums[3]), results[3]);
+}
+
+TEST(MissingNumberTest, MissingNumberWorker) {
+    MissingNumber solution;
+    std::vector<std::vector<int>> nums({
+        { 3,0,1 },
+        { 0,1 },
+        { 9,6,4,2,3,5,7,0,1 },
+    });
+
+    std::vector<int> results({
+        2,
+        2,
+        8,
+    });
+
+    EXPECT_EQ(solution.Solution1(nums[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(nums[1]), results[1]);
+    EXPECT_EQ(solution.Solution1(nums[2]), results[2]);
+
+    EXPECT_EQ(solution.Solution2(nums[0]), results[0]);
+    EXPECT_EQ(solution.Solution2(nums[1]), results[1]);
+    EXPECT_EQ(solution.Solution2(nums[2]), results[2]);
+
+    EXPECT_EQ(solution.Solution3(nums[0]), results[0]);
+    EXPECT_EQ(solution.Solution3(nums[1]), results[1]);
+    EXPECT_EQ(solution.Solution3(nums[2]), results[2]);
+
+    EXPECT_EQ(solution.Solution4(nums[0]), results[0]);
+    EXPECT_EQ(solution.Solution4(nums[1]), results[1]);
+    EXPECT_EQ(solution.Solution4(nums[2]), results[2]);
 }
 
 };
