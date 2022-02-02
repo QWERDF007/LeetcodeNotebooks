@@ -1,6 +1,6 @@
-| :tiger:                  | :cat:                                                 | :dog: | :dragon: | :snake: |
-| ------------------------ | ----------------------------------------------------- | ----- | -------- | ------- |
-| 1. [两数之和](#两数之和) | 26. [删除有序数组中的重复项](#删除有序数组中的重复项) |       |          |         |
+| :tiger:                  | :cat:                                                 | :dog:                          | :dragon: | :snake: |
+| ------------------------ | ----------------------------------------------------- | ------------------------------ | -------- | ------- |
+| 1. [两数之和](#两数之和) | 26. [删除有序数组中的重复项](#删除有序数组中的重复项) | 268. [丢失的数字](#丢失的数字) |          |         |
 
 
 
@@ -114,7 +114,7 @@ public:
 
 用快慢指针来完成，指针初始位置为 1。将快指针 `fast` 依次遍历 1 到 n -1 的每个位置，遇到 `nums[fast] != nums[fast-1]`，说明 `nums[fast]` 和之前的元素都不同，使  `nums[slow] = nums[fast]`， `slow` 加 1。需要单独处理数组长度为 0 的情况。
 
-复杂度分析：
+**复杂度分析：**
 
 - 时间复杂度：$O(n)$。只需遍历一次数组
 - 空间复杂度：$O(1)$。两个指针所需空间与数组大小无关
@@ -136,6 +136,115 @@ public:
             ++fast;
         }
         return slow;
+    }
+};
+```
+
+# 丢失的数字
+
+- [链接]()
+- [code](../cc/array/array.cpp#L201-L315)
+
+> 给定一个包含 [0, n] 中 n 个数的数组 nums ，找出 [0, n] 这个范围内没有出现在数组中的那个数。
+
+## 排序
+
+将数组排序后，遍历数组，即可根据数组元素是否和下标相等，得出丢失的数字。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(nlogn)$，排序时间复杂度 $O(nlogn)$，遍历数组 $O(n)$
+- 空间复杂度：$O(logn)$，排序递归调用栈空间
+
+```c++
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
+        for (int i = 0; i < n; i++) {
+            if (nums[i] != i) {
+                return i;
+            }
+        }
+        return n;
+    }
+};
+```
+
+## 哈希集合
+
+遍历数组，将数组中每个元素加入到哈希集合，然后依次检查从 0 到 n 的每个数是否在哈希集合中。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，添加数组元素到哈希集合时间 $O(n)$，检查每个数是否存在时间 $O(n)$。**实际测试下来时间远超过排序方法所需 $O(nlogn)$**
+- 空间复杂度：$O(n)$，哈希集合需要存储 n 个数组元素
+
+```c++
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        unordered_set<int> set;
+        int n = nums.size();
+        for (int& num : nums) {
+            set.insert(num);
+        }
+        for (int i = 0; i < n; ++i) {
+            if (!set.count(i)) {
+                return i;
+            }
+        }
+        return n;
+    }
+};
+```
+
+## 位运算
+
+按位异或运算。对于任意整数 x，都有 x 异或 x 等于 0，x 异或 0 等于 x 本身，且按位异或运算满足交换律和结合律。设结果初值为 0，将 n 个数组元素与结果异或，再将 0 到 n 个数与结果异或，共有 2n + 1 个数，根据数组元素出现的奇偶，即可得到丢失的数字。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，需要遍历 2n + 1 个数
+- 空间复杂度：$O(1)$
+
+```c++
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        int n = nums.size();
+        int ret = 0;
+        for (int i = 0; i <= n; ++i) {
+            ret ^= i;
+        }
+        for (int i = 0; i < n; ++i) {
+            ret ^= nums[i];
+        }
+        return ret;
+    }
+};
+```
+
+## 数学
+
+等差数列求和。按公式得到 n+1 个数的总和，再减去 n 个数组元素的总和，即可得到丢失的数。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，遍历 n 个数组元素
+- 空间复杂度：$O(1)$
+
+```c++
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        int n = nums.size();
+        int total = (n + 1) * n / 2, sum = 0;
+        for (int i = 0; i < n; ++i) {
+            sum += nums[i];
+        }
+        return total - sum;
     }
 };
 ```
