@@ -58,6 +58,7 @@ enum SolutionsId {
     TWO_SUM = 1,
     ADD_TWO_NUMBERS = 2,
     REMOVE_DUPLICATES = 26,
+    MISSING_NUMBER = 268,
 };
     
 } // namespace leetcode
