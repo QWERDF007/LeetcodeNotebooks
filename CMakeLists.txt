@@ -24,7 +24,6 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/cc)
 add_subdirectory(${PROJECT_SOURCE_DIR}/test)
 
 # googletest
-set(gtest_force_shared_crt ON)
 add_subdirectory(${PROJECT_SOURCE_DIR}/external/googletest)
 
 target_include_directories(leetcodenotes
