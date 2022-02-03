@@ -251,7 +251,7 @@ void MissingNumber::Benchmark() {
         }
     }, solution, nums);
 
-    benchmark::RegisterBenchmark("BM_MissingNumber_Arithmetic1", [](benchmark::State& state, MissingNumber solution, std::vector<int> nums) {
+    benchmark::RegisterBenchmark("BM_MissingNumber_Arithmetic", [](benchmark::State& state, MissingNumber solution, std::vector<int> nums) {
         for (auto _ : state) {
             solution.Solution4(nums);
         }
