@@ -14,7 +14,6 @@
 namespace leetcode {
 namespace array{
 
-
 void ArraySolution(int pid) {
     LeetcodeSolution *solution = nullptr;
     switch (pid) {
@@ -38,6 +37,7 @@ void ArraySolution(int pid) {
     if (solution != nullptr) {
         //std::cout << typeid(*solution).name() << std::endl;
         std::cout << solution->Title() << std::endl;
+        std::cout << "Link:\n";
         std::cout << solution->Link() << std::endl << std::endl;
         std::cout << "Problem:\n";
         std::cout << solution->Problem() << std::endl;
