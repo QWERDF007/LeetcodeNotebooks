@@ -84,7 +84,7 @@ void TwoSum::Benchmark() {
         }
     }, solution, nums, target);
 
-    benchmark::RegisterBenchmark("BM_TwoSum_HashTable", [](benchmark::State& state, TwoSum solution, std::vector<int> nums, int target) {
+    benchmark::RegisterBenchmark("BM_TwoSum_HashMap", [](benchmark::State& state, TwoSum solution, std::vector<int> nums, int target) {
         for (auto _ : state) {
             solution.Solution2(nums, target);
         }
