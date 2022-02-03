@@ -2,9 +2,11 @@
 #include "array/array.h"
 
 namespace leetcode {
-namespace array {
+namespace test {
 
-TEST(TwoSumTest, TwoSunWorker) {
+using namespace array;
+
+TEST(TwoSumTest, LeetcodeTest) {
     TwoSum solution;
     
     std::vector<std::vector<int>> nums({
@@ -39,7 +41,7 @@ TEST(TwoSumTest, TwoSunWorker) {
     EXPECT_EQ(solution.Solution2(nums[3], targets[3]), results[3]);
 }
 
-TEST(RemoveDuplicatesTest, RemoveDuplicatesWorker) {
+TEST(RemoveDuplicatesTest, LeetcodeTest) {
     RemoveDuplicates solution;
     std::vector<std::vector<int>> nums({
         {},
@@ -66,7 +68,7 @@ TEST(RemoveDuplicatesTest, RemoveDuplicatesWorker) {
     EXPECT_EQ(solution.Solution2(nums[3]), results[3]);
 }
 
-TEST(MissingNumberTest, MissingNumberWorker) {
+TEST(MissingNumberTest, LeetcodeTest) {
     MissingNumber solution;
     std::vector<std::vector<int>> nums({
         { 3,0,1 },
@@ -97,7 +99,7 @@ TEST(MissingNumberTest, MissingNumberWorker) {
     EXPECT_EQ(solution.Solution4(nums[2]), results[2]);
 }
 
-};
-};
+} // namespace test
+} // namespace leetcode
 
 
