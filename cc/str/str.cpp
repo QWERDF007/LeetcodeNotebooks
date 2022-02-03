@@ -107,12 +107,10 @@ int RomanToInt::Solution1(std::string s) {
                 if (s[i + 1] == 'L') {
                     ret += 40;
                     ++i;
-                }
-                else if (s[i + 1] == 'C') {
+                } else if (s[i + 1] == 'C') {
                     ret += 90;
                     ++i;
-                }
-                else {
+                } else {
                     ret += 10;
                 }
             } else if (s[i] == 'L') {
@@ -121,12 +119,10 @@ int RomanToInt::Solution1(std::string s) {
                 if (s[i + 1] == 'D') {
                     ret += 400;
                     ++i;
-                }
-                else if (s[i + 1] == 'M') {
+                } else if (s[i + 1] == 'M') {
                     ret += 900;
                     ++i;
-                }
-                else {
+                } else {
                     ret += 100;
                 }
             } else if (s[i] == 'D') {
