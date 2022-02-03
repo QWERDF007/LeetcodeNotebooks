@@ -42,7 +42,7 @@ std::string RomanToInt::Title() {
 
 std::string RomanToInt::Problem() {
     return
-        "罗马数字包含以下七种字符: I, V, X, L, C, D 和 M。\n"
+        "罗马数字包含以下其中字符：I, V, X, L, C, D 和 M。\n"
         "字符          数值\n"
         "I             1\n"
         "V             5\n"
