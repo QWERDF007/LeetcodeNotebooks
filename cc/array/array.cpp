@@ -218,7 +218,7 @@ std::string MissingNumber::Solution() {
 void MissingNumber::Benchmark() {
     MissingNumber solution;
 
-    int n = 20;
+    int n = 1000000;
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(0, n);
@@ -231,17 +231,7 @@ void MissingNumber::Benchmark() {
             nums.emplace_back(i);
         }
     }
-    
-    for (int i = 0; i < n; ++i) {
-        std::cout << nums[i] << " ";
-    }
-    std::cout << std::endl;
     std::shuffle(nums.begin(), nums.end(), gen);
-    for (int i = 0; i < n; ++i) {
-        std::cout << nums[i] << " ";
-    }
-    std::cout << std::endl;
-    std::cout << "missing num: " << missing_num << std::endl;
 
     benchmark::RegisterBenchmark("BM_MissingNumber_Sort", [](benchmark::State& state, MissingNumber solution, std::vector<int> nums) {
         for (auto _ : state) {
