@@ -4,8 +4,10 @@
 #include <cxxopts.hpp>
 #include <benchmark/benchmark.h>
 
-#include "array/array.h"
 #include "leetcode_solution.h"
+#include "array/array.h"
+#include "str/str.h"
+
 
 
 int main(int argc, char* argv[]) {
@@ -31,6 +33,10 @@ int main(int argc, char* argv[]) {
     switch (type) {
     case leetcode::ARRAY: {
         leetcode::array::ArraySolution(pid);
+        break;
+    }
+    case leetcode::STR: {
+        leetcode::str::StrSolution(pid);
         break;
     }
     default:
