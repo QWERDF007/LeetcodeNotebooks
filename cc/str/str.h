@@ -54,6 +54,39 @@ public:
         {'C', 100}, {'D', 500}, {'M', 1000}
     };
 };
+
+class AddBinary : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 列竖式(模拟)
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param a 
+     * @param b 
+     * @return std::string a + b 的二进制结果
+     */
+    std::string Solution1(std::string a, std::string b);
+
+    /**
+     * @brief 列竖式(位运算)
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param a 
+     * @param b 
+     * @return std::string a + b 的二进制结果
+     */
+    std::string Solution2(std::string a, std::string b);
+};
     
 } // namespace str
 } // namespace leetcode 

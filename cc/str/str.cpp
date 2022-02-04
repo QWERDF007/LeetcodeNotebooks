@@ -1,40 +1,21 @@
 ﻿#include <iostream>
-#include <unordered_map>
-
 #include <benchmark/benchmark.h>
 
 #include "str.h"
-#include "leetcode_solution.h"
+
+
+
+
+
+
+
+
+
+
 
 
 namespace leetcode {
 namespace str {
-
-void StrSolution(int pid) {
-    LeetcodeSolution* solution = nullptr;
-    switch (pid) {
-    case ROMAN_TO_INT: {
-        solution = new RomanToInt();
-        break;
-    }
-    default:
-        std::cerr << "no such pid: " << pid << std::endl;
-        exit(EXIT_FAILURE);
-        break;
-    }
-    if (solution != nullptr) {
-        std::cout << solution->Title() << std::endl;
-        std::cout << "Link:\n";
-        std::cout << solution->Link() << std::endl << std::endl;
-        std::cout << "Problem:\n";
-        std::cout << solution->Problem() << std::endl;
-        std::cout << "Solution:\n";
-        std::cout << solution->Solution() << std::endl;
-        solution->Benchmark();
-        delete solution;
-    }
-
-}
 
 std::string RomanToInt::Title() {
     return "13. 罗马数字转整数\n";
@@ -211,6 +192,118 @@ int RomanToInt::Solution3(std::string s) {
         }
     }
     return ret;
+}
+
+
+std::string AddBinary::Title() {
+    return "67. 二进制求和\n";
+}
+
+std::string AddBinary::Problem() {
+    return 
+        "给你两个二进制字符串，返回它们的和（用二进制表示）。\n"
+        "输入为非空字符串且只包含数字 1 和 0。\n";
+}
+
+std::string AddBinary::Link() {
+    return "https://leetcode-cn.com/problems/add-binary/";
+}
+
+std::string AddBinary::Solution() {
+    return "模拟列竖式，时间：O(n)，空间：O(1)。\n";
+}
+
+void AddBinary::Benchmark() {
+    AddBinary solution;
+
+    std::string a = "10100000100100110110010000010101111011011001101110111111111101000000101111001110001111100001101";
+    std::string b = "110101001011101110001111100110001010100001101011101010000011011011001011101111001100000011011110011";
+
+    benchmark::RegisterBenchmark("BM_AddBinary_Simulate", [](benchmark::State &state, AddBinary solution, std::string a, std::string b) {
+        for (auto _ : state) {
+            solution.Solution1(a, b);
+        }
+    }, solution, a, b);
+
+    benchmark::RegisterBenchmark("BM_AddBinary_BitwiseOperation", [](benchmark::State& state, AddBinary solution, std::string a, std::string b) {
+        for (auto _ : state) {
+            solution.Solution2(a, b);
+        }
+    }, solution, a, b);
+}
+
+std::string AddBinary::Solution1(std::string a, std::string b) {
+    std::string ans;
+    std::reverse(a.begin(), a.end());
+    std::reverse(b.begin(), b.end());
+    int m = a.size();
+    int n = b.size();
+    int i = 0, carry = 0;
+    int p = std::max(m, n);
+    while (i < p) {
+        carry += i < m ? a[i] == '1' : 0;
+        carry += i < n ? b[i] == '1' : 0;
+        ans.push_back(carry % 2 ? '1' : '0');
+        carry /= 2;
+        ++i;
+    }
+    if (carry) {
+        ans.push_back('1');
+    }
+    std::reverse(ans.begin(), ans.end());
+    return ans;
+}
+
+std::string AddBinary::Solution2(std::string a, std::string b) {
+    std::string ans;
+    std::reverse(a.begin(), a.end());
+    std::reverse(b.begin(), b.end());
+    int m = a.size();
+    int n = b.size();
+    int i = 0, carry = 0, x = 0, y = 0;
+    int p = std::max(m, n);
+    while (i < p) {
+        x = i < m ? a[i] == '1' : 0;
+        y = i < n ? b[i] == '1' : 0;
+        ans.push_back((x ^ y) ^ carry ? '1' : '0');
+        carry = carry ? (carry & x | carry & y) : (x & y);
+        ++i;
+    }
+    if (carry) {
+        ans.push_back('1');
+    }
+    std::reverse(ans.begin(), ans.end());
+    return ans;
+}
+
+
+void StrSolution(int pid) {
+    LeetcodeSolution* solution = nullptr;
+    switch (pid) {
+    case ROMAN_TO_INT: {
+        solution = new RomanToInt();
+        break;
+    }
+    case ADD_BINARY: {
+        solution = new AddBinary();
+        break;
+    }
+    default:
+        std::cerr << "no such pid: " << pid << std::endl;
+        exit(EXIT_FAILURE);
+        break;
+    }
+    if (solution != nullptr) {
+        std::cout << solution->Title() << std::endl;
+        std::cout << "Link:\n";
+        std::cout << solution->Link() << std::endl << std::endl;
+        std::cout << "Problem:\n";
+        std::cout << solution->Problem() << std::endl;
+        std::cout << "Solution:\n";
+        std::cout << solution->Solution() << std::endl;
+        solution->Benchmark();
+        delete solution;
+    }
 }
 
 } // namespace str
