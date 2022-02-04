@@ -5,49 +5,20 @@
 #include <algorithm>
 #include <unordered_map>
 #include <unordered_set>
-
 #include <benchmark/benchmark.h>
 
-#include "leetcode_solution.h"
 #include "array.h"
+
+
+
+
+
+
+
+
 
 namespace leetcode {
 namespace array{
-
-void ArraySolution(int pid) {
-    LeetcodeSolution *solution = nullptr;
-    switch (pid) {
-    case SolutionsId::TWO_SUM: {
-        solution = new TwoSum();
-        break;
-    }
-    case SolutionsId::REMOVE_DUPLICATES: {
-        solution = new RemoveDuplicates();
-        break;
-    }
-    case SolutionsId::MISSING_NUMBER: {
-        solution = new MissingNumber();
-        break;
-    }
-    default:
-        std::cerr << "no such pid: " << pid << std::endl;
-        exit(EXIT_FAILURE);
-        break;
-    }
-    if (solution != nullptr) {
-        //std::cout << typeid(*solution).name() << std::endl;
-        std::cout << solution->Title() << std::endl;
-        std::cout << "Link:\n";
-        std::cout << solution->Link() << std::endl << std::endl;
-        std::cout << "Problem:\n";
-        std::cout << solution->Problem() << std::endl;
-        std::cout << "Solution:\n";
-        std::cout << solution->Solution() << std::endl;
-        solution->Benchmark();
-        delete solution;
-    }
-}
-
 
 std::string TwoSum::Title() {
     return "1.两数之和\n";
@@ -302,6 +273,41 @@ int MissingNumber::Solution4(std::vector<int>& nums) {
         sum += nums[i];
     }
     return total - sum;
+}
+
+
+void ArraySolution(int pid) {
+    LeetcodeSolution* solution = nullptr;
+    switch (pid) {
+    case SolutionsId::TWO_SUM: {
+        solution = new TwoSum();
+        break;
+    }
+    case SolutionsId::REMOVE_DUPLICATES: {
+        solution = new RemoveDuplicates();
+        break;
+    }
+    case SolutionsId::MISSING_NUMBER: {
+        solution = new MissingNumber();
+        break;
+    }
+    default:
+        std::cerr << "no such pid: " << pid << std::endl;
+        exit(EXIT_FAILURE);
+        break;
+    }
+    if (solution != nullptr) {
+        //std::cout << typeid(*solution).name() << std::endl;
+        std::cout << solution->Title() << std::endl;
+        std::cout << "Link:\n";
+        std::cout << solution->Link() << std::endl << std::endl;
+        std::cout << "Problem:\n";
+        std::cout << solution->Problem() << std::endl;
+        std::cout << "Solution:\n";
+        std::cout << solution->Solution() << std::endl;
+        solution->Benchmark();
+        delete solution;
+    }
 }
 
 } // namespace array
