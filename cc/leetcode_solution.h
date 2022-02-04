@@ -60,6 +60,7 @@ enum SolutionsId {
     ADD_TWO_NUMBERS = 2,
     ROMAN_TO_INT = 13,
     REMOVE_DUPLICATES = 26,
+    ADD_BINARY = 67,
     MISSING_NUMBER = 268,
 };
     
