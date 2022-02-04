@@ -1,13 +1,13 @@
-| :tiger:                               | :cat: | :dog: | :dragon: | :snake: |
-| ------------------------------------- | ----- | ----- | -------- | ------- |
-| 13. [罗马数字转整数](#罗马数字转整数) |       |       |          |         |
+| :tiger:                               | :cat:                         | :dog: | :dragon: | :snake: |
+| ------------------------------------- | ----------------------------- | ----- | -------- | ------- |
+| 13. [罗马数字转整数](#罗马数字转整数) | 67. [二进制求和](#二进制求和) |       |          |         |
 
 
 
 # 罗马数字转整数
 
 - [链接](https://leetcode-cn.com/problems/roman-to-integer/)
-- [code](../cc/str/str.cpp#L39-L218)
+- [code](../cc/str/str.cpp#L20-L195)
 
 > 罗马数字包含以下七种字符: I， V， X， L，C，D 和 M。
 >
@@ -198,6 +198,85 @@ public:
         {'I',1}, {'V', 5}, {'X', 10}, {'L', 50}, 
         {'C', 100}, {'D', 500}, {'M', 1000}
     };
+};
+```
+
+# 二进制求和
+
+- [链接](https://leetcode-cn.com/problems/add-binary/)
+- [code](../cc/str/str.cpp#L198-L277)
+
+>给你两个二进制字符串，返回它们的和（用二进制表示）。
+>
+>输入为非空字符串且只包含数字 1 和 0。
+
+## 列竖式(模拟)
+
+借鉴列竖式，将两个字符串对齐，逐位相加。反转字符串后，从低位开始遍历，高位补 0，即可对齐字符串。用 `carry` 表示上一位的进位，每一位的答案为 `(carry + ai + bi) % 2`，下一位的进位为 `(carry + ai + b) / 2`。遍历完后若 `carry` 不为 0，则向结果添加一位 1。
+
+- 时间复杂度：O(n)，n = max{|a|, |b|}
+- 空间复杂度：O(1)
+
+```c++
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        string ans;
+        reverse(a.begin(), a.end());
+        reverse(b.begin(), b.end());
+        int m = a.size();
+        int n = b.size();
+        int i = 0, carry = 0;
+        int p = max(m, n);
+        while (i < p) {
+            carry += i < m ? a[i] == '1' : 0;
+            carry += i < n ? b[i] == '1' : 0;
+            ans.push_back(carry % 2 ? '1' : '0');
+            carry /= 2;
+            ++i;
+        }
+        if (carry) {
+            ans.push_back('1');
+        }
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
+};
+```
+
+## 列竖式(位运算)
+
+同样使用列竖式，用位运算代替加减乘除。每一位的答案为 `(ai ^ bi) ^ carry`，下一位的进位 `carry` 需要考虑上一位的进位，若上一位进位为 0 ，则进位为 `x & y`；若不为 0， 则进位为 `carry & x | carry & y`。遍历完后若 `carry` 不为 0，则向结果添加一位 1。
+
+**复杂度分析：**
+
+- 时间复杂度：O(n)，n = max{|a|, |b|}
+- 空间复杂度：O(1)
+
+```c++
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        string ans;
+        reverse(a.begin(), a.end());
+        reverse(b.begin(), b.end());
+        int m = a.size();
+        int n = b.size();
+        int i = 0, carry = 0, x = 0, y = 0;
+        int p = max(m, n);
+        while (i < p) {
+            x = i < m ? a[i] == '1' : 0;
+            y = i < n ? b[i] == '1' : 0;
+            ans.push_back((x ^ y) ^ carry ? '1' : '0');
+            carry = carry ? (carry & x | carry & y) : (x & y);
+            ++i;
+        }
+        if (carry) {
+            ans.push_back('1');
+        }
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
 };
 ```
 
