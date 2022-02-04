@@ -7,7 +7,7 @@
 # 两数之和
 
 - [链接](https://leetcode-cn.com/problems/two-sum/)
-- [code](../cc/array/array.cpp#L35-L101)
+- [code](../cc/array/array.cpp#L23-L90)
 
 
 > 给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。
@@ -71,7 +71,7 @@ public:
 # 删除有序数组中的重复项
 
 - [链接](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/)
-- [code](../cc/array/array.cpp#L112-L189)
+- [code](../cc/array/array.cpp#L93-L170)
 
 >给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 只出现一次 ，返回删除后数组的新长度。
 >
@@ -143,7 +143,7 @@ public:
 # 丢失的数字
 
 - [链接]()
-- [code](../cc/array/array.cpp#L201-L305)
+- [code](../cc/array/array.cpp#L172-L276)
 
 > 给定一个包含 [0, n] 中 n 个数的数组 nums ，找出 [0, n] 这个范围内没有出现在数组中的那个数。
 
