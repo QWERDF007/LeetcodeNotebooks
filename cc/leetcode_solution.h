@@ -62,6 +62,7 @@ enum SolutionsId {
     REMOVE_DUPLICATES = 26,
     ADD_BINARY = 67,
     MISSING_NUMBER = 268,
+    NUM_ARRAY = 303,
 };
     
 } // namespace leetcode
