@@ -8,8 +8,6 @@
 namespace leetcode {
 namespace array{
 
-void ArraySolution(int pid);
-
 class TwoSum : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -123,6 +121,51 @@ public:
 
 };
 
+class NumArray : public LeetcodeSolution {
+public:
+    NumArray() {};
+
+    NumArray(std::vector<int>& nums);
+
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 实时计算
+     * 时间复杂度：O(n) + m * O(right-left+1)
+     * 空间复杂度：O(n)
+     * @param left 
+     * @param right 
+     * @return int 
+     */
+    int sumRange1(int left, int right);
+
+    /**
+     * @brief 前缀和
+     * 时间复杂度：O(n) + m * O(1)
+     * 空间复杂度：O(n)
+     * @param left 
+     * @param right 
+     * @return int 
+     */
+    int sumRange2(int left, int right);
+
+    std::vector<int> nums_, sums_;
+};
+
+/**
+ * @brief 数组题目入口
+ * 
+ * @param pid 数组题目id
+ */
+void ArraySolution(int pid);
 
 } // namespace array
 } // namespace leetcode

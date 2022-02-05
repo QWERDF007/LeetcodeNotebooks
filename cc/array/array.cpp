@@ -276,6 +276,70 @@ int MissingNumber::Solution4(std::vector<int>& nums) {
 }
 
 
+NumArray::NumArray(std::vector<int>& nums) : nums_(nums) {
+    int n = nums.size();
+    sums_.resize(n + 1);
+    for (int i = 0; i < n; ++i) {
+        sums_[i + 1] = sums_[i] + nums[i];
+    }
+}
+
+std::string NumArray::Title() {
+    return "303. 区域和检索 - 数组不可变\n";
+}
+
+std::string NumArray::Problem() {
+    return
+        "给定一个整数数组 nums，处理以下类型的多个查询：\n"
+        "实现 NumArray 类：\n"
+        "- NumArray(vector<int>& nums) 使用数组 nums 初始化对象\n"
+        "- int sumRange(int i, int j)  返回数组 nums 中索引 left 和 right 之间的元素的总和 ，包含 left 和 right 两点\n";
+}
+
+std::string NumArray::Link() {
+    return "https://leetcode-cn.com/problems/range-sum-query-immutable/";
+}
+
+std::string NumArray::Solution() {
+    return "前缀和，时间：O(n) + m * O(right-left+1)，空间：O(n)。\n";
+}
+
+void NumArray::Benchmark() {
+    int n = 10000;
+    std::vector<int> nums(n);
+    for (int i = 0; i < n; ++i) {
+        nums[i] = i + 1;
+    }
+    int left = 3888, right = 9998;
+
+    NumArray solution(nums);
+
+    benchmark::RegisterBenchmark("BM_NumArray_RunTimeCalc", [](benchmark::State& state, NumArray solution, int left, int right) {
+        for (auto _ : state) {
+            solution.sumRange1(left, right);
+        }
+    }, solution, left, right);
+
+    benchmark::RegisterBenchmark("BM_NumArray_PrefixSum", [](benchmark::State& state, NumArray solution, int left, int right) {
+        for (auto _ : state) {
+            solution.sumRange2(left, right);
+        }
+    }, solution, left, right);
+}
+
+int NumArray::sumRange1(int left, int right) {
+    int sum = 0;
+    for (int k = left; k <= right; ++k) {
+        sum += nums_[k];
+    }
+    return sum;
+}
+
+int NumArray::sumRange2(int left, int right) {
+    return sums_[right + 1] - sums_[left];
+}
+
+
 void ArraySolution(int pid) {
     LeetcodeSolution* solution = nullptr;
     switch (pid) {
@@ -289,6 +353,10 @@ void ArraySolution(int pid) {
     }
     case SolutionsId::MISSING_NUMBER: {
         solution = new MissingNumber();
+        break;
+    }
+    case SolutionsId::NUM_ARRAY: {
+        solution = new NumArray();
         break;
     }
     default:
