@@ -8,8 +8,6 @@
 namespace leetcode {
 namespace str {
 
-void StrSolution(int pid);
-
 class RomanToInt : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -87,6 +85,13 @@ public:
      */
     std::string Solution2(std::string a, std::string b);
 };
+
+/**
+ * @brief 字符串题目入口
+ * 
+ * @param pid 字符串题目id
+ */
+void StrSolution(int pid);
     
 } // namespace str
 } // namespace leetcode 
