@@ -1,6 +1,6 @@
-| :tiger:                  | :cat:                                                 | :dog:                          | :dragon: | :snake: |
-| ------------------------ | ----------------------------------------------------- | ------------------------------ | -------- | ------- |
-| 1. [两数之和](#两数之和) | 26. [删除有序数组中的重复项](#删除有序数组中的重复项) | 268. [丢失的数字](#丢失的数字) |          |         |
+| :tiger:                  | :cat:                                                 | :dog:                          | :dragon:                                             | :snake: |
+| ------------------------ | ----------------------------------------------------- | ------------------------------ | ---------------------------------------------------- | ------- |
+| 1. [两数之和](#两数之和) | 26. [删除有序数组中的重复项](#删除有序数组中的重复项) | 268. [丢失的数字](#丢失的数字) | 303. [区域和检索-数组不可变](#区域和检索-数组不可变) |         |
 
 
 
@@ -246,6 +246,71 @@ public:
         }
         return total - sum;
     }
+};
+```
+
+# 区域和检索-数组不可变
+
+- [链接](https://leetcode-cn.com/problems/range-sum-query-immutable/)
+- [code](../cc/array/array.cpp#L279-L340)
+
+> 给定一个整数数组 nums，处理以下类型的多个查询：
+>
+> 实现 NumArray 类：
+>
+> - NumArray(vector<int>& nums) 使用数组 nums 初始化对象
+> - int sumRange(int i, int j)  返回数组 nums 中索引 left 和 right 之间的元素的总和 ，包含 left 和 right 两点
+
+## 实时计算
+
+把数组保存下来，每次调用 `sumRange` 时计算索引从 `i` 到 `j` 的元素的总和。**(超出题目时间限制)**
+
+**复杂度分析：**
+
+- 时间复杂度：保存数组时间 $O(n)$，每次求和时间 $O(j-i+1)$
+- 空间复杂度：$O(n)$，保存数组所需空间
+
+```c++
+class NumArray {
+public:
+    NumArray(vector<int>& nums) : nums_(nums) {
+    }
+    
+    int sumRange(int left, int right) {
+        int sum = 0;
+        for (int i = left; i <= right; ++i) {
+            sum += nums_[i];
+        }
+        return sum;
+    }
+    vector<int> nums_;
+};
+```
+
+## 前缀和
+
+前缀和，利用积分的可加性来实现求和。对于任意 0 <= i <= j，`sumRange(i, j) = sumRange(0, j) - sumRange(0,i-1)`。具体实现时，将前缀和的数组 sums 的长度设为 n + 1，则可以不对 i = 0 的情况进行特殊处理，即用位置 k 的元素存储 sumRange(0, k - 1)。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，初始化计算前缀和数组时间 $O(n)$，每次求和时间 $O(1)$
+- 空间复杂度：$O(n)$
+
+```c++
+class NumArray {
+public:
+    NumArray(vector<int>& nums)  {
+        int n = nums.size();
+        sums_.resize(n+1);
+        for (int i = 0; i < n; ++i) {
+            sums_[i+1] = sums_[i] + nums[i];
+        }
+    }
+    
+    int sumRange(int left, int right) {
+        return sums_[right+1] - sums_[left];
+    }
+    vector<int> sums_;
 };
 ```
 
