@@ -69,5 +69,19 @@ TEST(AddBinaryTest, LeetcodeTest) {
     EXPECT_EQ(solution.Solution2(a[2], b[2]), results[2]);
 }
 
+TEST(ConvertToTitleTest, LeetcodeTest) {
+    ConvertToTitle solution;
+
+    EXPECT_EQ(solution.Solution1(1), "A");
+    EXPECT_EQ(solution.Solution1(28), "AB");
+    EXPECT_EQ(solution.Solution1(52), "AZ");
+    EXPECT_EQ(solution.Solution1(701), "ZY");
+
+    EXPECT_EQ(solution.Solution2(1), "A");
+    EXPECT_EQ(solution.Solution2(28), "AB");
+    EXPECT_EQ(solution.Solution2(52), "AZ");
+    EXPECT_EQ(solution.Solution2(701), "ZY");
+}
+
 } // namespace test
 } // namespace leetcode
