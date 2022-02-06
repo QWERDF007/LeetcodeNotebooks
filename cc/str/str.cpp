@@ -277,6 +277,72 @@ std::string AddBinary::Solution2(std::string a, std::string b) {
 }
 
 
+std::string ConvertToTitle::Title() {
+    return "168. Excel表列名称\n";
+}
+
+std::string ConvertToTitle::Problem() {
+    return
+        "给你一个整数 columnNumber ，返回它在 Excel 表中相对应的列名称。\n"
+        "A -> 1\n"
+        "B -> 2\n"
+        "...\n"
+        "AB -> 28\n";
+}
+
+std::string ConvertToTitle::Link() {
+    return "https://leetcode-cn.com/problems/excel-sheet-column-title/";
+}
+
+std::string ConvertToTitle::Solution() {
+    return "数学，时间：O(log26C)，空间：O(1)。\n";
+}
+
+void ConvertToTitle::Benchmark() {
+    ConvertToTitle solution;
+
+    int column_number = 123456789;
+
+    benchmark::RegisterBenchmark("BM_ConvertToTitle_Arithmetic", [](benchmark::State& state, ConvertToTitle solution, int column_number) {
+        for (auto _ : state) {
+            solution.Solution1(column_number);
+        }
+    }, solution, column_number);
+
+    benchmark::RegisterBenchmark("BM_ConvertToTitle_Borrow", [](benchmark::State& state, ConvertToTitle solution, int column_number) {
+        for (auto _ : state) {
+            solution.Solution2(column_number);
+        }
+    }, solution, column_number);
+}
+
+std::string ConvertToTitle::Solution1(int columnNumber) {
+    std::string ans;
+    while (columnNumber > 0) {
+        --columnNumber;
+        ans += columnNumber % 26 + 'A';
+        columnNumber /= 26;
+    }
+    std::reverse(ans.begin(), ans.end());
+    return ans;
+}
+
+std::string ConvertToTitle::Solution2(int columnNumber) {
+    std::string ans;
+    while (columnNumber > 0) {
+        int remainder = columnNumber % 26;
+        if (remainder == 0) {
+            remainder = 26;
+            columnNumber -= 26;
+        }
+        ans.push_back(remainder + 64); // 'A' 的前一位，因为 remainder 的值域为 [1,26]
+        columnNumber /= 26;
+    }
+    std::reverse(ans.begin(), ans.end());
+    return ans;
+}
+
+
 void StrSolution(int pid) {
     LeetcodeSolution* solution = nullptr;
     switch (pid) {
@@ -286,6 +352,10 @@ void StrSolution(int pid) {
     }
     case ADD_BINARY: {
         solution = new AddBinary();
+        break;
+    }
+    case CONVERT_TO_TITLE: {
+        solution = new ConvertToTitle();
         break;
     }
     default:

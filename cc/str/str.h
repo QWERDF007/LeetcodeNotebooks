@@ -86,6 +86,23 @@ public:
     std::string Solution2(std::string a, std::string b);
 };
 
+class ConvertToTitle : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    std::string Solution1(int columnNumber);
+
+    std::string Solution2(int columnNumber);
+};
+
 /**
  * @brief 字符串题目入口
  * 
