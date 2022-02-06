@@ -283,7 +283,7 @@ public:
 # Excel表列名称
 
 - [链接](https://leetcode-cn.com/problems/excel-sheet-column-title/)
-- [code]()
+- [code](../cc/str/str.cpp#L280-L343)
 
 > 给你一个整数 columnNumber ，返回它在 Excel 表中相对应的列名称。
 >
