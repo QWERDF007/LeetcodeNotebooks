@@ -61,6 +61,7 @@ enum SolutionsId {
     ROMAN_TO_INT = 13,
     REMOVE_DUPLICATES = 26,
     ADD_BINARY = 67,
+    CONVERT_TO_TITLE = 168,
     MISSING_NUMBER = 268,
     NUM_ARRAY = 303,
 };
