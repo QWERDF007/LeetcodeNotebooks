@@ -1,6 +1,6 @@
-| :tiger:                  | :cat:                                                 | :dog:                          | :dragon:                                             | :snake: |
-| ------------------------ | ----------------------------------------------------- | ------------------------------ | ---------------------------------------------------- | ------- |
-| 1. [两数之和](#两数之和) | 26. [删除有序数组中的重复项](#删除有序数组中的重复项) | 268. [丢失的数字](#丢失的数字) | 303. [区域和检索-数组不可变](#区域和检索-数组不可变) |         |
+| :tiger:                  | :cat:                                                 | :dog:                          | :dragon:                                             | :snake:                                |
+| ------------------------ | ----------------------------------------------------- | ------------------------------ | ---------------------------------------------------- | -------------------------------------- |
+| 1. [两数之和](#两数之和) | 26. [删除有序数组中的重复项](#删除有序数组中的重复项) | 268. [丢失的数字](#丢失的数字) | 303. [区域和检索-数组不可变](#区域和检索-数组不可变) | 349. [两个数组的交集](#两个数组的交集) |
 
 
 
@@ -311,6 +311,80 @@ public:
         return sums_[right+1] - sums_[left];
     }
     vector<int> sums_;
+};
+```
+
+# 两个数组的交集
+
+- [链接](https://leetcode-cn.com/problems/intersection-of-two-arrays/)
+- [code](../cc/array/array.cpp#L343-L419)
+
+> 给定两个数组 nums1 和 nums2 ，返回它们的交集。输出结果中的每个元素一定是唯一的。我们可以不考虑输出结果的顺序。
+
+## 哈希集合
+
+将其中一个数组添加至哈希集合中，再遍历另一个数组，查询数组元素是否在集合中。
+
+优化：将第二个数组添加至哈希集合时，可以直接判断是否在第一个集合中，只将交集部分加入第二个集合，将第二个集合作为结果。
+
+**注：**虽然哈希集合理论时间复杂度低于排序方法，但实际时间超过排序，随着两个数组中元素的重复数量增加，两者性能接近。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n+m)$，添加到集合所需时间 $O(n)$ 和 $O(m)$，遍历查询另一数组是否在集合中所需时间 $O(m)$ 或 $O(n)$，
+- 空间复杂度：$O(n)$，哈希集合所需空间 
+
+```c++
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        unordered_set<int> set1(nums1.begin(), nums1.end());
+        unordered_set<int> set2;
+        for (int num : nums2) {
+            if (set1.find(num) != set1.end()) {
+                set2.insert(num);
+            }
+        }
+        return vector<int>(set2.begin(), set2.end());
+    }
+};
+```
+
+## 排序
+
+将两个数组排序，然后再分别用两个指针遍历两个数组，再额外记录上次添加的元素，以确保结果的唯一性。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n \log n + m \log m)$，排序两个数组所需时间分别为 $O(n \log n)$ 和 $O(m \log m)$，遍历两个数组所需时间为 $O(n+m)$
+- 空间复杂度：$O(\log n + \log m)$，两个数组排序所用的空间
+
+```c++
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        sort(nums1.begin(), nums1.end());
+        sort(nums2.begin(), nums2.end());
+        vector<int> ans;
+        int i = 0, j = 0;
+        int n = nums1.size(), m = nums2.size();
+        while (i < n && j < m) {
+            int num1 = nums1[i], num2 = nums2[j];
+            if (num1 == num2) {
+                // 保证唯一性
+                if (!ans.size() || num1 != ans.back()) {
+                    ans.emplace_back(num1);
+                }
+                ++i;
+                ++j;
+            } else if (num1 < num2) {
+                ++i;
+            } else {
+                ++j;
+            }
+        }
+        return ans;
+    }
 };
 ```
 
