@@ -340,6 +340,84 @@ int NumArray::sumRange2(int left, int right) {
 }
 
 
+std::string Intersection::Title() {
+    return "349. 两个数组的交集\n";
+}
+
+std::string Intersection::Problem() {
+    return 
+        "给定两个数组 nums1 和 nums2 ，返回它们的交集。输出结果中的每个元素一定是唯一的。我们可以不考虑输出结果的顺序。\n";
+}
+
+std::string Intersection::Link() {
+    return "https://leetcode-cn.com/problems/intersection-of-two-arrays/";
+}
+
+std::string Intersection::Solution() {
+    return "哈希集合，时间：O(n+m)，空间：O(n+m)。\n";
+}
+
+void Intersection::Benchmark() {
+    Intersection solution;
+
+    int n = 10000;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, n/100);
+    std::vector<int> nums1(n), nums2(n);
+    for (int i = 0; i < n; ++i) {
+        nums1[i] = dis(gen);
+        nums2[i] = dis(gen);
+    }
+
+    benchmark::RegisterBenchmark("BM_Intersection_HashSet", [](benchmark::State &state, Intersection solution, std::vector<int> nums1, std::vector<int> nums2) {
+        for (auto _ : state) {
+            solution.Solution1(nums1, nums2);
+        }
+    }, solution, nums1, nums2);
+
+    benchmark::RegisterBenchmark("BM_Intersection_Sort", [](benchmark::State& state, Intersection solution, std::vector<int> nums1, std::vector<int> nums2) {
+        for (auto _ : state) {
+            solution.Solution2(nums1, nums2);
+        }
+    }, solution, nums1, nums2);
+}
+
+std::vector<int> Intersection::Solution1(std::vector<int>& nums1, std::vector<int>& nums2) {
+    std::unordered_set<int> set1(nums1.begin(), nums1.end());
+    std::unordered_set<int> set2;
+    for (auto num : nums2) {
+        if (set1.find(num) != set1.end()) {
+            set2.insert(num);
+        }
+    }
+    return std::vector<int>(set2.begin(), set2.end());
+}
+
+std::vector<int> Intersection::Solution2(std::vector<int>& nums1, std::vector<int>& nums2) {
+    std::sort(nums1.begin(), nums1.end());
+    std::sort(nums2.begin(), nums2.end());
+    std::vector<int> ans;
+    int i = 0, j = 0;
+    int n = nums1.size(), m = nums2.size();
+    while (i < n && j < m) {
+        int num1 = nums1[i], num2 = nums2[j];
+        if (num1 == num2) {
+            // 保证唯一性
+            if (!ans.size() || num1 != ans.back()) {
+                ans.emplace_back(num1);
+            }
+            ++i;
+            ++j;
+        } else if (num1 < num2) {
+            ++i;
+        } else {
+            ++j;
+        }
+    }
+    return ans;
+}
+
 void ArraySolution(int pid) {
     LeetcodeSolution* solution = nullptr;
     switch (pid) {
@@ -357,6 +435,10 @@ void ArraySolution(int pid) {
     }
     case SolutionsId::NUM_ARRAY: {
         solution = new NumArray();
+        break;
+    }
+    case SolutionsId::INTERSECTION: {
+        solution = new Intersection();
         break;
     }
     default:
@@ -377,6 +459,7 @@ void ArraySolution(int pid) {
         delete solution;
     }
 }
+
 
 } // namespace array
 } // namespace leetcode

@@ -160,6 +160,39 @@ public:
     std::vector<int> nums_, sums_;
 };
 
+class Intersection : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 哈希集合
+     * 时间复杂度：O(n+m)
+     * 空间复杂度：O(n+m)
+     * @param nums1 
+     * @param nums2 
+     * @return std::vector<int> 
+     */
+    std::vector<int> Solution1(std::vector<int>& nums1, std::vector<int>& nums2);
+
+    /**
+     * @brief 排序
+     * 时间复杂度：O(nlogn+mlogm)
+     * 空间复杂度：O(logn+logm)
+     * @param nums1 
+     * @param nums2 
+     * @return std::vector<int> 
+     */
+    std::vector<int> Solution2(std::vector<int>& nums1, std::vector<int>& nums2);
+};
+
 /**
  * @brief 数组题目入口
  * 
