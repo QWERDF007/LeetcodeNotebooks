@@ -64,6 +64,7 @@ enum SolutionsId {
     CONVERT_TO_TITLE = 168,
     MISSING_NUMBER = 268,
     NUM_ARRAY = 303,
+    INTERSECTION = 349,
 };
     
 } // namespace leetcode
