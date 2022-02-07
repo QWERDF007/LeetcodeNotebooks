@@ -363,10 +363,12 @@ void Intersection::Benchmark() {
     int n = 10000;
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(0, n/100);
-    std::vector<int> nums1(n), nums2(n);
-    for (int i = 0; i < n; ++i) {
+    std::uniform_int_distribution<> dis(0, n/20);
+    std::vector<int> nums1(n/3), nums2(n);
+    for (int i = 0; i < n/3; ++i) {
         nums1[i] = dis(gen);
+    }
+    for (int i = 0; i < n; ++i) {
         nums2[i] = dis(gen);
     }
 
@@ -376,7 +378,7 @@ void Intersection::Benchmark() {
         }
     }, solution, nums1, nums2);
 
-    benchmark::RegisterBenchmark("BM_Intersection_Sort", [](benchmark::State& state, Intersection solution, std::vector<int> nums1, std::vector<int> nums2) {
+    benchmark::RegisterBenchmark("BM_Intersection_SortDualPointer", [](benchmark::State& state, Intersection solution, std::vector<int> nums1, std::vector<int> nums2) {
         for (auto _ : state) {
             solution.Solution2(nums1, nums2);
         }
@@ -384,6 +386,9 @@ void Intersection::Benchmark() {
 }
 
 std::vector<int> Intersection::Solution1(std::vector<int>& nums1, std::vector<int>& nums2) {
+    if (nums1.size() > nums2.size()) {
+        return Solution1(nums2, nums1);
+    }
     std::unordered_set<int> set1(nums1.begin(), nums1.end());
     std::unordered_set<int> set2;
     for (auto num : nums2) {
@@ -418,6 +423,93 @@ std::vector<int> Intersection::Solution2(std::vector<int>& nums1, std::vector<in
     return ans;
 }
 
+
+std::string Intersect::Title() {
+    return "350. 两个数组的交集 II\n";
+}
+
+std::string Intersect::Problem() {
+    return 
+        "给你两个整数数组 nums1 和 nums2 ，请你以数组形式返回两数组的交集。\n"
+        "返回结果中每个元素出现的次数，应与元素在两个数组中都出现的次数一致（如果出现次数不一致，则考虑取较小值）。\n"
+        "可以不考虑输出结果的顺序。\n";
+}
+
+std::string Intersect::Link() {
+    return "https://leetcode-cn.com/problems/intersection-of-two-arrays-ii/";
+}
+
+std::string Intersect::Solution() {
+    return "哈希表，时间：O(n+m)，空间：O(min(n,m))。\n";
+}
+
+void Intersect::Benchmark() {
+    Intersect solution;
+
+    int n = 10000;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, n/100);
+    std::vector<int> nums1(n), nums2(n/3);
+    for (int i = 0; i < n; ++i) {
+        nums1[i] = dis(gen);
+    }
+    for (int i = 0; i < n/3; ++i) {
+        nums2[i] = dis(gen);
+    }
+
+    benchmark::RegisterBenchmark("BM_Intersection_HashTable", [](benchmark::State& state, Intersect solution, std::vector<int> nums1, std::vector<int> nums2) {
+        for (auto _ : state) {
+            solution.Solution1(nums1, nums2);
+        }
+    }, solution, nums1, nums2);
+
+    benchmark::RegisterBenchmark("BM_Intersection_SortDualPointer", [](benchmark::State& state, Intersect solution, std::vector<int> nums1, std::vector<int> nums2) {
+        for (auto _ : state) {
+            solution.Solution2(nums1, nums2);
+        }
+    }, solution, nums1, nums2);
+}
+
+std::vector<int> Intersect::Solution1(std::vector<int>& nums1, std::vector<int>& nums2) {
+    if (nums1.size() > nums2.size()) {
+        return Solution1(nums2, nums1);
+    }
+    std::unordered_map<int, int> map;
+    for (int num : nums1) {
+        ++map[num];
+    }
+    std::vector<int> ans;
+    for (int num : nums2) {
+        if (map.count(num) && map[num] > 0) {
+            ans.emplace_back(num);
+            --map[num];
+        }
+    }
+    return ans;
+}
+
+std::vector<int> Intersect::Solution2(std::vector<int>& nums1, std::vector<int>& nums2) {
+    std::sort(nums1.begin(), nums1.end());
+    std::sort(nums2.begin(), nums2.end());
+    int i = 0, j = 0;
+    int n = nums1.size(), m = nums2.size();
+    std::vector<int> ans;
+    while (i < n && j < m) {
+        int num1 = nums1[i], num2 = nums2[j];
+        if (num1 == num2) {
+            ans.emplace_back(num1);
+            ++i;
+            ++j;
+        } else if (num1 < num2) {
+            ++i;
+        } else {
+            ++j;
+        }
+    }
+    return ans;
+}
+
 void ArraySolution(int pid) {
     LeetcodeSolution* solution = nullptr;
     switch (pid) {
@@ -439,6 +531,10 @@ void ArraySolution(int pid) {
     }
     case SolutionsId::INTERSECTION: {
         solution = new Intersection();
+        break;
+    }
+    case SolutionsId::INTERSECT: {
+        solution = new Intersect();
         break;
     }
     default:
