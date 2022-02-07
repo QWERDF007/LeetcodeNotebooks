@@ -1,5 +1,6 @@
 ﻿#include <gtest/gtest.h>
 #include <unordered_set>
+#include <algorithm>
 #include "array/array.h"
 
 namespace leetcode {
@@ -153,11 +154,17 @@ TEST(IntersectionTest, LeetcodeTest) {
         { 9,4,9,8,4 },
     };
 
+    std::vector<int> s1_1 = solution.Solution1(nums1[1], nums2[1]);
+    std::sort(s1_1.begin(), s1_1.end());
+
     EXPECT_EQ(solution.Solution1(nums1[0], nums2[0]), std::vector<int>({ 2 }));
-    EXPECT_EQ(solution.Solution1(nums1[1], nums2[1]), std::vector<int>({ 9,4 }));
+    EXPECT_EQ(s1_1, std::vector<int>({ 4,9 }));
+
+    std::vector<int> s2_1 = solution.Solution2(nums1[1], nums2[1]);
+    std::sort(s2_1.begin(), s2_1.end());
 
     EXPECT_EQ(solution.Solution2(nums1[0], nums2[0]), std::vector<int>({ 2 }));
-    EXPECT_EQ(solution.Solution2(nums1[1], nums2[1]), std::vector<int>({ 4,9 }));
+    EXPECT_EQ(s2_1, std::vector<int>({ 4,9 }));
 }
 
 TEST(IntersectTest, LeetcodeTest) {
@@ -174,13 +181,23 @@ TEST(IntersectTest, LeetcodeTest) {
         { 9,4,9,8,4 },
     };
 
+    auto s1_1 = solution.Solution1(nums1[1], nums2[1]);
+    std::sort(s1_1.begin(), s1_1.end());
+    auto s1_2 = solution.Solution1(nums1[2], nums2[2]);
+    std::sort(s1_2.begin(), s1_2.end());
+
     EXPECT_EQ(solution.Solution1(nums1[0], nums2[0]), std::vector<int>({ 2,2 }));
-    EXPECT_EQ(solution.Solution1(nums1[1], nums2[1]), std::vector<int>({ 9,4 }));
-    EXPECT_EQ(solution.Solution1(nums1[2], nums2[2]), std::vector<int>({ 9,4,4 }));
+    EXPECT_EQ(s1_1, std::vector<int>({ 4,9 }));
+    EXPECT_EQ(s1_2, std::vector<int>({ 4,4,9 }));
+
+    auto s2_1 = solution.Solution2(nums1[1], nums2[1]);
+    std::sort(s2_1.begin(), s2_1.end());
+    auto s2_2 = solution.Solution2(nums1[2], nums2[2]);
+    std::sort(s2_2.begin(), s2_2.end());
 
     EXPECT_EQ(solution.Solution2(nums1[0], nums2[0]), std::vector<int>({ 2,2 }));
-    EXPECT_EQ(solution.Solution2(nums1[1], nums2[1]), std::vector<int>({ 4,9 }));
-    EXPECT_EQ(solution.Solution2(nums1[2], nums2[2]), std::vector<int>({ 4,4,9 }));
+    EXPECT_EQ(s2_1, std::vector<int>({ 4,9 }));
+    EXPECT_EQ(s2_2, std::vector<int>({ 4,4,9 }));
 }
 
 } // namespace test
