@@ -65,6 +65,7 @@ enum SolutionsId {
     MISSING_NUMBER = 268,
     NUM_ARRAY = 303,
     INTERSECTION = 349,
+    INTERSECT = 350,
 };
     
 } // namespace leetcode
