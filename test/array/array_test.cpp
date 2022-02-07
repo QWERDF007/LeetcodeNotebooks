@@ -141,10 +141,6 @@ TEST(NumArrayTest, LeetcodeTest) {
     EXPECT_EQ(solution.sumRange2(left[3], right[3]), results[3]);
 }
 
-std::unordered_set<int> VectorToSet(std::vector<int>& nums) {
-    return std::unordered_set<int>(nums.begin(), nums.end());
-}
-
 TEST(IntersectionTest, LeetcodeTest) {
     Intersection solution;
     std::vector<std::vector<int>> nums1{
@@ -157,16 +153,34 @@ TEST(IntersectionTest, LeetcodeTest) {
         { 9,4,9,8,4 },
     };
 
-    std::vector<std::vector<int>> results{
-        { 2 },
-        { 9,4 },
+    EXPECT_EQ(solution.Solution1(nums1[0], nums2[0]), std::vector<int>({ 2 }));
+    EXPECT_EQ(solution.Solution1(nums1[1], nums2[1]), std::vector<int>({ 9,4 }));
+
+    EXPECT_EQ(solution.Solution2(nums1[0], nums2[0]), std::vector<int>({ 2 }));
+    EXPECT_EQ(solution.Solution2(nums1[1], nums2[1]), std::vector<int>({ 4,9 }));
+}
+
+TEST(IntersectTest, LeetcodeTest) {
+    Intersect solution;
+    std::vector<std::vector<int>> nums1{
+        { 1,2,2,1 },
+        { 4,9,5 },
+        { 4,9,4,5 },
     };
 
-    EXPECT_EQ(VectorToSet(solution.Solution1(nums1[0], nums2[0])), VectorToSet(results[0]));
-    EXPECT_EQ(VectorToSet(solution.Solution1(nums1[1], nums2[1])), VectorToSet(results[1]));
+    std::vector<std::vector<int>> nums2{
+        { 2,2 },
+        { 9,4,9,8,4 },
+        { 9,4,9,8,4 },
+    };
 
-    EXPECT_EQ(VectorToSet(solution.Solution2(nums1[0], nums2[0])), VectorToSet(results[0]));
-    EXPECT_EQ(VectorToSet(solution.Solution2(nums1[1], nums2[1])), VectorToSet(results[1]));
+    EXPECT_EQ(solution.Solution1(nums1[0], nums2[0]), std::vector<int>({ 2,2 }));
+    EXPECT_EQ(solution.Solution1(nums1[1], nums2[1]), std::vector<int>({ 9,4 }));
+    EXPECT_EQ(solution.Solution1(nums1[2], nums2[2]), std::vector<int>({ 9,4,4 }));
+
+    EXPECT_EQ(solution.Solution2(nums1[0], nums2[0]), std::vector<int>({ 2,2 }));
+    EXPECT_EQ(solution.Solution2(nums1[1], nums2[1]), std::vector<int>({ 4,9 }));
+    EXPECT_EQ(solution.Solution2(nums1[2], nums2[2]), std::vector<int>({ 4,4,9 }));
 }
 
 } // namespace test
