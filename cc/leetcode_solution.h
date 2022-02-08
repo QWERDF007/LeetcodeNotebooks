@@ -66,6 +66,7 @@ enum SolutionsId {
     NUM_ARRAY = 303,
     INTERSECTION = 349,
     INTERSECT = 350,
+    THIRD_MAX = 414,
 };
     
 } // namespace leetcode
