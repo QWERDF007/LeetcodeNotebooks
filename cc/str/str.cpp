@@ -1,17 +1,10 @@
-﻿#include <iostream>
+﻿#include <set>
+#include <iostream>
+#include <functional>
+#include <random>
 #include <benchmark/benchmark.h>
 
 #include "str.h"
-
-
-
-
-
-
-
-
-
-
 
 
 namespace leetcode {
@@ -343,25 +336,112 @@ std::string ConvertToTitle::Solution2(int columnNumber) {
 }
 
 
+std::string SecondHighest::Title() {
+    return "1796. 字符串中第二大的数字\n";
+}
+
+std::string SecondHighest::Problem() {
+    return 
+        "给你一个混合字符串 s，请你返回 s 中第二大的数字，如果不存在第二大的数字，请你返回 -1。\n"
+        "混合字符串由小写英文字母和数字组成。\n";
+}
+
+std::string SecondHighest::Link() {
+    return "https://leetcode-cn.com/problems/second-largest-digit-in-a-string/";
+}
+
+std::string SecondHighest::Solution() {
+    return "有限变量遍历，时间：O(n)，空间：O(1)。\n";
+}
+
+void SecondHighest::Benchmark() {
+    SecondHighest solution;
+
+    std::string table = "0123456789abcdeabcdefghijklmnopqrstuvwxyz";
+    int n = 10000;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, table.size() - 1);
+    
+    std::string s;
+    for (int i = 0; i < n; ++i) {
+        s += table[dis(gen)];
+    }
+
+    benchmark::RegisterBenchmark("BM_SecondHighest_LimitedVars", [](benchmark::State &state, SecondHighest solution, std::string s) {
+        for (auto _ : state) {
+            solution.Solution1(s);
+        }
+    }, solution, s);
+
+    benchmark::RegisterBenchmark("BM_SecondHighest_SortedSet", [](benchmark::State& state, SecondHighest solution, std::string s) {
+        for (auto _ : state) {
+            solution.Solution2(s);
+        }
+    }, solution, s);
+
+    benchmark::RegisterBenchmark("BM_SecondHighest_Sort", [](benchmark::State& state, SecondHighest solution, std::string s) {
+        for (auto _ : state) {
+            solution.Solution3(s);
+        }
+    }, solution, s);
+}
+
+int SecondHighest::Solution1(std::string s) {
+    int a = -1, b = -1;
+    for (char c : s) {
+        if (c <= '9') {
+            int num = c - '0';
+            if (num > a) {
+                b = a;
+                a = num;
+            } else if (a > num && num > b) {
+                b = num;
+            }
+        }
+    }
+    return b;
+}
+
+int SecondHighest::Solution2(std::string s) {
+    std::set<int> set;
+    for (char c : s) {
+        if (c <= '9') {
+            set.insert(c - '0');
+            if (set.size() > 2) {
+                set.erase(set.begin());
+            }
+        }
+    }
+    return set.size() == 2 ? *set.begin() : -1;
+}
+
+int SecondHighest::Solution3(std::string s) {
+    std::string s_num;
+    for (char c : s) {
+        if (c <= '9') {
+            s_num += c;
+        }
+    }
+    std::sort(s_num.begin(), s_num.end(), std::greater<>());
+    int n = s_num.size();
+    for (int i = 1; i < n; ++i) {
+        if (s_num[i] != s_num[i - 1]) {
+            return s_num[i] - '0';
+        }
+    }
+    return -1;
+}
+
+
 void StrSolution(int pid) {
     LeetcodeSolution* solution = nullptr;
     switch (pid) {
-    case ROMAN_TO_INT: {
-        solution = new RomanToInt();
-        break;
-    }
-    case ADD_BINARY: {
-        solution = new AddBinary();
-        break;
-    }
-    case CONVERT_TO_TITLE: {
-        solution = new ConvertToTitle();
-        break;
-    }
-    default:
-        std::cerr << "no such pid: " << pid << std::endl;
-        exit(EXIT_FAILURE);
-        break;
+        case ROMAN_TO_INT: solution = new RomanToInt(); break;
+        case ADD_BINARY: solution = new AddBinary(); break;
+        case CONVERT_TO_TITLE: solution = new ConvertToTitle(); break;
+        case SECOND_HIGHEST: solution = new SecondHighest(); break;
+        default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
     }
     if (solution != nullptr) {
         std::cout << solution->Title() << std::endl;
@@ -375,6 +455,7 @@ void StrSolution(int pid) {
         delete solution;
     }
 }
+
 
 } // namespace str
 } // namespace leetcode 

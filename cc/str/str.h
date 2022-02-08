@@ -103,6 +103,46 @@ public:
     std::string Solution2(int columnNumber);
 };
 
+class SecondHighest : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 有限变量遍历
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param s 
+     * @return int 第二大的数
+     */
+    int Solution1(std::string s);
+
+    /**
+     * @brief 有序集合
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param s 
+     * @return int 第二大的数
+     */
+    int Solution2(std::string s);
+
+    /**
+     * @brief 排序
+     * 时间复杂度：O(nlogn)
+     * 空间复杂度：O(n)
+     * @param s 
+     * @return int 第二大的数
+     */
+    int Solution3(std::string s);
+};
+
 /**
  * @brief 字符串题目入口
  * 
