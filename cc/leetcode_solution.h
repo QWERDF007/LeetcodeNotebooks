@@ -67,6 +67,7 @@ enum SolutionsId {
     INTERSECTION = 349,
     INTERSECT = 350,
     THIRD_MAX = 414,
+    SECOND_HIGHEST = 1796,
 };
     
 } // namespace leetcode
