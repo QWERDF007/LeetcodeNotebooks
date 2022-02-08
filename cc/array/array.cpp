@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <unordered_map>
 #include <unordered_set>
+#include <functional>
 #include <benchmark/benchmark.h>
 
 #include "array.h"
@@ -510,37 +511,106 @@ std::vector<int> Intersect::Solution2(std::vector<int>& nums1, std::vector<int>&
     return ans;
 }
 
+
+std::string ThirdMax::Title() {
+    return "414. 第三大的数\n";
+}
+
+std::string ThirdMax::Problem() {
+    return 
+        "给你一个非空数组，返回此数组中第三大的数。如果不存在，则返回数组中最大的数。\n";
+}
+
+std::string ThirdMax::Link() {
+    return "https://leetcode-cn.com/problems/third-maximum-number/";
+}
+
+std::string ThirdMax::Solution() {
+    return "有限变量遍历，时间：O(n)，空间：O(1)。\n";
+}
+
+void ThirdMax::Benchmark() {
+    ThirdMax solution;
+
+    int n = 10000;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, n / 20);
+    std::vector<int> nums(n);
+    for (int i = 0; i < n; ++i) {
+        nums[i] = dis(gen);
+    }
+
+    benchmark::RegisterBenchmark("BM_ThirdMax_Sort", [](benchmark::State & state, ThirdMax solution, std::vector<int> nums) {
+        for (auto _ : state) {
+            solution.Solution1(nums);
+        }
+    }, solution, nums);
+
+    benchmark::RegisterBenchmark("BM_ThirdMax_SortedSet", [](benchmark::State& state, ThirdMax solution, std::vector<int> nums) {
+        for (auto _ : state) {
+            solution.Solution2(nums);
+        }
+    }, solution, nums);
+
+    benchmark::RegisterBenchmark("BM_ThirdMax_LimitedVars", [](benchmark::State& state, ThirdMax solution, std::vector<int> nums) {
+        for (auto _ : state) {
+            solution.Solution3(nums);
+        }
+    }, solution, nums);
+}
+
+int ThirdMax::Solution1(std::vector<int>& nums) {
+    std::sort(nums.begin(), nums.end(), std::greater<>());
+    int n = nums.size();
+    for (int i = 1, diff = 1; i < n; ++i) {
+        if (nums[i] != nums[i - 1] && ++diff == 3) {
+            return nums[i];
+        }
+    }
+    return nums[0];
+}
+
+int ThirdMax::Solution2(std::vector<int>& nums) {
+    std::set<int> set;
+    for (int num : nums) {
+        set.insert(num);
+        if (set.size() > 3) {
+            set.erase(set.begin());
+        }
+    }
+    return set.size() == 3 ? *set.begin() : *set.rbegin();
+}
+
+int ThirdMax::Solution3(std::vector<int>& nums) {
+    long long a = LLONG_MIN, b = LLONG_MIN, c = LLONG_MIN;
+    for (int num : nums) {
+        if (num > a) {
+            c = b;
+            b = a;
+            a = num;
+        } else if (a > num && num > b) {
+            c = b;
+            b = num;
+        } else if (b > num && num > c) {
+            c = num;
+        }
+    }
+    return c == LLONG_MIN ? a : c;
+}
+
+
 void ArraySolution(int pid) {
     LeetcodeSolution* solution = nullptr;
     switch (pid) {
-    case SolutionsId::TWO_SUM: {
-        solution = new TwoSum();
-        break;
-    }
-    case SolutionsId::REMOVE_DUPLICATES: {
-        solution = new RemoveDuplicates();
-        break;
-    }
-    case SolutionsId::MISSING_NUMBER: {
-        solution = new MissingNumber();
-        break;
-    }
-    case SolutionsId::NUM_ARRAY: {
-        solution = new NumArray();
-        break;
-    }
-    case SolutionsId::INTERSECTION: {
-        solution = new Intersection();
-        break;
-    }
-    case SolutionsId::INTERSECT: {
-        solution = new Intersect();
-        break;
-    }
-    default:
-        std::cerr << "no such pid: " << pid << std::endl;
-        exit(EXIT_FAILURE);
-        break;
+    case SolutionsId::TWO_SUM: solution = new TwoSum(); break;
+    case SolutionsId::REMOVE_DUPLICATES: solution = new RemoveDuplicates(); break;
+    case SolutionsId::MISSING_NUMBER: solution = new MissingNumber(); break;
+    case SolutionsId::NUM_ARRAY: solution = new NumArray(); break;
+    case SolutionsId::INTERSECTION: solution = new Intersection(); break;
+    case SolutionsId::INTERSECT: solution = new Intersect(); break;
+    case SolutionsId::THIRD_MAX: solution = new ThirdMax(); break;
+    default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
     }
     if (solution != nullptr) {
         //std::cout << typeid(*solution).name() << std::endl;
@@ -555,6 +625,7 @@ void ArraySolution(int pid) {
         delete solution;
     }
 }
+
 
 
 } // namespace array

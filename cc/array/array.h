@@ -226,6 +226,46 @@ public:
     std::vector<int> Solution2(std::vector<int>& nums1, std::vector<int>& nums2);
 };
 
+class ThirdMax : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+    
+    /**
+     * @brief 排序
+     * 时间复杂度：O(nlogn)
+     * 空间复杂度：O(logn)
+     * @param nums 
+     * @return int 第三大的数
+     */
+    int Solution1(std::vector<int>& nums);
+
+    /**
+     * @brief 有序集合
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param nums 
+     * @return int 第三大的数
+     */
+    int Solution2(std::vector<int>& nums);
+
+    /**
+     * @brief 有限变量遍历
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param nums 
+     * @return int 第三大的数
+     */
+    int Solution3(std::vector<int>& nums);
+};
+
 /**
  * @brief 数组题目入口
  * 
