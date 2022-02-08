@@ -1,14 +1,14 @@
 | :tiger:                                    | :cat:                                                 | :dog:                          | :dragon:                                             | :snake:                                |
 | ------------------------------------------ | ----------------------------------------------------- | ------------------------------ | ---------------------------------------------------- | -------------------------------------- |
 | 1. [两数之和](#两数之和)                   | 26. [删除有序数组中的重复项](#删除有序数组中的重复项) | 268. [丢失的数字](#丢失的数字) | 303. [区域和检索-数组不可变](#区域和检索-数组不可变) | 349. [两个数组的交集](#两个数组的交集) |
-| 350. [两个数组的交集II](#两个数组的交集II) |                                                       |                                |                                                      |                                        |
+| 350. [两个数组的交集II](#两个数组的交集II) | 414. [第三大的数](#第三大的数)                        |                                |                                                      |                                        |
 
 
 
 # 两数之和
 
 - [链接](https://leetcode-cn.com/problems/two-sum/)
-- [code](../cc/array/array.cpp#L23-L90)
+- [code](../cc/array/array.h)
 
 
 > 给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。
@@ -72,7 +72,7 @@ public:
 # 删除有序数组中的重复项
 
 - [链接](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array/)
-- [code](../cc/array/array.cpp#L93-L170)
+- [code](../cc/array/array.h)
 
 >给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 只出现一次 ，返回删除后数组的新长度。
 >
@@ -144,7 +144,7 @@ public:
 # 丢失的数字
 
 - [链接]()
-- [code](../cc/array/array.cpp#L172-L276)
+- [code](../cc/array/array.h)
 
 > 给定一个包含 [0, n] 中 n 个数的数组 nums ，找出 [0, n] 这个范围内没有出现在数组中的那个数。
 
@@ -253,7 +253,7 @@ public:
 # 区域和检索-数组不可变
 
 - [链接](https://leetcode-cn.com/problems/range-sum-query-immutable/)
-- [code](../cc/array/array.cpp#L279-L340)
+- [code](../cc/array/array.h)
 
 > 给定一个整数数组 nums，处理以下类型的多个查询：
 >
@@ -318,7 +318,7 @@ public:
 # 两个数组的交集
 
 - [链接](https://leetcode-cn.com/problems/intersection-of-two-arrays/)
-- [code](../cc/array/array.cpp#L343-L424)
+- [code](../cc/array/array.h)
 
 > 给定两个数组 nums1 和 nums2 ，返回它们的交集。输出结果中的每个元素一定是唯一的。我们可以不考虑输出结果的顺序。
 
@@ -392,7 +392,7 @@ public:
 # 两个数组的交集II
 
 - [链接](https://leetcode-cn.com/problems/intersection-of-two-arrays-ii/)
-- [code](../cc/array/array.cpp#L427-L511)
+- [code](../cc/array/array.h)
 
 > 给你两个整数数组 nums1 和 nums2 ，请你以数组形式返回两数组的交集。
 >
@@ -465,6 +465,100 @@ public:
             }
         }
         return ans;
+    }
+};
+```
+
+# 第三大的数
+
+- [链接](https://leetcode-cn.com/problems/third-maximum-number/)
+- [code](../cc/array/array.h)
+
+> 给你一个非空数组，返回此数组中第三大的数。如果不存在，则返回数组中最大的数。
+
+## 排序
+
+将数组按从大到小排序，然后遍历获取第三大的数。遍历过程中返回第三大元素，遍历结束时返回最大的元素。
+
+**注：** 数组中可能存在重复元素，需要去重，可以在遍历的时候用一个记数指针来处理
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n \log n)$，排序所需时间
+- 空间复杂度：$O(\log n)$，排序所需空间
+
+```c++
+class Solution {
+public:
+    int thirdMax(vector<int>& nums) {
+        sort(nums.begin(), nums.end(), greater<>());
+        int n = nums.size();
+        for (int i = 1, diff = 1; i < n; ++i) {
+            if (nums[i] != nums[i-1] && ++diff == 3) {
+                return nums[i];
+            }
+        }
+        return nums[0];
+    }
+};
+```
+
+## 有序集合
+
+维护一个大小为 3 的有序集合，遍历数组，将元素加入到集合，集合大小超过 3 时删除最小元素。
+
+**注：** 虽然插入、删除操作理论时间 O(1)，但实际时间远超
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，有序集合的大小至多为 3，插入、删除操作时间可视为 $O(1)$，遍历数组时间 $O(n)$
+- 空间复杂度：$O(1)$，
+
+```c++
+class Solution {
+public:
+    int thirdMax(vector<int>& nums) {
+        std::set<int> set;
+        for (int num : nums) {
+            set.insert(num);
+            if (set.size() > 3) {
+                set.erase(set.begin());
+            }
+        }
+        return set.size() == 3 ? *set.begin() : *set.rbegin();
+    }
+};
+```
+
+## 有限变量遍历
+
+利用有限变量模拟有序集。使用变量 `a`，`b`，`c` 来维护数组中最大、次大和第三大的元素，遍历数组，更新变量。并使用超过 int 范围的最小值来指示没找到第三大的数。
+
+优化：可以使用指针，空指针作为没找到的条件，可以不依赖元素范围
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，遍历数组所需时间
+- 空间复杂度：$O(1)$
+
+```c++
+class Solution {
+public:
+    int thirdMax(vector<int>& nums) {
+        long long a = LLONG_MIN, b = LLONG_MIN, c = LLONG_MIN;
+        for (int num : nums) {
+            if (num > a) {
+                c = b;
+                b = a;
+                a = num;
+            } else if (a > num && num > b) {
+                c = b;
+                b = num;
+            } else if (b > num && num > c) {
+                c = num;
+            }
+        }
+        return c == LLONG_MIN ? a : c;
     }
 };
 ```
