@@ -200,6 +200,28 @@ TEST(IntersectTest, LeetcodeTest) {
     EXPECT_EQ(s2_2, std::vector<int>({ 4,4,9 }));
 }
 
+TEST(ThirdMaxTest, LeetcodeTest) {
+    ThirdMax solution;
+
+    std::vector<std::vector<int>> nums{
+        { 3,2,1 },
+        { 1,2, },
+        { 2,2,3,1 },
+    };
+
+    EXPECT_EQ(solution.Solution1(nums[0]), 1);
+    EXPECT_EQ(solution.Solution1(nums[1]), 2);
+    EXPECT_EQ(solution.Solution1(nums[2]), 1);
+
+    EXPECT_EQ(solution.Solution2(nums[0]), 1);
+    EXPECT_EQ(solution.Solution2(nums[1]), 2);
+    EXPECT_EQ(solution.Solution2(nums[2]), 1);
+
+    EXPECT_EQ(solution.Solution2(nums[0]), 1);
+    EXPECT_EQ(solution.Solution2(nums[1]), 2);
+    EXPECT_EQ(solution.Solution2(nums[2]), 1);
+}
+
 } // namespace test
 } // namespace leetcode
 
