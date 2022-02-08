@@ -207,19 +207,22 @@ TEST(ThirdMaxTest, LeetcodeTest) {
         { 3,2,1 },
         { 1,2, },
         { 2,2,3,1 },
+        { 1,2,INT_MIN},
     };
-
     EXPECT_EQ(solution.Solution1(nums[0]), 1);
     EXPECT_EQ(solution.Solution1(nums[1]), 2);
     EXPECT_EQ(solution.Solution1(nums[2]), 1);
+    EXPECT_EQ(solution.Solution1(nums[3]), INT_MIN);
 
     EXPECT_EQ(solution.Solution2(nums[0]), 1);
     EXPECT_EQ(solution.Solution2(nums[1]), 2);
     EXPECT_EQ(solution.Solution2(nums[2]), 1);
+    EXPECT_EQ(solution.Solution2(nums[3]), INT_MIN);
 
     EXPECT_EQ(solution.Solution2(nums[0]), 1);
     EXPECT_EQ(solution.Solution2(nums[1]), 2);
     EXPECT_EQ(solution.Solution2(nums[2]), 1);
+    EXPECT_EQ(solution.Solution3(nums[3]), INT_MIN);
 }
 
 } // namespace test
