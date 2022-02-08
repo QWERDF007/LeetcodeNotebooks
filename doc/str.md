@@ -1,13 +1,13 @@
-| :tiger:                               | :cat:                         | :dog:                                | :dragon: | :snake: |
-| ------------------------------------- | ----------------------------- | ------------------------------------ | -------- | ------- |
-| 13. [罗马数字转整数](#罗马数字转整数) | 67. [二进制求和](#二进制求和) | 168. [Excel表列名称](#Excel表列名称) |          |         |
+| :tiger:                               | :cat:                         | :dog:                                | :dragon:                                            | :snake: |
+| ------------------------------------- | ----------------------------- | ------------------------------------ | --------------------------------------------------- | ------- |
+| 13. [罗马数字转整数](#罗马数字转整数) | 67. [二进制求和](#二进制求和) | 168. [Excel表列名称](#Excel表列名称) | 1796. [字符串中第二大的数字](#字符串中第二大的数字) |         |
 
 
 
 # 罗马数字转整数
 
 - [链接](https://leetcode-cn.com/problems/roman-to-integer/)
-- [code](../cc/str/str.cpp#L20-L195)
+- [code](../cc/str/str.h)
 
 > 罗马数字包含以下七种字符: I， V， X， L，C，D 和 M。
 >
@@ -204,7 +204,7 @@ public:
 # 二进制求和
 
 - [链接](https://leetcode-cn.com/problems/add-binary/)
-- [code](../cc/str/str.cpp#L198-L277)
+- [code](../cc/str/str.h)
 
 >给你两个二进制字符串，返回它们的和（用二进制表示）。
 >
@@ -283,7 +283,7 @@ public:
 # Excel表列名称
 
 - [链接](https://leetcode-cn.com/problems/excel-sheet-column-title/)
-- [code](../cc/str/str.cpp#L280-L343)
+- [code](../cc/str/str.h)
 
 > 给你一个整数 columnNumber ，返回它在 Excel 表中相对应的列名称。
 >
@@ -373,6 +373,109 @@ public:
         }
         reverse(ans.begin(), ans.end());
         return ans;
+    }
+};
+```
+
+# 字符串中第二大的数字
+
+- [链接](https://leetcode-cn.com/problems/second-largest-digit-in-a-string/)
+- [code](../cc/str/str.h)
+
+> 给你一个混合字符串 s，请你返回 s 中第二大的数字，如果不存在第二大的数字，请你返回 -1。
+>
+> 混合字符串由小写英文字母和数字组成。
+
+**注：** 与数组题 [414. 第三大的数](array.md) 类似
+
+## 有限变量遍历
+
+使用变量 `a`，`b` 记录字符串中最大和次大的数字，遍历数组，更新变量，需要跳过不是数字的字符。
+
+优化：可以使用 -1 作为初值，无需特殊考虑不存在的情况
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，遍历字符串所需时间
+- 空间复杂度：$O(1)$
+
+```c++
+class Solution {
+public:
+    int secondHighest(string s) {
+        int a = -1, b = -1;
+        for (char c : s) {
+            if (c <= '9') {
+                int num = c - '0';
+                if (num > a) {
+                    b = a;
+                    a = num;
+                } else if (a > num && num > b) {
+                    b = num;
+                }
+            }
+        }
+        return b;
+    }
+};
+```
+
+## 有序集合
+
+维护一个大小为 2 的有序集合，遍历字符串，将数字字符插入集合，集合大小超过 2 时，删除集合中最小的数字。
+
+**注：** 虽然插入、删除操作理论时间 O(1)，但实际时间远超，足以影响整体时间
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，遍历字符串时间 $O(n)$，常数大小集合插入、删除操作时间 $O(1)$
+- 空间复杂度：$O(1)$
+
+```c++
+class Solution {
+public:
+    int secondHighest(string s) {
+        set<int> set;
+        for (char c : s) {
+            if (c <= '9') {
+                set.insert(c - '0');
+                if (set.size() > 2) {
+                    set.erase(set.begin());
+                }
+            }
+        }
+        return set.size() == 2 ? *set.begin() : -1;
+    }
+};
+```
+
+## 排序
+
+先遍历数组，删除非数字的字符。再对字符串按从大到小排序，获取第二大的数字。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n\log n)$，最差情况全数字字符串，遍历一遍 $O(n)$，排序 $O(n \log n)$，找出第二大数字 $O(1)$
+- 空间复杂度：$O(n)$，最差情况下，存储数字字符串所需空间
+
+```c++
+class Solution {
+public:
+    int secondHighest(string s) {
+        string s_num;
+        for (char c : s) {
+            if (c <= '9') {
+                s_num += c;
+            }
+        }
+        sort(s_num.begin(), s_num.end(), greater<>());
+        int n = s_num.size();
+        for (int i = 1; i < n; ++i) {
+            if (s_num[i] != s_num[i - 1]) {
+                return s_num[i] - '0';
+            }
+        }
+        return -1;
     }
 };
 ```
