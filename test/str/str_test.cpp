@@ -83,5 +83,21 @@ TEST(ConvertToTitleTest, LeetcodeTest) {
     EXPECT_EQ(solution.Solution2(701), "ZY");
 }
 
+TEST(SecondHighestTest, LeetcodeTest) {
+    SecondHighest solution;
+
+    EXPECT_EQ(solution.Solution1("dfa12321afd"), 2);
+    EXPECT_EQ(solution.Solution1("abc1111"), -1);
+    EXPECT_EQ(solution.Solution1("ck077"), 0);
+
+    EXPECT_EQ(solution.Solution2("dfa12321afd"), 2);
+    EXPECT_EQ(solution.Solution2("abc1111"), -1);
+    EXPECT_EQ(solution.Solution2("ck077"), 0);
+
+    EXPECT_EQ(solution.Solution3("dfa12321afd"), 2);
+    EXPECT_EQ(solution.Solution3("abc1111"), -1);
+    EXPECT_EQ(solution.Solution3("ck077"), 0);
+}
+
 } // namespace test
 } // namespace leetcode
