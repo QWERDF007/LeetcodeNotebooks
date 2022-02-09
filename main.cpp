@@ -7,47 +7,60 @@
 #include "leetcode_solution.h"
 #include "array/array.h"
 #include "str/str.h"
+#include "linked_list/linked_list.h"
 
 
 
 int main(int argc, char* argv[]) {
-    cxxopts::Options options(argv[0], "Leetcode C++ Solutions");
-    options.allow_unrecognised_options();
-    options.add_options()
-        ("t,type", "problem type", cxxopts::value<int>())
-        ("i,pid", "problem id", cxxopts::value<int>())
-        ("h,help", "Print usage");
-    cxxopts::ParseResult opts = options.parse(argc, argv);
-    if (opts.count("help")) {
-        std::cout << options.help() << std::endl;
-        exit(EXIT_SUCCESS);
-    }
+    try {
+        cxxopts::Options options(argv[0], "Leetcode C++ Solutions");
+        options.allow_unrecognised_options();
+        options.add_options()
+            ("t,type", "problem type", cxxopts::value<int>())
+            ("i,pid", "problem id", cxxopts::value<int>())
+            ("h,help", "Print usage");
+        cxxopts::ParseResult opts = options.parse(argc, argv);
+        if (opts.count("help")) {
+            std::cout << options.help() << std::endl;
+            exit(EXIT_SUCCESS);
+        }
 
-    int type = -1, pid = -1;
-    if (opts.count("type")) {
-        type = opts["type"].as<int>();
-    }
-    if (opts.count("pid")) {
-        pid = opts["pid"].as<int>();
-    }
-    switch (type) {
-    case leetcode::ARRAY: {
-        leetcode::array::ArraySolution(pid);
-        break;
-    }
-    case leetcode::STR: {
-        leetcode::str::StrSolution(pid);
-        break;
-    }
-    default:
-        std::cerr << "no such type: \"" << type << "\"\n";
-        exit(EXIT_FAILURE);
-        break;
-    }
+        int type = -1, pid = -1;
+        if (opts.count("type")) {
+            type = opts["type"].as<int>();
+        }
+        if (opts.count("pid")) {
+            pid = opts["pid"].as<int>();
+        }
+        switch (type) {
+        case leetcode::ARRAY: {
+            leetcode::array::ArraySolution(pid);
+            break;
+        }
+        case leetcode::STR: {
+            leetcode::str::StrSolution(pid);
+            break;
+        }
+        case leetcode::LINKED_LIST: {
+            leetcode::linkedlist::LinkedListSolution(pid);
+            break;
+        }
+        default:
+            std::cerr << "no such type: \"" << type << "\"\n";
+            exit(EXIT_FAILURE);
+            break;
+        }
 
-    benchmark::Initialize(&argc, argv);
-    // if (benchmark::ReportUnrecognizedArguments(argc, argv)) 
-    //     return 1;
-    benchmark::RunSpecifiedBenchmarks();    
-    benchmark::Shutdown();
+        benchmark::Initialize(&argc, argv);
+        // if (benchmark::ReportUnrecognizedArguments(argc, argv)) 
+        //     return 1;
+        benchmark::RunSpecifiedBenchmarks();
+        benchmark::Shutdown();
+        std::cout << "\n88\n";
+    } catch (const std::exception &e) {
+        std::cout << e.what() << std::endl;
+    } catch (...) {
+        std::cout << "unknown exception\n";
+    }
+    
 }
