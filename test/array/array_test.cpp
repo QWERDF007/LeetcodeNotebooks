@@ -225,6 +225,33 @@ TEST(ThirdMaxTest, LeetcodeTest) {
     EXPECT_EQ(solution.Solution3(nums[3]), INT_MIN);
 }
 
+TEST(FindDisappearedNumbersTest, LeetcodeTest) {
+    FindDisappearedNumbers solution;
+
+    std::vector<std::vector<int>> nums{
+        { 4,3,2,7,8,2,3,1 },
+        { 1,1 },
+        { 1,2,3 },
+    };
+    std::vector<std::vector<int>> results{
+        { 5,6 },
+        { 2 },
+        {},
+    };
+
+    EXPECT_EQ(solution.Solution1(nums[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(nums[1]), results[1]);
+    EXPECT_EQ(solution.Solution1(nums[2]), results[2]);
+
+    EXPECT_EQ(solution.Solution3(nums[0]), results[0]);
+    EXPECT_EQ(solution.Solution3(nums[1]), results[1]);
+    EXPECT_EQ(solution.Solution3(nums[2]), results[2]);
+
+    EXPECT_EQ(solution.Solution2(nums[0]), results[0]);
+    EXPECT_EQ(solution.Solution2(nums[1]), results[1]);
+    EXPECT_EQ(solution.Solution2(nums[2]), results[2]);
+}
+
 } // namespace test
 } // namespace leetcode
 
