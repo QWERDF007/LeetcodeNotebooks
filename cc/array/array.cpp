@@ -11,15 +11,35 @@
 #include "array.h"
 
 
-
-
-
-
-
-
-
 namespace leetcode {
 namespace array{
+
+void ArraySolution(int pid) {
+    LeetcodeSolution* solution = nullptr;
+    switch (pid) {
+        case SolutionsId::TWO_SUM: solution = new TwoSum(); break;
+        case SolutionsId::REMOVE_DUPLICATES: solution = new RemoveDuplicates(); break;
+        case SolutionsId::MISSING_NUMBER: solution = new MissingNumber(); break;
+        case SolutionsId::NUM_ARRAY: solution = new NumArray(); break;
+        case SolutionsId::INTERSECTION: solution = new Intersection(); break;
+        case SolutionsId::INTERSECT: solution = new Intersect(); break;
+        case SolutionsId::THIRD_MAX: solution = new ThirdMax(); break;
+        case SolutionsId::FIND_DISAPPEARED_NUMBERS: solution = new FindDisappearedNumbers(); break;
+        default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
+    }
+    if (solution != nullptr) {
+        //std::cout << typeid(*solution).name() << std::endl;
+        std::cout << solution->Title() << std::endl;
+        std::cout << "Link:\n";
+        std::cout << solution->Link() << std::endl << std::endl;
+        std::cout << "Problem:\n";
+        std::cout << solution->Problem() << std::endl;
+        std::cout << "Solution:\n";
+        std::cout << solution->Solution() << std::endl;
+        solution->Benchmark();
+        delete solution;
+    }
+}
 
 std::string TwoSum::Title() {
     return "1.两数之和\n";
@@ -600,33 +620,104 @@ int ThirdMax::Solution3(std::vector<int>& nums) {
 }
 
 
-void ArraySolution(int pid) {
-    LeetcodeSolution* solution = nullptr;
-    switch (pid) {
-    case SolutionsId::TWO_SUM: solution = new TwoSum(); break;
-    case SolutionsId::REMOVE_DUPLICATES: solution = new RemoveDuplicates(); break;
-    case SolutionsId::MISSING_NUMBER: solution = new MissingNumber(); break;
-    case SolutionsId::NUM_ARRAY: solution = new NumArray(); break;
-    case SolutionsId::INTERSECTION: solution = new Intersection(); break;
-    case SolutionsId::INTERSECT: solution = new Intersect(); break;
-    case SolutionsId::THIRD_MAX: solution = new ThirdMax(); break;
-    default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
-    }
-    if (solution != nullptr) {
-        //std::cout << typeid(*solution).name() << std::endl;
-        std::cout << solution->Title() << std::endl;
-        std::cout << "Link:\n";
-        std::cout << solution->Link() << std::endl << std::endl;
-        std::cout << "Problem:\n";
-        std::cout << solution->Problem() << std::endl;
-        std::cout << "Solution:\n";
-        std::cout << solution->Solution() << std::endl;
-        solution->Benchmark();
-        delete solution;
-    }
+
+
+std::string FindDisappearedNumbers::Title() {
+    return "448. 找到所有数组中消失的数字\n";
 }
 
+std::string FindDisappearedNumbers::Problem() {
+    return 
+        "给你一个含 n 个整数的数组 nums ，其中 nums[i] 在区间 [1, n] 内。\n"
+        "请你找出所有在 [1, n] 范围内但没有出现在 nums 中的数字，并以数组的形式返回结果。\n";
+}
 
+std::string FindDisappearedNumbers::Link() {
+    return "https://leetcode-cn.com/problems/find-all-numbers-disappeared-in-an-array/";
+}
+
+std::string FindDisappearedNumbers::Solution() {
+    return "原地修改，数组模拟哈希表，时间：O(n)，空间：O(1)。\n";
+}
+
+void FindDisappearedNumbers::Benchmark() {
+    FindDisappearedNumbers solution;
+
+    int n = 10000;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(1, n);
+    std::vector<int> nums(n);
+    for (int i = 0; i < n; ++i) {
+        nums[i] = dis(gen);
+    }
+    auto fun_hashset = [](benchmark::State& state, FindDisappearedNumbers solution, std::vector<int> nums) {
+        for (auto _ : state) {
+            solution.Solution1(nums);
+        }
+    };
+    benchmark::RegisterBenchmark("BM_FindDisappearedNumbers_HashSet", fun_hashset, solution, nums);
+
+    auto fun_inplace = [](benchmark::State& state, FindDisappearedNumbers solution, std::vector<int> nums) {
+        for (auto _ : state) {
+            solution.Solution2(nums);
+        }
+    };
+    benchmark::RegisterBenchmark("BM_FindDisappearedNumbers_Inplace", fun_inplace, solution, nums);
+
+    auto fun_hashmap = [](benchmark::State& state, FindDisappearedNumbers solution, std::vector<int> nums) {
+        for (auto _ : state) {
+            solution.Solution3(nums);
+        }
+    };
+
+    benchmark::RegisterBenchmark("BM_FindDisappearedNumbers_HashMap", fun_hashmap, solution, nums);
+}
+
+std::vector<int> FindDisappearedNumbers::Solution1(std::vector<int>& nums) {
+    std::unordered_set<int> set;
+    int n = nums.size();
+    for (int num : nums) {
+        set.insert(num);
+    }
+    std::vector<int> ans;
+    for (int i = 1; i <= n; ++i) {
+        if (!set.count(i)) {
+            ans.emplace_back(i);
+        }
+    }
+    return ans;
+}
+
+std::vector<int> FindDisappearedNumbers::Solution2(std::vector<int>& nums) {
+    std::vector<int> ans;
+    int n = nums.size();
+    for (int i = 0; i < n; ++i) {
+        int j = (nums[i] - 1) % n;
+        nums[j] += n;
+    }
+    for (int i = 0; i < n; ++i) {
+        if (nums[i] <= n) {
+            ans.emplace_back(i + 1);
+        }
+    }
+    return ans;
+}
+
+std::vector<int> FindDisappearedNumbers::Solution3(std::vector<int>& nums) {
+    std::unordered_map<int, int> map;
+    int n = nums.size();
+    for (int num : nums) {
+        ++map[num];
+    }
+    std::vector<int> ans;
+    for (int i = 1; i <= n; ++i) {
+        if (!map.count(i)) {
+            ans.emplace_back(i);
+        }
+    }
+    return ans;
+}
 
 } // namespace array
 } // namespace leetcode

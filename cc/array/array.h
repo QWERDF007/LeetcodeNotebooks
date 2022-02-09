@@ -8,6 +8,14 @@
 namespace leetcode {
 namespace array{
 
+/**
+ * @brief 数组题目入口
+ *
+ * @param pid 数组题目id
+ */
+void ArraySolution(int pid);
+
+
 class TwoSum : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -266,12 +274,46 @@ public:
     int Solution3(std::vector<int>& nums);
 };
 
-/**
- * @brief 数组题目入口
- * 
- * @param pid 数组题目id
- */
-void ArraySolution(int pid);
+class FindDisappearedNumbers : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 哈希集合
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param nums 
+     * @return std::vector<int> 消失的数字
+     */
+    std::vector<int> Solution1(std::vector<int>& nums);
+
+    /**
+     * @brief 原地修改
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param nums 
+     * @return std::vector<int> 消失的数字
+     */
+    std::vector<int> Solution2(std::vector<int>& nums);
+
+    /**
+     * @brief 哈希表
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param nums
+     * @return std::vector<int> 消失的数字
+     */
+    std::vector<int> Solution3(std::vector<int>& nums);
+};
+
 
 } // namespace array
 } // namespace leetcode
