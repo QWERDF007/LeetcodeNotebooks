@@ -67,6 +67,7 @@ enum SolutionsId {
     INTERSECTION = 349,
     INTERSECT = 350,
     THIRD_MAX = 414,
+    FIND_DISAPPEARED_NUMBERS = 448,
     SECOND_HIGHEST = 1796,
 };
     
