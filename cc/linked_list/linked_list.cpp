@@ -1,4 +1,7 @@
-﻿#include <iostream>
+﻿#include <vector>
+#include <random>
+#include <iostream>
+#include <benchmark/benchmark.h>
 
 #include "leetcode_solution.h"
 #include "linked_list.h"
@@ -25,6 +28,46 @@ void LinkedListSolution(int pid) {
 	}
 }
 
+ListNode *Vector2ListNode(std::vector<int> &nums) {
+	ListNode *head = nullptr;
+	ListNode *tail = nullptr;
+	for (int num : nums) {
+		if (!head) {
+			head = tail = new ListNode(num);
+		}
+		else {
+			tail->next = new ListNode(num);
+			tail = tail->next;
+		}
+	}
+	return head;
+}
+
+void FreeListNode(ListNode *head) {
+	while (head) {
+		ListNode *p = head;
+		head = head->next;
+		delete p;
+	}
+}
+
+bool CompareListNode(ListNode *l1, ListNode *l2) {
+	ListNode *node1 = l1, *node2 = l2;
+	while (node1 || node2) {
+		if ((!node1 && node2) || (node1 && !node2)) {
+			return false;
+		}
+		else if (node1->val != node2->val) {
+			return false;
+		}
+		else {
+			node1 = node1->next;
+			node2 = node2->next;
+		}
+	}
+	return true;
+}
+
 std::string AddTwoNumbers::Title() {
 	return "2. 两数相加\n";
 }
@@ -46,10 +89,76 @@ std::string AddTwoNumbers::Solution() {
 }
 
 void AddTwoNumbers::Benchmark() {
+	AddTwoNumbers solution;
+
+	int n = 100;
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> dis(0, 9);
+	std::vector<int> nums1(n), nums2(n);
+	for (int i = 0; i < n; ++i) {
+		nums1[i] = dis(gen);
+		nums2[i] = dis(gen);
+	}
+	ListNode *l1 = Vector2ListNode(nums1);
+	ListNode *l2 = Vector2ListNode(nums2);
+
+	benchmark::RegisterBenchmark("BM_AddTwoNumbers_Simulate", [](benchmark::State &state, AddTwoNumbers solution, ListNode *l1, ListNode *l2) {
+		for (auto _ : state) {
+			ListNode *tmp_l1 = l1, *tmp_l2 = l2;
+			ListNode *l3 = solution.Solution1(tmp_l1, tmp_l2);
+			FreeListNode(l3);
+		}
+	}, solution, l1, l2);
+
+	benchmark::RegisterBenchmark("BM_AddTwoNumbers_Recursion", [](benchmark::State &state, AddTwoNumbers solution, ListNode *l1, ListNode *l2) {
+		for (auto _ : state) {
+			ListNode *tmp_l1 = l1, *tmp_l2 = l2;
+			ListNode *l3 = solution.Solution2(tmp_l1, tmp_l2);
+			FreeListNode(l3);
+		}
+	}, solution, l1, l2);
+
+	//FreeListNode(l1);
+	//FreeListNode(l2);
 }
 
 ListNode* AddTwoNumbers::Solution1(ListNode* l1, ListNode* l2) {
-	return nullptr;
+	ListNode *head = nullptr, *tail = nullptr;
+	int carry = 0;
+	while (l1 || l2 || carry) {
+		int v1 = l1 ? l1->val : 0;
+		int v2 = l2 ? l2->val : 0;
+		int sum = v1 + v2 + carry;
+		if (!head) {
+			head = tail = new ListNode(sum % 10);
+		} else {
+			tail->next = new ListNode(sum % 10);
+			tail = tail->next;
+		}
+		carry = sum / 10;
+		l1 = l1 ? l1->next : l1;
+		l2 = l2 ? l2->next : l2;
+	}
+	return head;
+}
+
+ListNode *AddTwoNumbers::Solution2(ListNode *l1, ListNode *l2) {
+	return Solution2Aux(l1, l2, 0);
+}
+
+ListNode *AddTwoNumbers::Solution2Aux(ListNode *l1, ListNode *l2, int carry) {
+	if (l1 == nullptr && l2 == nullptr && carry == 0) {
+		return nullptr;
+	}
+	int v1 = l1 ? l1->val : 0;
+	int v2 = l2 ? l2->val : 0;
+	int sum = v1 + v2 + carry;
+	l1 = l1 ? l1->next : l1;
+	l2 = l2 ? l2->next : l2;
+	ListNode *node = new ListNode(sum % 10);
+	node->next = Solution2Aux(l1, l2, sum / 10);
+	return node;
 }
 
 } // namespace linkedlist
