@@ -85,7 +85,7 @@ std::string AddTwoNumbers::Link() {
 }
 
 std::string AddTwoNumbers::Solution() {
-	return std::string();
+	return "模拟，时间：O(max(n,m))，空间：O(1)。\n";
 }
 
 void AddTwoNumbers::Benchmark() {
