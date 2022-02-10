@@ -36,7 +36,7 @@ public:
      * @param target 
      * @return std::vector<int> 
      */
-    std::vector<int> Solution1(std::vector<int>& nums, int target);
+    std::vector<int> Solution1(std::vector<int> &nums, int target);
 
     /**
      * @brief 两数之和：哈希表
@@ -46,7 +46,7 @@ public:
      * @param target 
      * @return std::vector<int> 
      */
-    std::vector<int> Solution2(std::vector<int>& nums, int target);
+    std::vector<int> Solution2(std::vector<int> &nums, int target);
 };
 
 class RemoveDuplicates : public LeetcodeSolution {
@@ -67,7 +67,7 @@ public:
      * 空间复杂度：O(1)
      * @return int 删除重复项后数组的长度
      */
-    int Solution1(std::vector<int>& nums);
+    int Solution1(std::vector<int> &nums);
 
     /**
      * @brief 删除有序数组中的重复项：双指针
@@ -75,7 +75,7 @@ public:
      * 空间复杂度：O(1)
      * @return int 删除重复项后数组的长度
      */
-    int Solution2(std::vector<int>& nums);
+    int Solution2(std::vector<int> &nums);
 
 };
 
@@ -98,7 +98,7 @@ public:
      * @param nums 
      * @return int 丢失的数字
      */
-    int Solution1(std::vector<int>& nums);
+    int Solution1(std::vector<int> &nums);
 
     /**
      * @brief 丢失的数字：哈希集合
@@ -107,7 +107,7 @@ public:
      * @param nums 
      * @return int 丢失的数字
      */
-    int Solution2(std::vector<int>& nums);
+    int Solution2(std::vector<int> &nums);
 
     /**
      * @brief 丢失的数字：位运算
@@ -116,7 +116,7 @@ public:
      * @param nums 
      * @return int 丢失的数字
      */
-    int Solution3(std::vector<int>& nums);
+    int Solution3(std::vector<int> &nums);
 
     /**
      * @brief 丢失的数字：数学等差数列求和
@@ -125,7 +125,7 @@ public:
      * @param nums 
      * @return int 丢失的数字
      */
-    int Solution4(std::vector<int>& nums);
+    int Solution4(std::vector<int> &nums);
 
 };
 
@@ -133,7 +133,7 @@ class NumArray : public LeetcodeSolution {
 public:
     NumArray() {};
 
-    NumArray(std::vector<int>& nums);
+    NumArray(std::vector<int> &nums);
 
     std::string Title() override;
 
@@ -188,7 +188,7 @@ public:
      * @param nums2 
      * @return std::vector<int> 数组交集
      */
-    std::vector<int> Solution1(std::vector<int>& nums1, std::vector<int>& nums2);
+    std::vector<int> Solution1(std::vector<int> &nums1, std::vector<int> &nums2);
 
     /**
      * @brief 排序+双指针
@@ -198,7 +198,7 @@ public:
      * @param nums2 
      * @return std::vector<int> 数组交集
      */
-    std::vector<int> Solution2(std::vector<int>& nums1, std::vector<int>& nums2);
+    std::vector<int> Solution2(std::vector<int> &nums1, std::vector<int> &nums2);
 };
 
 class Intersect : public LeetcodeSolution {
@@ -221,7 +221,7 @@ public:
      * @param nums2
      * @return std::vector<int> 数组交集
      */
-    std::vector<int> Solution1(std::vector<int>& nums1, std::vector<int>& nums2);
+    std::vector<int> Solution1(std::vector<int> &nums1, std::vector<int> &nums2);
 
     /**
      * @brief 排序+双指针
@@ -231,7 +231,7 @@ public:
      * @param nums2
      * @return std::vector<int> 数组交集
      */
-    std::vector<int> Solution2(std::vector<int>& nums1, std::vector<int>& nums2);
+    std::vector<int> Solution2(std::vector<int> &nums1, std::vector<int> &nums2);
 };
 
 class ThirdMax : public LeetcodeSolution {
@@ -253,7 +253,7 @@ public:
      * @param nums 
      * @return int 第三大的数
      */
-    int Solution1(std::vector<int>& nums);
+    int Solution1(std::vector<int> &nums);
 
     /**
      * @brief 有序集合
@@ -262,7 +262,7 @@ public:
      * @param nums 
      * @return int 第三大的数
      */
-    int Solution2(std::vector<int>& nums);
+    int Solution2(std::vector<int> &nums);
 
     /**
      * @brief 有限变量遍历
@@ -271,7 +271,7 @@ public:
      * @param nums 
      * @return int 第三大的数
      */
-    int Solution3(std::vector<int>& nums);
+    int Solution3(std::vector<int> &nums);
 };
 
 class FindDisappearedNumbers : public LeetcodeSolution {
@@ -293,7 +293,7 @@ public:
      * @param nums 
      * @return std::vector<int> 消失的数字
      */
-    std::vector<int> Solution1(std::vector<int>& nums);
+    std::vector<int> Solution1(std::vector<int> &nums);
 
     /**
      * @brief 原地修改
@@ -302,7 +302,7 @@ public:
      * @param nums 
      * @return std::vector<int> 消失的数字
      */
-    std::vector<int> Solution2(std::vector<int>& nums);
+    std::vector<int> Solution2(std::vector<int> &nums);
 
     /**
      * @brief 哈希表
@@ -311,9 +311,30 @@ public:
      * @param nums
      * @return std::vector<int> 消失的数字
      */
-    std::vector<int> Solution3(std::vector<int>& nums);
+    std::vector<int> Solution3(std::vector<int> &nums);
 };
 
+class MinMoves : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 数学，一次遍历
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param nums 
+     * @return int 最小次数
+     */
+    int Solution1(std::vector<int> &nums);
+};
 
 } // namespace array
 } // namespace leetcode

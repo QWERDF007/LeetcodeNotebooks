@@ -26,6 +26,7 @@ void ArraySolution(int pid) {
         case SolutionsId::INTERSECT: solution = new Intersect(); break;
         case SolutionsId::THIRD_MAX: solution = new ThirdMax(); break;
         case SolutionsId::FIND_DISAPPEARED_NUMBERS: solution = new FindDisappearedNumbers(); break;
+        case SolutionsId::MIN_MOVES: solution = new MinMoves(); break;
         default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
     }
     if (solution != nullptr) {
@@ -718,6 +719,54 @@ std::vector<int> FindDisappearedNumbers::Solution3(std::vector<int>& nums) {
         }
     }
     return ans;
+}
+
+std::string MinMoves::Title() {
+    return "453. 最小操作次数使数组元素相等\n";
+}
+
+std::string MinMoves::Problem() {
+    return 
+        "给你一个长度为 n 的整数数组，每次操作将会使 n-1 个元素增加 1。返回让数组所有元素相等的最小操作次数。\n";
+}
+
+std::string MinMoves::Link() {
+    return "https://leetcode-cn.com/problems/minimum-moves-to-equal-array-elements/";
+}
+
+std::string MinMoves::Solution() {
+    return "数学，一次遍历，时间：O(n)，空间：O(1)。\n";
+}
+
+void MinMoves::Benchmark() {
+    MinMoves solution;
+
+    int n = 1000000;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(-n, n);
+    std::vector<int> nums(n);
+    for (int i = 0; i < n; ++i) {
+        nums[i] = dis(gen);
+    }
+
+    benchmark::RegisterBenchmark("BM_MinMoves_Arithmetic", [](benchmark::State &state, MinMoves solution, std::vector<int> nums) {
+        for (auto _ : state) {
+            solution.Solution1(nums);
+        }
+    }, solution, nums);
+}
+
+int MinMoves::Solution1(std::vector<int> &nums) {
+    int n = nums.size();
+    int m = INT_MAX;
+    long long sum = 0;
+    
+    for (int num : nums) {
+        sum += num;
+        m = m > num ? num : m;
+    }
+    return sum - (long long)m * n;
 }
 
 } // namespace array
