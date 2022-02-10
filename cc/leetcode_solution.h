@@ -69,6 +69,7 @@ enum SolutionsId {
     THIRD_MAX = 414,
     FIND_DISAPPEARED_NUMBERS = 448,
     MIN_MOVES = 453,
+    MAX_POWER = 1446,
     SECOND_HIGHEST = 1796,
 };
     
