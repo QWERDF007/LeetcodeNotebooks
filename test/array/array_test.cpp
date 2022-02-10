@@ -254,6 +254,24 @@ TEST(FindDisappearedNumbersTest, LeetcodeTest) {
     EXPECT_EQ(solution.Solution2(nums[2]), results[2]);
 }
 
+TEST(MinMovesTest, LeetcodeTest) {
+    MinMoves solution;
+
+    std::vector<std::vector<int>> nums{
+        { 1,2,3 },
+        { 1,1,1 },
+        { 1,1000000000 },
+    };
+
+    std::vector<int> results{
+        3, 0, 999999999,
+    };
+
+    EXPECT_EQ(solution.Solution1(nums[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(nums[1]), results[1]);
+    EXPECT_EQ(solution.Solution1(nums[2]), results[2]);
+}
+
 } // namespace test
 } // namespace leetcode
 
