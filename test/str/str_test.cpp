@@ -99,5 +99,15 @@ TEST(SecondHighestTest, LeetcodeTest) {
     EXPECT_EQ(solution.Solution3("ck077"), 0);
 }
 
+TEST(MaxPowerTest, LeetcodeTest) {
+    MaxPower solution;
+
+    EXPECT_EQ(solution.Solution1("leetcode"), 2);
+    EXPECT_EQ(solution.Solution1("abbcccddddeeeeedcba"), 5);
+    EXPECT_EQ(solution.Solution1("triplepillooooow"), 5);
+    EXPECT_EQ(solution.Solution1("hooraaaaaaaaaaay"), 11);
+    EXPECT_EQ(solution.Solution1("tourist"), 1);
+}
+
 } // namespace test
 } // namespace leetcode
