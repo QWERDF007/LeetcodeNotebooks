@@ -150,7 +150,7 @@ void RemoveDuplicates::Benchmark() {
         }
     }, solution, nums);
 
-    benchmark::RegisterBenchmark("BM_TwoSum_DoublePointers", [](benchmark::State& state, RemoveDuplicates solution, std::vector<int> nums) {
+    benchmark::RegisterBenchmark("BM_TwoSum_DualPointer", [](benchmark::State& state, RemoveDuplicates solution, std::vector<int> nums) {
         for (auto _ : state) {
             solution.Solution2(nums);
         }
