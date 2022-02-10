@@ -8,6 +8,15 @@
 namespace leetcode {
 namespace str {
 
+
+/**
+ * @brief 字符串题目入口
+ *
+ * @param pid 字符串题目id
+ */
+void StrSolution(int pid);
+
+
 class RomanToInt : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -103,6 +112,28 @@ public:
     std::string Solution2(int columnNumber);
 };
 
+class MaxPower : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 双指针
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param s
+     * @return int 「能量」
+     */
+    int Solution1(std::string s);
+};
+
 class SecondHighest : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -143,12 +174,7 @@ public:
     int Solution3(std::string s);
 };
 
-/**
- * @brief 字符串题目入口
- * 
- * @param pid 字符串题目id
- */
-void StrSolution(int pid);
-    
+
+
 } // namespace str
 } // namespace leetcode 

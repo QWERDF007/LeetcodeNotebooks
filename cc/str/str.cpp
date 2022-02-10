@@ -10,6 +10,30 @@
 namespace leetcode {
 namespace str {
 
+
+void StrSolution(int pid) {
+    LeetcodeSolution *solution = nullptr;
+    switch (pid) {
+        case ROMAN_TO_INT: solution = new RomanToInt(); break;
+        case ADD_BINARY: solution = new AddBinary(); break;
+        case CONVERT_TO_TITLE: solution = new ConvertToTitle(); break;
+        case MAX_POWER: solution = new MaxPower(); break;
+        case SECOND_HIGHEST: solution = new SecondHighest(); break;
+        default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
+    }
+    if (solution != nullptr) {
+        std::cout << solution->Title() << std::endl;
+        std::cout << "Link:\n";
+        std::cout << solution->Link() << std::endl << std::endl;
+        std::cout << "Problem:\n";
+        std::cout << solution->Problem() << std::endl;
+        std::cout << "Solution:\n";
+        std::cout << solution->Solution() << std::endl;
+        solution->Benchmark();
+        delete solution;
+    }
+}
+
 std::string RomanToInt::Title() {
     return "13. 罗马数字转整数\n";
 }
@@ -336,6 +360,61 @@ std::string ConvertToTitle::Solution2(int columnNumber) {
 }
 
 
+std::string MaxPower::Title() {
+    return "1446. 连续字符\n";
+}
+
+std::string MaxPower::Problem() {
+    return
+        "给你一个字符串 s，字符串的「能量」定义为：只包含一种字符的最长非空子字符串的长度。\n"
+        "请你返回字符串的能量。\n";
+}
+
+std::string MaxPower::Link() {
+    return "https://leetcode-cn.com/problems/consecutive-characters/";
+}
+
+std::string MaxPower::Solution() {
+    return "双指针，时间：O(n)，空间：O(1)。\n";
+}
+
+void MaxPower::Benchmark() {
+    MaxPower solution;
+
+    int n = 1000;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis('a', 'z');
+    std::string s;
+    for (int i = 0; i < n; ++i) {
+        s += static_cast<char>(dis(gen));
+    }
+
+    benchmark::RegisterBenchmark("BM_MaxPower_DualPointer", [](benchmark::State &state, MaxPower solution, std::string s) {
+        for (auto _ : state) {
+            solution.Solution1(s);
+        }
+    }, solution, s);
+}
+
+int MaxPower::Solution1(std::string s) {
+    int n = s.size();
+    int m = 1, c = 1;
+    for (int i = 1; i < n; ++i) {
+        if (s[i] == s[i - 1]) {
+            ++c;
+            if (c > m) {
+                m = c;
+            }
+        }
+        else {
+            c = 1;
+        }
+    }
+    return m;
+}
+
+
 std::string SecondHighest::Title() {
     return "1796. 字符串中第二大的数字\n";
 }
@@ -431,29 +510,6 @@ int SecondHighest::Solution3(std::string s) {
         }
     }
     return -1;
-}
-
-
-void StrSolution(int pid) {
-    LeetcodeSolution* solution = nullptr;
-    switch (pid) {
-        case ROMAN_TO_INT: solution = new RomanToInt(); break;
-        case ADD_BINARY: solution = new AddBinary(); break;
-        case CONVERT_TO_TITLE: solution = new ConvertToTitle(); break;
-        case SECOND_HIGHEST: solution = new SecondHighest(); break;
-        default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
-    }
-    if (solution != nullptr) {
-        std::cout << solution->Title() << std::endl;
-        std::cout << "Link:\n";
-        std::cout << solution->Link() << std::endl << std::endl;
-        std::cout << "Problem:\n";
-        std::cout << solution->Problem() << std::endl;
-        std::cout << "Solution:\n";
-        std::cout << solution->Solution() << std::endl;
-        solution->Benchmark();
-        delete solution;
-    }
 }
 
 
