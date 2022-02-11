@@ -71,6 +71,7 @@ enum SolutionsId {
     MIN_MOVES = 453,
     MAX_POWER = 1446,
     SECOND_HIGHEST = 1796,
+    MINIMUM_DIFFERENCE = 1984,
 };
     
 } // namespace leetcode
