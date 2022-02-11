@@ -272,6 +272,27 @@ TEST(MinMovesTest, LeetcodeTest) {
     EXPECT_EQ(solution.Solution1(nums[2]), results[2]);
 }
 
+TEST(MinimumDifferenceTest, LeetcodeTest) {
+    MinimumDifference solution;
+    std::vector<std::vector<int>> nums{
+        { 90 },
+        { 9,4,1,7 },
+        { 87063,61094,44530,21297,95857,93551,9918 },
+    };
+
+    std::vector<int> k{
+        1,2,6,
+    };
+
+    std::vector<int> results{
+        0,2,74560,
+    };
+
+    EXPECT_EQ(solution.Solution1(nums[0], k[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(nums[1], k[1]), results[1]);
+    EXPECT_EQ(solution.Solution1(nums[2], k[2]), results[2]);
+}
+
 } // namespace test
 } // namespace leetcode
 
