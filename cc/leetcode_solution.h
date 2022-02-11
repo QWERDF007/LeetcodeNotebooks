@@ -48,6 +48,7 @@ public:
 enum ProblemType {
     ARRAY = 1,
     STR = 2,
+    MATH = 5,
     LINKED_LIST,
 };
 
@@ -58,6 +59,7 @@ enum ProblemType {
 enum SolutionsId {
     TWO_SUM = 1,
     ADD_TWO_NUMBERS = 2,
+    IS_PALINDROME = 9,
     ROMAN_TO_INT = 13,
     REMOVE_DUPLICATES = 26,
     ADD_BINARY = 67,

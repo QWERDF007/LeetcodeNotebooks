@@ -8,6 +8,7 @@
 #include "array/array.h"
 #include "str/str.h"
 #include "linked_list/linked_list.h"
+#include "math/leetcode_math.h"
 
 
 
@@ -33,22 +34,11 @@ int main(int argc, char* argv[]) {
             pid = opts["pid"].as<int>();
         }
         switch (type) {
-        case leetcode::ARRAY: {
-            leetcode::array::ArraySolution(pid);
-            break;
-        }
-        case leetcode::STR: {
-            leetcode::str::StrSolution(pid);
-            break;
-        }
-        case leetcode::LINKED_LIST: {
-            leetcode::linkedlist::LinkedListSolution(pid);
-            break;
-        }
-        default:
-            std::cerr << "no such type: \"" << type << "\"\n";
-            exit(EXIT_FAILURE);
-            break;
+            case leetcode::ARRAY: leetcode::array::ArraySolution(pid); break;
+            case leetcode::STR:  leetcode::str::StrSolution(pid); break;
+            case leetcode::MATH: leetcode::math::MathSolution(pid); break;
+            case leetcode::LINKED_LIST: leetcode::linkedlist::LinkedListSolution(pid); break;
+            default: std::cerr << "no such type: \"" << type << "\"\n"; exit(EXIT_FAILURE); break;
         }
 
         benchmark::Initialize(&argc, argv);
