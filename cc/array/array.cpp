@@ -27,6 +27,7 @@ void ArraySolution(int pid) {
         case SolutionsId::THIRD_MAX: solution = new ThirdMax(); break;
         case SolutionsId::FIND_DISAPPEARED_NUMBERS: solution = new FindDisappearedNumbers(); break;
         case SolutionsId::MIN_MOVES: solution = new MinMoves(); break;
+        case SolutionsId::MINIMUM_DIFFERENCE: solution = new MinimumDifference(); break;
         default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
     }
     if (solution != nullptr) {
@@ -767,6 +768,58 @@ int MinMoves::Solution1(std::vector<int> &nums) {
         m = m > num ? num : m;
     }
     return sum - (long long)m * n;
+}
+
+std::string MinimumDifference::Title() {
+    return "1984. 学生分数的最小差值\n";
+}
+
+std::string MinimumDifference::Problem() {
+    return 
+        "给你一个下标从 0 开始的整数数组 nums，其中 nums[i] 表示第 i 名学生的分数。另给你一个整数 k。\n"
+        "从数组中选出任意 k 名学生的分数，使这 k 个分数间最高分和最低分的差值达到最小化。\n"
+        "返回可能的最小差值。\n";
+}
+
+std::string MinimumDifference::Link() {
+    return "https://leetcode-cn.com/problems/minimum-difference-between-highest-and-lowest-of-k-scores/";
+}
+
+std::string MinimumDifference::Solution() {
+    return "排序+滑动窗口，时间：O(nlogn)，空间：O(logn)。\n";
+}
+
+void MinimumDifference::Benchmark() {
+    MinimumDifference solution;
+
+    int n = 100000;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, n);
+    std::vector<int> nums(n);
+    for (int i = 0; i < n; ++i) {
+        nums[i] = dis(gen);
+    }
+    int k = dis(gen) % 999 + 1;
+
+    auto func = [](benchmark::State &state, MinimumDifference solution, std::vector<int> nums, int k) {
+        for (auto _ : state) {
+            solution.Solution1(nums, k);
+        }
+    };
+
+    benchmark::RegisterBenchmark("BM_MinimumDifference_SortSlidingWindow", func, solution, nums, k);
+}
+
+int MinimumDifference::Solution1(std::vector<int> &nums, int k) {
+    if (k == 1) return 0;
+    std::sort(nums.begin(), nums.end());
+    int n = nums.size(), m = INT_MAX;
+    int j = n - k + 1;
+    for (int i = 0; i < j; ++i) {
+        m = std::min(m, nums[i + k - 1] - nums[i]);
+    }
+    return m;
 }
 
 } // namespace array

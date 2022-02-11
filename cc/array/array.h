@@ -336,5 +336,20 @@ public:
     int Solution1(std::vector<int> &nums);
 };
 
+class MinimumDifference : public LeetcodeSolution {
+public:
+    std::string Title() override;
+    
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    int Solution1(std::vector<int> &nums, int k);
+};
+
 } // namespace array
 } // namespace leetcode
