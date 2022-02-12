@@ -157,7 +157,7 @@ std::string MySqrt::Link() {
 }
 
 std::string MySqrt::Solution() {
-    return "牛顿迭代法，实际：O(log x)，空间：O(1)。\n";
+    return "牛顿迭代法，时间：O(log x)，空间：O(1)。\n";
 }
 
 void MySqrt::Benchmark() {
