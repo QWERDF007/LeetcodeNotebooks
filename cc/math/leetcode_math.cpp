@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <string>
 #include <random>
 #include <climits>
@@ -32,13 +32,13 @@ void MathSolution(int pid) {
 }
 
 std::string IsPalindrome::Title() {
-	return "9. »ØÎÄÊı\n";
+	return "9. å›æ–‡æ•°\n";
 }
 
 std::string IsPalindrome::Problem() {
 	return 
-        "¸øÄãÒ»¸öÕûÊı x£¬Èç¹û x ÊÇÒ»¸ö»ØÎÄÕûÊı£¬·µ»Ø true£»·ñÔò£¬·µ»Ø false¡£\n"
-        "»ØÎÄÊıÊÇÖ¸ÕıĞò£¨´Ó×óÏòÓÒ£©ºÍµ¹Ğò£¨´ÓÓÒÏò×ó£©¶Á¶¼ÊÇÒ»ÑùµÄÕûÊı¡£ÀıÈç£¬121 ÊÇ»ØÎÄ£¬¶ø 123 ²»ÊÇ¡£\n";
+        "ç»™ä½ ä¸€ä¸ªæ•´æ•° xï¼Œå¦‚æœ x æ˜¯ä¸€ä¸ªå›æ–‡æ•´æ•°ï¼Œè¿”å› trueï¼›å¦åˆ™ï¼Œè¿”å› falseã€‚\n"
+        "å›æ–‡æ•°æ˜¯æŒ‡æ­£åºï¼ˆä»å·¦å‘å³ï¼‰å’Œå€’åºï¼ˆä»å³å‘å·¦ï¼‰è¯»éƒ½æ˜¯ä¸€æ ·çš„æ•´æ•°ã€‚ä¾‹å¦‚ï¼Œ121 æ˜¯å›æ–‡ï¼Œè€Œ 123 ä¸æ˜¯ã€‚\n";
 }
 
 std::string IsPalindrome::Link() {
@@ -46,7 +46,7 @@ std::string IsPalindrome::Link() {
 }
 
 std::string IsPalindrome::Solution() {
-	return "·´×ªÒ»°ëÊı×Ö£¬Ê±¼ä£ºO(n)£¬¿Õ¼ä£ºO(1)¡£\n";
+	return "åè½¬ä¸€åŠæ•°å­—ï¼Œæ—¶é—´ï¼šO(n)ï¼Œç©ºé—´ï¼šO(1)ã€‚\n";
 }
 
 void IsPalindrome::Benchmark() {
@@ -112,20 +112,20 @@ bool IsPalindrome::Solution3(int x) {
         return false;
     }
     int div = 1;
-    // ÕÒ³ö×î´óÎ»Êı
+    // æ‰¾å‡ºæœ€å¤§ä½æ•°
     while (x / div >= 10) {
         div *= 10;
     }
     while (x > 0) {
-        // ÕÒ³öÁ½Í·±È½Ï
+        // æ‰¾å‡ºä¸¤å¤´æ¯”è¾ƒ
         int left = x / div;
         int right = x % 10;
         if (left != right) {
             return false;
         }
-        // Ä¨µôÁ½Í·£¬×¼±¸ÏÂÒ»´Î
+        // æŠ¹æ‰ä¸¤å¤´ï¼Œå‡†å¤‡ä¸‹ä¸€æ¬¡
         x = (x % div) / 10;
-        // Ä¨µôÁËÁ½Î»£¬³ıÊı³ıÒÔ100
+        // æŠ¹æ‰äº†ä¸¤ä½ï¼Œé™¤æ•°é™¤ä»¥100
         div /= 100;
     }
     return true;
@@ -142,14 +142,14 @@ bool IsPalindrome::Solution4(int x) {
 }
 
 std::string MySqrt::Title() {
-    return "69. x µÄÆ½·½¸ù\n";
+    return "69. x çš„å¹³æ–¹æ ¹\n";
 }
 
 std::string MySqrt::Problem() {
     return 
-        "¸øÄãÒ»¸ö·Ç¸ºÕûÊı x£¬¼ÆËã²¢·µ»Ø x µÄËãÊõÆ½·½¸ù¡£\n"
-        "ÓÉÓÚ·µ»ØÀàĞÍÊÇÕûÊı£¬½á¹ûÖ»±£ÁôÕûÊı²¿·Ö£¬Ğ¡Êı²¿·Ö½«±»ÉáÈ¥ ¡£\n"
-        "×¢Òâ£º²»ÔÊĞíÊ¹ÓÃÈÎºÎÄÚÖÃÖ¸Êıº¯ÊıºÍËã·û£¬ÀıÈç pow(x, 0.5) »òÕß x ** 0.5 ¡£\n";
+        "ç»™ä½ ä¸€ä¸ªéè´Ÿæ•´æ•° xï¼Œè®¡ç®—å¹¶è¿”å› x çš„ç®—æœ¯å¹³æ–¹æ ¹ã€‚\n"
+        "ç”±äºè¿”å›ç±»å‹æ˜¯æ•´æ•°ï¼Œç»“æœåªä¿ç•™æ•´æ•°éƒ¨åˆ†ï¼Œå°æ•°éƒ¨åˆ†å°†è¢«èˆå» ã€‚\n"
+        "æ³¨æ„ï¼šä¸å…è®¸ä½¿ç”¨ä»»ä½•å†…ç½®æŒ‡æ•°å‡½æ•°å’Œç®—ç¬¦ï¼Œä¾‹å¦‚ pow(x, 0.5) æˆ–è€… x ** 0.5 ã€‚\n";
 }
 
 std::string MySqrt::Link() {
@@ -157,7 +157,7 @@ std::string MySqrt::Link() {
 }
 
 std::string MySqrt::Solution() {
-    return "Å£¶Ùµü´ú·¨£¬Êµ¼Ê£ºO(log x)£¬¿Õ¼ä£ºO(1)¡£\n";
+    return "ç‰›é¡¿è¿­ä»£æ³•ï¼Œå®é™…ï¼šO(log x)ï¼Œç©ºé—´ï¼šO(1)ã€‚\n";
 }
 
 void MySqrt::Benchmark() {
