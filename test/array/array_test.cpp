@@ -10,7 +10,7 @@ namespace test {
 
 using namespace array;
 
-TEST(TwoSumTest, LeetcodeTest) {
+TEST(ArrayTest, TwoSumTest) {
     TwoSum solution;
     
     std::vector<std::vector<int>> nums({
@@ -45,7 +45,7 @@ TEST(TwoSumTest, LeetcodeTest) {
     EXPECT_EQ(solution.Solution2(nums[3], targets[3]), results[3]);
 }
 
-TEST(RemoveDuplicatesTest, LeetcodeTest) {
+TEST(ArrayTest, RemoveDuplicatesTest) {
     RemoveDuplicates solution;
     std::vector<std::vector<int>> nums({
         {},
@@ -72,7 +72,7 @@ TEST(RemoveDuplicatesTest, LeetcodeTest) {
     EXPECT_EQ(solution.Solution2(nums[3]), results[3]);
 }
 
-TEST(MissingNumberTest, LeetcodeTest) {
+TEST(ArrayTest, MissingNumberTest) {
     MissingNumber solution;
     std::vector<std::vector<int>> nums({
         { 3,0,1 },
@@ -103,7 +103,7 @@ TEST(MissingNumberTest, LeetcodeTest) {
     EXPECT_EQ(solution.Solution4(nums[2]), results[2]);
 }
 
-TEST(NumArrayTest, LeetcodeTest) {
+TEST(ArrayTest, NumArrayTest) {
     int n = 1000;
     std::vector<int> nums(n);
     for (int i = 0; i < n; ++i) {
@@ -144,7 +144,7 @@ TEST(NumArrayTest, LeetcodeTest) {
     EXPECT_EQ(solution.sumRange2(left[3], right[3]), results[3]);
 }
 
-TEST(IntersectionTest, LeetcodeTest) {
+TEST(ArrayTest, IntersectionTest) {
     Intersection solution;
     std::vector<std::vector<int>> nums1{
         { 1,2,2,1 },
@@ -169,7 +169,7 @@ TEST(IntersectionTest, LeetcodeTest) {
     EXPECT_EQ(s2_1, std::vector<int>({ 4,9 }));
 }
 
-TEST(IntersectTest, LeetcodeTest) {
+TEST(ArrayTest, IntersectTest) {
     Intersect solution;
     std::vector<std::vector<int>> nums1{
         { 1,2,2,1 },
@@ -202,7 +202,7 @@ TEST(IntersectTest, LeetcodeTest) {
     EXPECT_EQ(s2_2, std::vector<int>({ 4,4,9 }));
 }
 
-TEST(ThirdMaxTest, LeetcodeTest) {
+TEST(ArrayTest, ThirdMaxTest) {
     ThirdMax solution;
 
     std::vector<std::vector<int>> nums{
@@ -227,7 +227,7 @@ TEST(ThirdMaxTest, LeetcodeTest) {
     EXPECT_EQ(solution.Solution3(nums[3]), INT_MIN);
 }
 
-TEST(FindDisappearedNumbersTest, LeetcodeTest) {
+TEST(ArrayTest, FindDisappearedNumbersTest) {
     FindDisappearedNumbers solution;
 
     std::vector<std::vector<int>> nums{
@@ -254,7 +254,7 @@ TEST(FindDisappearedNumbersTest, LeetcodeTest) {
     EXPECT_EQ(solution.Solution2(nums[2]), results[2]);
 }
 
-TEST(MinMovesTest, LeetcodeTest) {
+TEST(ArrayTest, MinMovesTest) {
     MinMoves solution;
 
     std::vector<std::vector<int>> nums{
@@ -272,7 +272,7 @@ TEST(MinMovesTest, LeetcodeTest) {
     EXPECT_EQ(solution.Solution1(nums[2]), results[2]);
 }
 
-TEST(MinimumDifferenceTest, LeetcodeTest) {
+TEST(ArrayTest, MinimumDifferenceTest) {
     MinimumDifference solution;
     std::vector<std::vector<int>> nums{
         { 90 },
