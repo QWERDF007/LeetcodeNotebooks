@@ -1,7 +1,7 @@
 ﻿#include <ctime>
 #include <random>
 #include <stdlib.h>
-#include <limits.h>
+#include <climits>
 #include <iostream>
 #include <algorithm>
 #include <unordered_map>
