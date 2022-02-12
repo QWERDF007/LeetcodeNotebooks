@@ -7,7 +7,7 @@ namespace test {
 
 using namespace linkedlist;
 
-TEST(AddTwoNumbersTest, Leetcode) {
+TEST(LinkedListTest, AddTwoNumbersTest) {
     AddTwoNumbers solution;
     std::vector<std::vector<int>> nums1{
         { 2,4,3 },
