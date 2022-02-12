@@ -6,7 +6,7 @@ namespace test {
 
 using namespace str;
 
-TEST(RomanToIntTest, LeetcodeTest) {
+TEST(StrTest, RomanToIntTest) {
     RomanToInt solution;
 
     std::vector<std::string> strs{
@@ -39,7 +39,7 @@ TEST(RomanToIntTest, LeetcodeTest) {
     EXPECT_EQ(solution.Solution3(strs[3]), results[3]);
 }
 
-TEST(AddBinaryTest, LeetcodeTest) {
+TEST(StrTest, AddBinaryTest) {
     AddBinary solution;
 
     std::vector<std::string> a{
@@ -69,7 +69,7 @@ TEST(AddBinaryTest, LeetcodeTest) {
     EXPECT_EQ(solution.Solution2(a[2], b[2]), results[2]);
 }
 
-TEST(ConvertToTitleTest, LeetcodeTest) {
+TEST(StrTest, ConvertToTitleTest) {
     ConvertToTitle solution;
 
     EXPECT_EQ(solution.Solution1(1), "A");
@@ -83,7 +83,7 @@ TEST(ConvertToTitleTest, LeetcodeTest) {
     EXPECT_EQ(solution.Solution2(701), "ZY");
 }
 
-TEST(SecondHighestTest, LeetcodeTest) {
+TEST(StrTest, SecondHighestTest) {
     SecondHighest solution;
 
     EXPECT_EQ(solution.Solution1("dfa12321afd"), 2);
@@ -99,7 +99,7 @@ TEST(SecondHighestTest, LeetcodeTest) {
     EXPECT_EQ(solution.Solution3("ck077"), 0);
 }
 
-TEST(MaxPowerTest, LeetcodeTest) {
+TEST(StrTest, MaxPowerTest) {
     MaxPower solution;
 
     EXPECT_EQ(solution.Solution1("leetcode"), 2);
