@@ -60,5 +60,26 @@ public:
     bool Solution4(int x);
 };
 
+class MySqrt : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    int Solution1(int x);
+
+    int Solution2(int x);
+
+    int Solution3(int x);
+
+    int Solution4(int x);
+};
+
 } // namespace math
 } // namespace leetcode
