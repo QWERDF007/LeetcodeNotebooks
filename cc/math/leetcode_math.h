@@ -72,12 +72,40 @@ public:
 
     void Benchmark() override;
 
+    /**
+     * @brief 暴力解法
+     * 时间复杂度：O(x^{1/2})
+     * 空间复杂度：O(1)
+     * @param x 
+     * @return int 
+     */
     int Solution1(int x);
 
+    /**
+     * @brief 二分查找
+     * 时间复杂度：O(log x)
+     * 空间复杂度：O(1)
+     * @param x 
+     * @return int 
+     */
     int Solution2(int x);
 
+    /**
+     * @brief 牛顿迭代
+     * 时间复杂度：O(log x)
+     * 空间复杂度：O(1)
+     * @param x 
+     * @return int 
+     */
     int Solution3(int x);
 
+    /**
+     * @brief 数学替换
+     * 时间复杂度：O(1)
+     * 空间复杂度：O(1)
+     * @param x 
+     * @return int 
+     */
     int Solution4(int x);
 };
 
