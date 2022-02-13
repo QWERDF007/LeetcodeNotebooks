@@ -65,6 +65,7 @@ enum SolutionsId {
     ADD_BINARY = 67,
     MY_SQRT = 69,
     CONVERT_TO_TITLE = 168,
+    IS_HAPPY = 202,
     MISSING_NUMBER = 268,
     NUM_ARRAY = 303,
     INTERSECTION = 349,
