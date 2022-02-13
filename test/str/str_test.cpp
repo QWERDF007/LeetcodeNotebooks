@@ -83,6 +83,24 @@ TEST(StrTest, ConvertToTitleTest) {
     EXPECT_EQ(solution.Solution2(701), "ZY");
 }
 
+TEST(StrTest, MaxNumberOfBallonsTest) {
+    MaxNumberOfBallons solution;
+
+    EXPECT_EQ(solution.Solution1("nlaebolko"), 1);
+    EXPECT_EQ(solution.Solution1("loonbalxballpoon"), 2);
+    EXPECT_EQ(solution.Solution1("leetcode"), 0);
+}
+
+TEST(StrTest, MaxPowerTest) {
+    MaxPower solution;
+
+    EXPECT_EQ(solution.Solution1("leetcode"), 2);
+    EXPECT_EQ(solution.Solution1("abbcccddddeeeeedcba"), 5);
+    EXPECT_EQ(solution.Solution1("triplepillooooow"), 5);
+    EXPECT_EQ(solution.Solution1("hooraaaaaaaaaaay"), 11);
+    EXPECT_EQ(solution.Solution1("tourist"), 1);
+}
+
 TEST(StrTest, SecondHighestTest) {
     SecondHighest solution;
 
@@ -99,15 +117,7 @@ TEST(StrTest, SecondHighestTest) {
     EXPECT_EQ(solution.Solution3("ck077"), 0);
 }
 
-TEST(StrTest, MaxPowerTest) {
-    MaxPower solution;
 
-    EXPECT_EQ(solution.Solution1("leetcode"), 2);
-    EXPECT_EQ(solution.Solution1("abbcccddddeeeeedcba"), 5);
-    EXPECT_EQ(solution.Solution1("triplepillooooow"), 5);
-    EXPECT_EQ(solution.Solution1("hooraaaaaaaaaaay"), 11);
-    EXPECT_EQ(solution.Solution1("tourist"), 1);
-}
 
 } // namespace test
 } // namespace leetcode
