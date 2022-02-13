@@ -112,6 +112,21 @@ public:
     std::string Solution2(int columnNumber);
 };
 
+class MaxNumberOfBallons : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    int Solution1(std::string s);
+};
+
 class MaxPower : public LeetcodeSolution {
 public:
     std::string Title() override;

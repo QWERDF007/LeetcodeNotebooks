@@ -17,6 +17,7 @@ void StrSolution(int pid) {
         case ROMAN_TO_INT: solution = new RomanToInt(); break;
         case ADD_BINARY: solution = new AddBinary(); break;
         case CONVERT_TO_TITLE: solution = new ConvertToTitle(); break;
+        case MAX_NUMBER_OF_BALLONS: solution = new MaxNumberOfBallons(); break;
         case MAX_POWER: solution = new MaxPower(); break;
         case SECOND_HIGHEST: solution = new SecondHighest(); break;
         default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
@@ -359,6 +360,63 @@ std::string ConvertToTitle::Solution2(int columnNumber) {
     return ans;
 }
 
+std::string MaxNumberOfBallons::Title() {
+    return "1189. “气球” 的最大数量\n";
+}
+
+std::string MaxNumberOfBallons::Problem() {
+    return 
+        "给你一个字符串 text，你需要使用 text 中的字母来拼凑尽可能多的单词 balloon（气球）。\n"
+        "字符串 text 中的每个字母最多只能被使用一次。请你返回最多可以拼凑出多少个单词 balloon。\n";
+}
+
+std::string MaxNumberOfBallons::Link() {
+    return "https://leetcode-cn.com/problems/maximum-number-of-balloons/";
+}
+
+std::string MaxNumberOfBallons::Solution() {
+    return "统计，时间：O(n)，空间：O(1)。\n";
+}
+
+void MaxNumberOfBallons::Benchmark() {
+    MaxNumberOfBallons solution;
+    int n = 10000;
+    std::string table = "0123456789abcdeabcdefghijklmnopqrstuvwxyz";
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, table.size() - 1);
+    std::string text;
+    for (int i = 0; i < n; ++i) {
+        text += table[dis(gen)];
+    }
+
+    benchmark::RegisterBenchmark("BM_MaxNumberOfBallons_Stats", [](benchmark::State &state, MaxNumberOfBallons solution, std::string text) {
+        for (auto _ : state) {
+            solution.Solution1(text);
+        }
+    }, solution, text);
+}
+
+int MaxNumberOfBallons::Solution1(std::string text) {
+    int counts[5] = { 0 };
+    for (char c : text) {
+        switch (c) {
+            case 'b': counts[0] += 2; break;
+            case 'a': counts[1] += 2; break;
+            case 'l': counts[2] += 1; break;
+            case 'o': counts[3] += 1; break;
+            case 'n': counts[4] += 2; break;
+            default: break;
+        }
+    }
+    int m = INT_MAX;
+    for (int count : counts) {
+        if (count < m) {
+            m = count;
+        }
+    }
+    return m / 2;
+}
 
 std::string MaxPower::Title() {
     return "1446. 连续字符\n";
