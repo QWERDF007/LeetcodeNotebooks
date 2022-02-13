@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <climits>
 #include "math/leetcode_math.h"
 
 namespace leetcode {
@@ -52,6 +53,22 @@ TEST(MathTest, MySqrtTest) {
     EXPECT_EQ(solution.Solution4(4), 2);
     EXPECT_EQ(solution.Solution4(8), 2);
     EXPECT_EQ(solution.Solution4(123336), 351);
+}
+
+TEST(MathTest, IsHappyTest) {
+    IsHappy solution;
+
+    EXPECT_TRUE(solution.Solution1(19));
+    EXPECT_TRUE(solution.Solution2(19));
+    EXPECT_TRUE(solution.Solution3(19));
+    
+    EXPECT_FALSE(solution.Solution1(2));
+    EXPECT_FALSE(solution.Solution2(2));
+    EXPECT_FALSE(solution.Solution3(2));
+
+    EXPECT_FALSE(solution.Solution1(INT_MAX));
+    EXPECT_FALSE(solution.Solution2(INT_MAX));
+    EXPECT_FALSE(solution.Solution3(INT_MAX));
 }
 
 } // namespace test
