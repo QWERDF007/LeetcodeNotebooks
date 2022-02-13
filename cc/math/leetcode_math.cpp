@@ -16,6 +16,7 @@ void MathSolution(int pid) {
 	switch (pid) {
 		case IS_PALINDROME: solution = new IsPalindrome(); break;
         case MY_SQRT: solution = new MySqrt(); break;
+        case IS_HAPPY: solution = new IsHappy(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
 	}
     if (solution != nullptr) {
@@ -233,6 +234,87 @@ int MySqrt::Solution4(int x) {
     }
     int k = exp(0.5 * log(x));
     return (long long)(k + 1) * (k + 1) <= x ? k + 1 : k;
+}
+
+std::string IsHappy::Title() {
+    return "202. 快乐数\n";
+}
+
+std::string IsHappy::Problem() {
+    return 
+        "编写一个算法来判断一个数 n 是不是快乐数。\n"
+        "「快乐数」定义为：\n"
+        "- 对于一个正整数，每一次将该数替换为它每个位置上的数字的平方和。\n"
+        "- 然后重复这个过程直到这个数变为 1，也可能是无限循环但始终变不到 1。\n"
+        "- 如果这个过程结果为 1，那么这个数就是快乐数。\n"
+        "如果 n 是快乐数就返回 true；不是，则返回 false。\n";
+}
+
+std::string IsHappy::Link() {
+    return "https://leetcode-cn.com/problems/happy-number/";
+}
+
+std::string IsHappy::Solution() {
+    return "快慢指针，时间：O(log n)，空间：O(1)。\n";
+}
+
+void IsHappy::Benchmark() {
+    IsHappy solution;
+
+    int n = INT_MAX;
+
+    benchmark::RegisterBenchmark("BM_IsHappy_HashSet", [](benchmark::State &state, IsHappy solution, int n) {
+        for (auto _ : state) {
+            solution.Solution1(n);
+        }
+    }, solution, n);
+
+    benchmark::RegisterBenchmark("BM_IsHappy_FloydCycleDetection", [](benchmark::State &state, IsHappy solution, int n) {
+        for (auto _ : state) {
+            solution.Solution2(n);
+        }
+    }, solution, n);
+
+    benchmark::RegisterBenchmark("BM_IsHappy_Arithmetic", [](benchmark::State &state, IsHappy solution, int n) {
+        for (auto _ : state) {
+            solution.Solution3(n);
+        }
+    }, solution, n);
+}
+
+bool IsHappy::Solution1(int n) {
+    std::unordered_set<int> seen;
+    while (n != 1 && !seen.count(n)) {
+        seen.insert(n);
+        n = GetNext(n);
+    }
+    return n == 1;
+}
+
+bool IsHappy::Solution2(int n) {
+    int slow = n, fast = GetNext(n);
+    while (fast != 1 && slow != fast) {
+        slow = GetNext(slow);
+        fast = GetNext(GetNext(fast));
+    }
+    return fast == 1;
+}
+
+bool IsHappy::Solution3(int n) {
+    while (n != 1 && !cycle_nums_.count(n)) {
+        n = GetNext(n);
+    }
+    return n == 1;
+}
+
+int IsHappy::GetNext(int n) {
+    int sum = 0;
+    while (n > 0) {
+        int d = n % 10;
+        sum += d * d;
+        n /= 10;
+    }
+    return sum;
 }
 
 } // namespace math

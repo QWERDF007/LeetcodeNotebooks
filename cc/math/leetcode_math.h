@@ -1,5 +1,6 @@
 #pragma once
 
+#include <unordered_set>
 #include "leetcode_solution.h"
 
 namespace leetcode {
@@ -107,6 +108,54 @@ public:
      * @return int 
      */
     int Solution4(int x);
+};
+
+class IsHappy : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 哈希集合
+     * 时间复杂度：O(log n)
+     * 空间复杂度：O(log n)
+     * @param n 
+     * @return true 
+     * @return false 
+     */
+    bool Solution1(int n);
+
+    /**
+     * @brief 快慢指针
+     * 时间复杂度：O(log n)
+     * 空间复杂度：O(1)
+     * @param n 
+     * @return true 
+     * @return false 
+     */
+    bool Solution2(int n);
+
+    /**
+     * @brief 数学分析
+     * 时间复杂度：O(log n)
+     * 空间复杂度：O(1)
+     * @param n 
+     * @return true 
+     * @return false 
+     */
+    bool Solution3(int n);
+
+private:
+    int GetNext(int n);
+
+    std::unordered_set<int> cycle_nums_{ 4, 16, 37, 58, 89, 145, 42, 20 };
 };
 
 } // namespace math
