@@ -272,6 +272,35 @@ TEST(ArrayTest, MinMovesTest) {
     EXPECT_EQ(solution.Solution1(nums[2]), results[2]);
 }
 
+TEST(ArrayTest, SingleNonDuplicateTest) {
+    SingleNonDuplicate solution;
+    std::vector<std::vector<int>> nums{
+        { 1,1,2,3,3,4,4,8,8 },
+        { 3,3,7,7,10,11,11 },
+        { 1,1,2,3,3,4,4,8,8 },
+    };
+
+    std::vector<int> results{
+        2, 10, 2
+    };
+    
+    EXPECT_EQ(solution.Solution1(nums[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(nums[1]), results[1]);
+    EXPECT_EQ(solution.Solution1(nums[2]), results[2]);
+
+    EXPECT_EQ(solution.Solution2(nums[0]), results[0]);
+    EXPECT_EQ(solution.Solution2(nums[1]), results[1]);
+    EXPECT_EQ(solution.Solution2(nums[2]), results[2]);
+
+    EXPECT_EQ(solution.Solution3(nums[0]), results[0]);
+    EXPECT_EQ(solution.Solution3(nums[1]), results[1]);
+    EXPECT_EQ(solution.Solution3(nums[2]), results[2]);
+
+    EXPECT_EQ(solution.Solution4(nums[0]), results[0]);
+    EXPECT_EQ(solution.Solution4(nums[1]), results[1]);
+    EXPECT_EQ(solution.Solution4(nums[2]), results[2]);
+}
+
 TEST(ArrayTest, MinimumDifferenceTest) {
     MinimumDifference solution;
     std::vector<std::vector<int>> nums{
