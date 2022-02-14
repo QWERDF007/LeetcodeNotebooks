@@ -8,7 +8,7 @@ namespace bit {
 void BitwiseOperationSolution(int pid) {
     LeetcodeSolution *solution = nullptr;
     switch (pid) {
-        case HAMMING_WEIGHT: solution = new HammingWeight(); break;
+        case SolutionsId::HAMMING_WEIGHT: solution = new HammingWeight(); break;
         default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
     }
     if (solution != nullptr) {
