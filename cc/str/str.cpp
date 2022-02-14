@@ -15,12 +15,12 @@ namespace str {
 void StrSolution(int pid) {
     LeetcodeSolution *solution = nullptr;
     switch (pid) {
-        case ROMAN_TO_INT: solution = new RomanToInt(); break;
-        case ADD_BINARY: solution = new AddBinary(); break;
-        case CONVERT_TO_TITLE: solution = new ConvertToTitle(); break;
-        case MAX_NUMBER_OF_BALLONS: solution = new MaxNumberOfBallons(); break;
-        case MAX_POWER: solution = new MaxPower(); break;
-        case SECOND_HIGHEST: solution = new SecondHighest(); break;
+        case SolutionsId::ROMAN_TO_INT: solution = new RomanToInt(); break;
+        case SolutionsId::ADD_BINARY: solution = new AddBinary(); break;
+        case SolutionsId::CONVERT_TO_TITLE: solution = new ConvertToTitle(); break;
+        case SolutionsId::MAX_NUMBER_OF_BALLONS: solution = new MaxNumberOfBallons(); break;
+        case SolutionsId::MAX_POWER: solution = new MaxPower(); break;
+        case SolutionsId::SECOND_HIGHEST: solution = new SecondHighest(); break;
         default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
     }
     if (solution != nullptr) {
