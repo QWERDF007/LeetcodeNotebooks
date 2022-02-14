@@ -34,7 +34,7 @@ public:
      * 空间复杂度：O(1)
      * @param nums 
      * @param target 
-     * @return std::vector<int> 
+     * @return std::vector<int> 数组中找出和为目标值 target 的那两个整数
      */
     std::vector<int> Solution1(std::vector<int> &nums, int target);
 
@@ -44,7 +44,7 @@ public:
      * 空间复杂度：O(n)
      * @param nums 
      * @param target 
-     * @return std::vector<int> 
+     * @return std::vector<int> 数组中找出和为目标值 target 的那两个整数
      */
     std::vector<int> Solution2(std::vector<int> &nums, int target);
 };
@@ -65,6 +65,7 @@ public:
      * @brief 删除有序数组中的重复项：暴力解法
      * 时间复杂度：O(n^2)
      * 空间复杂度：O(1)
+     * @param nums
      * @return int 删除重复项后数组的长度
      */
     int Solution1(std::vector<int> &nums);
@@ -73,6 +74,7 @@ public:
      * @brief 删除有序数组中的重复项：双指针
      * 时间复杂度：O(n)
      * 空间复杂度：O(1)
+     * @param nums
      * @return int 删除重复项后数组的长度
      */
     int Solution2(std::vector<int> &nums);
@@ -149,9 +151,9 @@ public:
      * @brief 实时计算
      * 时间复杂度：O(n) + m * O(right-left+1)
      * 空间复杂度：O(n)
-     * @param left 
-     * @param right 
-     * @return int 
+     * @param left 索引
+     * @param right 索引
+     * @return int 索引 left 和 right 之间的元素的总和
      */
     int sumRange1(int left, int right);
 
@@ -159,9 +161,9 @@ public:
      * @brief 前缀和
      * 时间复杂度：O(n) + m * O(1)
      * 空间复杂度：O(n)
-     * @param left 
-     * @param right 
-     * @return int 
+     * @param left 索引
+     * @param right 索引
+     * @return int 索引 left 和 right 之间的元素的总和
      */
     int sumRange2(int left, int right);
 
@@ -336,6 +338,55 @@ public:
     int Solution1(std::vector<int> &nums);
 };
 
+class SingleNonDuplicate : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 异或
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param nums 有序数组
+     * @return int 有序数组中的单一元素
+     */
+    int Solution1(std::vector<int> &nums);
+
+    /**
+     * @brief 二分查找
+     * 时间复杂度：O(logn)
+     * 空间复杂度：O(1)
+     * @param nums 有序数组
+     * @return int 有序数组中的单一元素
+     */
+    int Solution2(std::vector<int> &nums);
+
+    /**
+     * @brief 偶数二分查找
+     * 时间复杂度：O(logn)
+     * 空间复杂度：O(1)
+     * @param nums 有序数组
+     * @return int 有序数组中的单一元素
+     */
+    int Solution3(std::vector<int> &nums);
+
+    /**
+     * @brief 遍历
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param nums 有序数组
+     * @return int 有序数组中的单一元素
+     */
+    int Solution4(std::vector<int> &nums);
+};
+
 class MinimumDifference : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -348,6 +399,14 @@ public:
 
     void Benchmark() override;
 
+    /**
+     * @brief 排序+滑动窗口
+     * 时间复杂度：O(nlogn)
+     * 空间复杂度：O(logn)
+     * @param nums 学生分数
+     * @param k 选择学生数量
+     * @return int 学生分数的最小差值
+     */
     int Solution1(std::vector<int> &nums, int k);
 };
 

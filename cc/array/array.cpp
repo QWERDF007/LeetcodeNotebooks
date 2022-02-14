@@ -27,6 +27,7 @@ void ArraySolution(int pid) {
         case SolutionsId::THIRD_MAX: solution = new ThirdMax(); break;
         case SolutionsId::FIND_DISAPPEARED_NUMBERS: solution = new FindDisappearedNumbers(); break;
         case SolutionsId::MIN_MOVES: solution = new MinMoves(); break;
+        case SolutionsId::SINGLE_NON_DUPLICATE: solution = new SingleNonDuplicate(); break;
         case SolutionsId::MINIMUM_DIFFERENCE: solution = new MinimumDifference(); break;
         default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
     }
@@ -770,6 +771,120 @@ int MinMoves::Solution1(std::vector<int> &nums) {
     return sum - (long long)m * n;
 }
 
+
+std::string SingleNonDuplicate::Title() {
+    return "540. 有序数组中的单一元素\n";
+}
+
+std::string SingleNonDuplicate::Problem() {
+    return 
+        "给你一个仅由整数组成的有序数组，其中每个元素都会出现两次，唯有一个数只会出现一次。\n"
+        "请你找出并返回只出现一次的那个数。\n"
+        "你设计的解决方案必须满足 O(log n) 时间复杂度和 O(1) 空间复杂度。\n";
+}
+
+std::string SingleNonDuplicate::Link() {
+    return "https://leetcode-cn.com/problems/single-element-in-a-sorted-array/";
+}
+
+std::string SingleNonDuplicate::Solution() {
+    return "偶数下标二分查找，时间：O(log n)，空间：O(1)。\n";
+}
+
+void SingleNonDuplicate::Benchmark() {
+    SingleNonDuplicate solution;
+
+    int n = 10000000;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, n/2 - 1);
+    std::vector<int> nums(n-1);
+    int num = dis(gen);
+    for (int i = 0; i < n/2; ++i) {
+        if (num == i) {
+            nums[i] = 2 * i + 1;
+        } else {
+            nums[i] = 2 * i;
+            nums[i + 1] = 2 * i;
+        }
+    }
+
+    benchmark::RegisterBenchmark("BM_SingleNonDuplicate_Xor", [](benchmark::State &state, SingleNonDuplicate solution, std::vector<int> nums) {
+        for (auto _ : state) {
+            solution.Solution1(nums);
+        }
+    }, solution, nums);
+
+    benchmark::RegisterBenchmark("BM_SingleNonDuplicate_BinarySearchAll", [](benchmark::State &state, SingleNonDuplicate solution, std::vector<int> nums) {
+        for (auto _ : state) {
+            solution.Solution2(nums);
+        }
+    }, solution, nums);
+
+    benchmark::RegisterBenchmark("BM_SingleNonDuplicate_BinarySearchEven", [](benchmark::State &state, SingleNonDuplicate solution, std::vector<int> nums) {
+        for (auto _ : state) {
+            solution.Solution3(nums);
+        }
+    }, solution, nums);
+
+    benchmark::RegisterBenchmark("BM_SingleNonDuplicate_Traverse", [](benchmark::State &state, SingleNonDuplicate solution, std::vector<int> nums) {
+        for (auto _ : state) {
+            solution.Solution4(nums);
+        }
+    }, solution, nums);
+}
+
+int SingleNonDuplicate::Solution1(std::vector<int> &nums) {
+    int ans = 0;
+    for (int num : nums) {
+        ans ^= num;
+    }
+    return ans;
+}
+
+int SingleNonDuplicate::Solution2(std::vector<int> &nums) {
+    int left = 0, right = nums.size() - 1;
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        // 若 mid 是奇数，mid^1=mid-1 是偶数
+        // 若 mid 是偶数，mid^1=mid+1 是奇数
+        if (nums[mid] == nums[mid ^ 1]) {
+            left = mid + 1;
+        } else {
+            right = mid;
+        }
+    }
+    return nums[right];
+}
+
+int SingleNonDuplicate::Solution3(std::vector<int> &nums) {
+    int low = 0, high = nums.size() - 1;
+    while (low < high) {
+        int mid = low + (high - low) / 2;
+        // 确保 mid 是偶数
+        // 若 mid 是奇数，mid&1=1，mid=mid-1 是偶数
+        // 若 mid 是偶数，mid&1=0，mid=mid-0 是偶数
+        mid -= mid & 1; 
+        if (nums[mid] == nums[mid + 1]) {
+            low = mid + 2;
+        }
+        else {
+            high = mid;
+        }
+    }
+    return nums[low];
+}
+
+int SingleNonDuplicate::Solution4(std::vector<int> &nums) {
+    int n = nums.size();
+    for (int i = 0; i < n; i+=2) {
+        if (i < n - 1 && nums[i] != nums[i + 1]) {
+            return nums[i];
+        }
+    }
+    return nums[n - 1];
+}
+
 std::string MinimumDifference::Title() {
     return "1984. 学生分数的最小差值\n";
 }
@@ -821,6 +936,8 @@ int MinimumDifference::Solution1(std::vector<int> &nums, int k) {
     }
     return m;
 }
+
+
 
 } // namespace array
 } // namespace leetcode
