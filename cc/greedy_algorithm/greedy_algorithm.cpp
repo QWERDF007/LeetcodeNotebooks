@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <algorithm>
 #include <random>
+#include <climits>
 #include <benchmark/benchmark.h>
 #include "greedy_algorithm.h"
 
