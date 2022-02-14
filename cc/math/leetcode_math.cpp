@@ -14,9 +14,9 @@ namespace math {
 void MathSolution(int pid) {
     LeetcodeSolution *solution = nullptr;
 	switch (pid) {
-		case IS_PALINDROME: solution = new IsPalindrome(); break;
-        case MY_SQRT: solution = new MySqrt(); break;
-        case IS_HAPPY: solution = new IsHappy(); break;
+        case SolutionsId::IS_PALINDROME: solution = new IsPalindrome(); break;
+        case SolutionsId::MY_SQRT: solution = new MySqrt(); break;
+        case SolutionsId::IS_HAPPY: solution = new IsHappy(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
 	}
     if (solution != nullptr) {
