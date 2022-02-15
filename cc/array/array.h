@@ -399,8 +399,22 @@ public:
 
     void Benchmark() override;
 
+    /**
+     * @brief 预处理
+     * 时间复杂度：O(nm)
+     * 空间复杂度：O(n+m)
+     * @param matrix 待处理矩阵
+     * @return std::vector<int> 幸运数
+     */
     std::vector<int> Solution1(std::vector<std::vector<int>> &matrix);
 
+    /**
+     * @brief 模拟
+     * 时间复杂度：O(nm(n+m))
+     * 空间复杂度：O(1)
+     * @param matrix 待处理矩阵
+     * @return std::vector<int> 幸运数
+     */
     std::vector<int> Solution2(std::vector<std::vector<int>> &matrix);
 };
 
