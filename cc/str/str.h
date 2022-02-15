@@ -112,6 +112,37 @@ public:
     std::string Solution2(int columnNumber);
 };
 
+class LongestPalindrome : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 数组统计
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(k)，k=52
+     * @param s 
+     * @return int 最长回文串长度
+     */
+    int Solution1(std::string s);
+
+    /**
+     * @brief 哈希表统计
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(k)，k 为字符串中不重复的字符数
+     * @param s 
+     * @return int 最长回文串长度
+     */
+    int Solution2(std::string s);
+};
+
 class MaxNumberOfBallons : public LeetcodeSolution {
 public:
     std::string Title() override;

@@ -18,6 +18,7 @@ void StrSolution(int pid) {
         case SolutionsId::ROMAN_TO_INT: solution = new RomanToInt(); break;
         case SolutionsId::ADD_BINARY: solution = new AddBinary(); break;
         case SolutionsId::CONVERT_TO_TITLE: solution = new ConvertToTitle(); break;
+        case SolutionsId::LONGEST_PALINDROME: solution = new LongestPalindrome(); break;
         case SolutionsId::MAX_NUMBER_OF_BALLONS: solution = new MaxNumberOfBallons(); break;
         case SolutionsId::MAX_POWER: solution = new MaxPower(); break;
         case SolutionsId::SECOND_HIGHEST: solution = new SecondHighest(); break;
@@ -359,6 +360,80 @@ std::string ConvertToTitle::Solution2(int columnNumber) {
     }
     std::reverse(ans.begin(), ans.end());
     return ans;
+}
+
+
+std::string LongestPalindrome::Title() {
+    return "409. 最长回文串\n";
+}
+
+std::string LongestPalindrome::Problem() {
+    return 
+        "给定一个包含大写字母和小写字母的字符串 s，返回 通过这些字母构造成的最长的回文串。\n"
+        "在构造过程中，请注意区分大小写。比如 \"Aa\" 不能当做一个回文字符串。\n";
+}
+
+std::string LongestPalindrome::Link() {
+    return "https://leetcode-cn.com/problems/longest-palindrome/";
+}
+
+std::string LongestPalindrome::Solution() {
+    return "数组统计，时间：O(n)，空间：O(k)，k=52。\n";
+}
+
+void LongestPalindrome::Benchmark() {
+    LongestPalindrome solution;
+
+    std::string table = "ABCDEABCDEFGHIJKLMNOPQRSTUVWXYZabcdeabcdefghijklmnopqrstuvwxyz";
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, table.size() - 1);
+    constexpr int n = 20000;
+    std::string s;
+    for (int i = 0; i < n; ++i) {
+        s += table[dis(gen)];
+    }
+
+    benchmark::RegisterBenchmark("BM_LongestPalindrome_StatsArray", [](benchmark::State &state, LongestPalindrome solution, std::string s) {
+        for (auto _ : state) {
+            solution.Solution1(s);
+        }
+    }, solution, s);
+
+    benchmark::RegisterBenchmark("BM_LongestPalindrome_StatsHashMap", [](benchmark::State &state, LongestPalindrome solution, std::string s) {
+        for (auto _ : state) {
+            solution.Solution2(s);
+        }
+    }, solution, s);
+}
+
+int LongestPalindrome::Solution1(std::string s) {
+    int counts[52] = { 0 };
+    for (char c : s) {
+        if (c >= 'a' && c <= 'z') {
+            ++counts[c - 'a' + 26];
+        }
+        else {
+            ++counts[c - 'A'];
+        }
+    }
+    int cnt = 0;
+    for (int count : counts) {
+        cnt += count / 2 * 2;
+    }
+    return cnt < s.size() ? cnt + 1 : cnt;
+}
+
+int LongestPalindrome::Solution2(std::string s) {
+    std::unordered_map<char, int> counts;
+    for (char c : s) {
+        ++counts[c];
+    }
+    int cnt = 0;
+    for (auto p : counts) {
+        cnt += p.second / 2 * 2;
+    }
+    return cnt < s.size() ? cnt + 1 : cnt;
 }
 
 std::string MaxNumberOfBallons::Title() {
