@@ -83,6 +83,18 @@ TEST(StrTest, ConvertToTitleTest) {
     EXPECT_EQ(solution.Solution2(701), "ZY");
 }
 
+TEST(StrTest, LongestPalindromeTest) {
+    LongestPalindrome solution;
+
+    EXPECT_EQ(solution.Solution1("abccccdd"), 7);
+    EXPECT_EQ(solution.Solution1("a"), 1);
+    EXPECT_EQ(solution.Solution1("bb"), 2);
+
+    EXPECT_EQ(solution.Solution2("abccccdd"), 7);
+    EXPECT_EQ(solution.Solution2("a"), 1);
+    EXPECT_EQ(solution.Solution2("bb"), 2);
+}
+
 TEST(StrTest, MaxNumberOfBallonsTest) {
     MaxNumberOfBallons solution;
 
