@@ -387,6 +387,23 @@ public:
     int Solution4(std::vector<int> &nums);
 };
 
+class LuckyNumbers : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    std::vector<int> Solution1(std::vector<std::vector<int>> &matrix);
+
+    std::vector<int> Solution2(std::vector<std::vector<int>> &matrix);
+};
+
 class MinimumDifference : public LeetcodeSolution {
 public:
     std::string Title() override;

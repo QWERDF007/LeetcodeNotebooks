@@ -28,6 +28,7 @@ void ArraySolution(int pid) {
         case SolutionsId::FIND_DISAPPEARED_NUMBERS: solution = new FindDisappearedNumbers(); break;
         case SolutionsId::MIN_MOVES: solution = new MinMoves(); break;
         case SolutionsId::SINGLE_NON_DUPLICATE: solution = new SingleNonDuplicate(); break;
+        case SolutionsId::LUCKY_NUMBERS: solution = new LuckyNumbers(); break;
         case SolutionsId::MINIMUM_DIFFERENCE: solution = new MinimumDifference(); break;
         default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
     }
@@ -885,6 +886,112 @@ int SingleNonDuplicate::Solution4(std::vector<int> &nums) {
     return nums[n - 1];
 }
 
+
+std::string LuckyNumbers::Title() {
+    return "1380. 矩阵中的幸运数\n";
+}
+
+std::string LuckyNumbers::Problem() {
+    return 
+        "给你一个 m * n 的矩阵，矩阵中的数字各不相同。请你按任意顺序返回矩阵中的所有幸运数。\n"
+        "幸运数是指矩阵中满足同时下列两个条件的元素：\n"
+        "- 在同一行的所有元素中最小\n"
+        "- 在同一列的所有元素中最大\n";
+}
+
+std::string LuckyNumbers::Link() {
+    return "https://leetcode-cn.com/problems/lucky-numbers-in-a-matrix/";
+}
+
+std::string LuckyNumbers::Solution() {
+    return "预处理，时间：O(nm)，空间：O(n+m)。\n";
+}
+
+void LuckyNumbers::Benchmark() {
+    LuckyNumbers solution;
+    int m = 1000;
+    int n = 2000;
+    std::vector<int> nums(m*n);
+    for (int i = 0; i < m*n; ++i) {
+        nums[i] = i;
+    }
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::shuffle(nums.begin(), nums.end(), gen);
+    std::vector<std::vector<int>> matrix(m,std::vector<int>(n));
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            matrix[i][j] = nums[i * m + j];
+        }
+    }
+
+    auto preprocess_func = [](benchmark::State &state, LuckyNumbers solution, std::vector<std::vector<int>> matrix) {
+        for (auto _ : state) {
+            solution.Solution1(matrix);
+        }
+    };
+    benchmark::RegisterBenchmark("BM_LuckyNumbers_Preprocess", preprocess_func, solution, matrix);
+
+    auto simulate_func = [](benchmark::State & state, LuckyNumbers solution, std::vector<std::vector<int>> matrix) {
+        for (auto _ : state) {
+            solution.Solution2(matrix);
+        }
+    };
+    benchmark::RegisterBenchmark("BM_LuckyNumbers_Simulate", simulate_func, solution, matrix);
+}
+
+std::vector<int> LuckyNumbers::Solution1(std::vector<std::vector<int>> &matrix) {
+    int m = matrix.size(), n = matrix[0].size();
+    std::vector<int> min_rows(m, INT_MAX), max_cols(n), ans;
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            min_rows[i] = std::min(min_rows[i], matrix[i][j]);
+            max_cols[j] = std::max(max_cols[j], matrix[i][j]);
+        }
+    }
+
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            int v = matrix[i][j];
+            if (v == min_rows[i] && v == max_cols[j]) {
+                ans.emplace_back(v);
+            }
+        }
+    }
+    return ans;
+}
+
+std::vector<int> LuckyNumbers::Solution2(std::vector<std::vector<int>> &matrix) {
+    int m = matrix.size(), n = matrix[0].size();
+    std::vector<int> ans;
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            int v = matrix[i][j];
+            bool is_max = true, is_min = true;
+            for (int k = 0; k < n; ++k) {
+                if (v > matrix[i][k]) {
+                    is_min = false;
+                    break;
+                }
+            }
+            if (!is_min) {
+                continue;
+            }
+            for (int k = 0; k < m; ++k) {
+                if (v < matrix[k][j]) {
+                    is_max = false;
+                }
+            }
+            if (is_max) {
+                ans.emplace_back(v);
+            }
+        }
+    }
+    return ans;
+}
+
+
 std::string MinimumDifference::Title() {
     return "1984. 学生分数的最小差值\n";
 }
@@ -936,7 +1043,6 @@ int MinimumDifference::Solution1(std::vector<int> &nums, int k) {
     }
     return m;
 }
-
 
 
 } // namespace array
