@@ -301,6 +301,41 @@ TEST(ArrayTest, SingleNonDuplicateTest) {
     EXPECT_EQ(solution.Solution4(nums[2]), results[2]);
 }
 
+TEST(ArrayTest, LuckyNumbersTest) {
+    LuckyNumbers solution;
+    
+    std::vector<std::vector<int>> matrix0{
+        { 3,7,8 },
+        { 9,11,13 },
+        { 15,16,17 },
+    };
+
+    std::vector<std::vector<int>> matrix1{
+        { 1,10,4,2 },
+        { 9,3,8,7 },
+        { 15,16,17,12 },
+    };
+
+    std::vector<std::vector<int>> matrix2{
+        { 7,8 },
+        { 1,2 },
+    };
+
+    std::vector<std::vector<int>> results{
+        { 15 },
+        { 12 },
+        { 7 },
+    };
+
+    EXPECT_EQ(solution.Solution1(matrix0), results[0]);
+    EXPECT_EQ(solution.Solution1(matrix1), results[1]);
+    EXPECT_EQ(solution.Solution1(matrix2), results[2]);
+
+    EXPECT_EQ(solution.Solution2(matrix0), results[0]);
+    EXPECT_EQ(solution.Solution2(matrix1), results[1]);
+    EXPECT_EQ(solution.Solution2(matrix2), results[2]);
+}
+
 TEST(ArrayTest, MinimumDifferenceTest) {
     MinimumDifference solution;
     std::vector<std::vector<int>> nums{
