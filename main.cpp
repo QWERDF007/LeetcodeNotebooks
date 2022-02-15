@@ -10,6 +10,7 @@
 #include "linked_list/linked_list.h"
 #include "math/leetcode_math.h"
 #include "bitwise_operation/bitwise_operation.h"
+#include "greedy_algorithm/greedy_algorithm.h"
 
 
 
@@ -38,6 +39,7 @@ int main(int argc, char* argv[]) {
             case leetcode::ARRAY: leetcode::array::ArraySolution(pid); break;
             case leetcode::STR:  leetcode::str::StrSolution(pid); break;
             case leetcode::MATH: leetcode::math::MathSolution(pid); break;
+            case leetcode::GREEDY_ALGORITHM: leetcode::greedy::GreedyAlgorithmSolution(pid); break;
             case leetcode::LINKED_LIST: leetcode::linkedlist::LinkedListSolution(pid); break;
             case leetcode::BITWISE_OPERATION: leetcode::bit::BitwiseOperationSolution(pid); break;
             default: std::cerr << "no such type: \"" << type << "\"\n"; exit(EXIT_FAILURE); break;
