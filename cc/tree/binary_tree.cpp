@@ -34,8 +34,8 @@ void PreOrderTraversal(TreeNode *root, std::vector<T> &res) {
     if (!root) {
         return;
     }
-    res.emplace_back(root->val, res);
-    PreOrderTraversal(root->left);
+    res.emplace_back(root->val);
+    PreOrderTraversal(root->left, res);
     PreOrderTraversal(root->right, res);
 }
 
