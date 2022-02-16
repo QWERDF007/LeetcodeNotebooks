@@ -103,5 +103,40 @@ public:
     std::vector<int> Solution3(TreeNode *root);
 };
 
+class IsSameTree : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 深度优先搜索 (DFS)
+     * 时间复杂度：O(min(n,m))
+     * 空间复杂度：O(min(n,m))
+     * @param p 待比较二叉树
+     * @param q 待比较二叉树
+     * @return true 
+     * @return false 
+     */
+    bool Solution1(TreeNode *p, TreeNode *q);
+
+    /**
+     * @brief 广度优先搜索 (BFS)
+     * 时间复杂度：O(min(n,m))
+     * 空间复杂度：O(min(n,m))
+     * @param p 待比较二叉树
+     * @param q 待比较二叉树
+     * @return true 
+     * @return false 
+     */
+    bool Solution2(TreeNode *p, TreeNode *q);
+};
+
 } // namespace tree
 } // namespace leetcode

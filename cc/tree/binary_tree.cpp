@@ -13,6 +13,7 @@ void BinaryTreeSolution(int pid) {
     LeetcodeSolution *solution = nullptr;
 	switch (pid) {
         case SolutionsId::INORDER_TRAVERSAL: solution = new InorderTraversal(); break;
+        case SolutionsId::IS_SAME_TREE: solution = new IsSameTree(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
 	}
 
@@ -204,6 +205,107 @@ std::vector<int> InorderTraversal::Solution3(TreeNode *root) {
     }
     return res;
 }
+
+
+std::string IsSameTree::Title() {
+    return "100. 相同的树\n";
+}
+
+std::string IsSameTree::Problem() {
+    return 
+        "给你两棵二叉树的根节点 p 和 q，编写一个函数来检验这两棵树是否相同。\n"
+        "如果两个树在结构上相同，并且节点具有相同的值，则认为它们是相同的。\n";
+}
+
+std::string IsSameTree::Link() {
+    return "https://leetcode-cn.com/problems/same-tree/";
+}
+
+std::string IsSameTree::Solution() {
+    return "DFS，时间：O(min(n,m))，空间：O(min(n,m))，n，m 分别为两棵树的节点数。\n";
+}
+
+void IsSameTree::Benchmark() {
+    IsSameTree solution;
+    std::vector<std::string> sp{
+        "0","1","2","3","4","5","6","7","8","9",
+        "0","1","2","3","4","5","6","7","8","9",
+        "0","1","2","3","4","5","6","7","8","9",
+        "0","1","2","3","4","5","6","7","8","9",
+        "0","1","2","3","4","5","6","7","8","9",
+        "0","1","2","3","4","5","6","7","8","9",
+        "0","1","2","3","4","5","6","7","8","9",
+        "0","1","2","3","4","5","6","7","8","9",
+        "0","1","2","3","4","5","6","7","8","9",
+        "0","1","2","3","4","5","6","7","8","9",
+    };
+    std::vector<std::string> sq{
+        "0","1","2","3","4","5","6","7","8","9",
+        "0","1","2","3","4","5","6","7","8","9",
+        "0","1","2","3","4","5","6","7","8","9",
+        "0","1","2","3","4","5","6","7","8","9",
+        "0","1","2","3","4","5","6","7","8","9",
+        "0","1","2","3","4","5","6","7","8","9",
+        "0","1","2","3","4","5","6","7","8","9",
+        "0","1","2","3","4","5","6","7","8","9",
+        "0","1","2","3","4","5","6","null","8","9",
+        "0","1","2","3","4","5","6","7","8","9",
+    };
+
+    TreeNode *p = NewTree(sp);
+    TreeNode *q = NewTree(sq);
+    
+    benchmark::RegisterBenchmark("BM_IsSameTree_DFS", [](benchmark::State &state, IsSameTree solution, TreeNode *p, TreeNode *q) {
+        for (auto _ : state) {
+            solution.Solution1(p, q);
+        }
+    }, solution, p, q);
+
+    benchmark::RegisterBenchmark("BM_IsSameTree_BFS", [](benchmark::State &state, IsSameTree solution, TreeNode *p, TreeNode *q) {
+        for (auto _ : state) {
+            solution.Solution2(p, q);
+        }
+    }, solution, p, q);
+
+
+    //DeleteTree(p);
+    //DeleteTree(q);
+}
+
+bool IsSameTree::Solution1(TreeNode *p, TreeNode *q) {
+    if (p == nullptr && q == nullptr) {
+        return true;
+    } else if (p == nullptr || q == nullptr || p->val != q->val) {
+        return false;
+    } else {
+        return Solution1(p->left, q->left) && Solution1(p->right, q->right);
+    }
+}
+
+bool IsSameTree::Solution2(TreeNode *p, TreeNode *q) {
+    std::queue<TreeNode *> cmp_queue;
+    cmp_queue.emplace(p);
+    cmp_queue.emplace(q);
+    while (!cmp_queue.empty()) {
+        TreeNode *cur_p = cmp_queue.front();
+        cmp_queue.pop();
+        TreeNode *cur_q = cmp_queue.front();
+        cmp_queue.pop();
+        if (cur_p == nullptr && cur_q == nullptr) {
+            continue;
+        } else if (cur_p == nullptr || cur_q == nullptr || cur_p->val != cur_q->val) {
+            return false;
+        } else {
+            cmp_queue.emplace(cur_p->left);
+            cmp_queue.emplace(cur_q->left);
+
+            cmp_queue.emplace(cur_p->right);
+            cmp_queue.emplace(cur_q->right);
+        }
+    }
+    return true;
+}
+
 
 
 } // namespace tree
