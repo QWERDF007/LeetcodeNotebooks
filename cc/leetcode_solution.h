@@ -52,6 +52,7 @@ enum ProblemType {
     GREEDY_ALGORITHM,
     LINKED_LIST,
     BITWISE_OPERATION,
+    BINARY_TREE,
 };
 
 /**
@@ -66,6 +67,7 @@ enum SolutionsId {
     REMOVE_DUPLICATES = 26,
     ADD_BINARY = 67,
     MY_SQRT = 69,
+    INORDER_TRAVERSAL = 97,
     CONVERT_TO_TITLE = 168,
     HAMMING_WEIGHT = 191,
     IS_HAPPY = 202,

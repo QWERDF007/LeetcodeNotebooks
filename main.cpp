@@ -11,6 +11,7 @@
 #include "math/leetcode_math.h"
 #include "bitwise_operation/bitwise_operation.h"
 #include "greedy_algorithm/greedy_algorithm.h"
+#include "tree/binary_tree.h"
 
 
 
@@ -42,6 +43,7 @@ int main(int argc, char* argv[]) {
             case leetcode::GREEDY_ALGORITHM: leetcode::greedy::GreedyAlgorithmSolution(pid); break;
             case leetcode::LINKED_LIST: leetcode::linkedlist::LinkedListSolution(pid); break;
             case leetcode::BITWISE_OPERATION: leetcode::bit::BitwiseOperationSolution(pid); break;
+            case leetcode::BINARY_TREE: leetcode::tree::BinaryTreeSolution(pid); break;
             default: std::cerr << "no such type: \"" << type << "\"\n"; exit(EXIT_FAILURE); break;
         }
 
