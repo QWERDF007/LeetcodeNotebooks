@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+﻿#include <gtest/gtest.h>
 #include "greedy_algorithm/greedy_algorithm.h"
 
 namespace leetcode {

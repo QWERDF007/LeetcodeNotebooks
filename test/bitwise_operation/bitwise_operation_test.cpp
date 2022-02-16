@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+﻿#include <gtest/gtest.h>
 #include "bitwise_operation/bitwise_operation.h"
 
 namespace leetcode {
