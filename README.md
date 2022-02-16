@@ -1,9 +1,9 @@
 # Leetcode 题解
 
-| :tiger:                            | :cat:                | :dog:               | :dragon:                   |
-| ---------------------------------- | -------------------- | ------------------- | -------------------------- |
-| [数组](doc/array.md)               | [字符串](doc/str.md) | [数学](doc/math.md) | [链表](doc/linked_list.md) |
-| [位运算](doc/bitwise_operation.md) |                      |                     |                            |
+| :tiger:                            | :cat:                      | :dog:               | :dragon:                     |
+| ---------------------------------- | -------------------------- | ------------------- | ---------------------------- |
+| [数组](doc/array.md)               | [字符串](doc/str.md)       | [数学](doc/math.md) | [二叉树](doc/binary_tree.md) |
+| [位运算](doc/bitwise_operation.md) | [链表](doc/linked_list.md) |                     |                              |
 
 ## build
 
