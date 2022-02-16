@@ -59,25 +59,25 @@ void PostOrderTraversal(TreeNode *root, std::vector<T> &res) {
     res.emplace_back(root->val);
 }
 
-TreeNode *NewTree(std::vector<std::string> &values) {
-    int n = values.size();
+TreeNode *NewTree(std::vector<std::string> &tree) {
+    int n = tree.size();
     if (n == 0) {
         return nullptr;
     }
-    TreeNode *root = new TreeNode(std::atoi(values[0].c_str())), *cur = nullptr;
+    TreeNode *root = new TreeNode(std::atoi(tree[0].c_str())), *cur = nullptr;
     std::queue<TreeNode *> q;
     q.push(root);
     int i = 1;
     while (i < n) {
         cur = q.front();
         q.pop();
-        if (values[i] != "null") {
-            cur->left = new TreeNode(std::atoi(values[i].c_str()));
+        if (tree[i] != "null") {
+            cur->left = new TreeNode(std::atoi(tree[i].c_str()));
             q.push(cur->left);
         }
         ++i;
-        if (i < n && values[i] != "null") {
-            cur->right = new TreeNode(std::atoi(values[i].c_str()));
+        if (i < n && tree[i] != "null") {
+            cur->right = new TreeNode(std::atoi(tree[i].c_str()));
             q.push(cur->right);
         }
         ++i;

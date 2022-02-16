@@ -33,7 +33,7 @@ void PreOrderTraversal(TreeNode *root, std::vector<T> &res);
  * 
  * @tparam T 二叉树结点值类型
  * @param root 二叉树根结点
- * @param res 二叉树先序遍历结果
+ * @param res 二叉树中序遍历结果
  */
 template <typename T>
 void InOrderTraversal(TreeNode *root, std::vector<T> &res);
@@ -43,7 +43,7 @@ void InOrderTraversal(TreeNode *root, std::vector<T> &res);
  * 
  * @tparam T 二叉树结点值类型
  * @param root 二叉树根结点
- * @param res 二叉树先序遍历结果
+ * @param res 二叉树后序遍历结果
  */
 template <typename T>
 void PostOrderTraversal(TreeNode *root, std::vector<T> &res);
@@ -51,10 +51,10 @@ void PostOrderTraversal(TreeNode *root, std::vector<T> &res);
 /**
  * @brief 从字符串数组层序生成二叉树，"null" 表示该结点为空，
  * 数组中只包含数字和null
- * @param values 字符串数组
+ * @param tree 二叉树字符串数组
  * @return TreeNode* 二叉树根结点
  */
-TreeNode *NewTree(std::vector<std::string> &values);
+TreeNode *NewTree(std::vector<std::string> &tree);
 
 /**
  * @brief 递归，后序遍历方式释放二叉树，左 -> 右 -> 根
