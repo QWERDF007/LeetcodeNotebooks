@@ -1,6 +1,6 @@
-| :tiger:                                  | :cat: | :dog: | :dragon: |
-| ---------------------------------------- | ----- | ----- | -------- |
-| 94.[二叉树的中序遍历](#二叉树的中序遍历) |       |       |          |
+| :tiger:                                  | :cat:                      | :dog: | :dragon: |
+| ---------------------------------------- | -------------------------- | ----- | -------- |
+| 94.[二叉树的中序遍历](#二叉树的中序遍历) | 100. [相同的树](#相同的树) |       |          |
 
 # 二叉树的中序遍历
 
@@ -137,6 +137,79 @@ public:
             }
         }
         return res;
+    }
+};
+```
+
+# 相同的树
+
+- [链接](https://leetcode-cn.com/problems/same-tree/)
+- [code](../cc/tree/binary_tree.h)
+
+> 给你两棵二叉树的根节点 p 和 q，编写一个函数来检验这两棵树是否相同。
+>
+> 如果两个树在结构上相同，并且节点具有相同的值，则认为它们是相同的。
+
+## 深度优先搜索
+
+使用深度优先搜索判断两棵树是否相等，即先序遍历两棵二叉树，判断对应节点是否相同。若两个树都为空，则两棵二叉树相等；若只有且只有其中一个为空，则两棵二叉树不同。若两棵树都不为空，则首先判断它们根节点的值是否相同，若不同则两颗树不同；若相同则再分别判断两棵树的左子树是否相同，以及右子树是否相同。这是一个递归的过程。
+
+**复杂度分析**：
+
+- 时间复杂度：$O(\min(n,m))$，对两个二叉树进行深度优先搜索时，只有两个树的对应节点都不为空时才会访问到该节点，因此被访问的节点数量不会超过较小的二叉树的节点数。
+- 空间复杂度：$O(\min(n,m))$，递归调用层数最大不会超过较小的二叉树的节点数。
+
+```c++
+class Solution {
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if (p == nullptr && q == nullptr) {
+            return true;
+        } else if (p == nullptr || q == nullptr || p->val != q->val) {
+            return false;
+        } else {
+            return isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
+        }
+    }
+};
+```
+
+## 广度优先搜索
+
+使用广度优先搜索判断两棵树是否相等，即层序遍历两棵二叉树，判断对应节点是否相同。构建一个队列，将两棵树根节点加入队列中。每次从队列中取出两个节点作为 p 和 q，判断是否相同，若不相同则两棵树不同；若相同，则将 p 和 q 的左节点加入队列，再将 p 和 q 的右节点加入队列。重复上述过程，直到队列为空，则说明两棵树相同。
+
+**注意：** BFS 理论时间复杂度与 DFS 相同，但队列操作时间耗时对算法影响较大。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(\min(n,m))$，只有两棵树节点不为空才会访问到该节点，因此访问节点数量不会超过较小的二叉树的节点数。
+- 空间复杂度：$O(\min(n,m))$，队列中节点数量最大不会超过较小二叉树的节点数。
+
+```c++
+class Solution {
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        queue<TreeNode *> cmp_queue;
+        cmp_queue.push(p);
+        cmp_queue.push(q);
+        while (!cmp_queue.empty()) {
+            p = cmp_queue.front();
+            cmp_queue.pop();
+            q = cmp_queue.front();
+            cmp_queue.pop();
+            if (p == nullptr && q == nullptr) {
+                continue;
+            } else if (p == nullptr || q == nullptr || p->val != q->val) {
+                return false;
+            } else {
+                cmp_queue.push(p->left);
+                cmp_queue.push(q->left);
+
+                cmp_queue.push(p->right);
+                cmp_queue.push(q->right);
+            }
+        }
+        return true;
     }
 };
 ```
