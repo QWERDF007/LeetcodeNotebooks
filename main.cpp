@@ -12,6 +12,7 @@
 #include "bitwise_operation/bitwise_operation.h"
 #include "greedy_algorithm/greedy_algorithm.h"
 #include "tree/binary_tree.h"
+#include "dynamic_programming/dynamic_programming.h"
 
 
 
@@ -39,6 +40,7 @@ int main(int argc, char* argv[]) {
         switch (type) {
             case leetcode::ARRAY: leetcode::array::ArraySolution(pid); break;
             case leetcode::STR:  leetcode::str::StrSolution(pid); break;
+            case leetcode::DYNAMIC_PROGRAMMING: leetcode::dp::DynamicProgrammingSolution(pid); break;
             case leetcode::MATH: leetcode::math::MathSolution(pid); break;
             case leetcode::GREEDY_ALGORITHM: leetcode::greedy::GreedyAlgorithmSolution(pid); break;
             case leetcode::LINKED_LIST: leetcode::linkedlist::LinkedListSolution(pid); break;

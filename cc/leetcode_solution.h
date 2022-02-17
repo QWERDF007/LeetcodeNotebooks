@@ -48,6 +48,7 @@ public:
 enum ProblemType {
     ARRAY = 1,
     STR = 2,
+    DYNAMIC_PROGRAMMING = 4,
     MATH = 5,
     GREEDY_ALGORITHM,
     LINKED_LIST,
@@ -82,6 +83,7 @@ enum SolutionsId {
     MIN_MOVES = 453,
     FIND_CONTENT_CHILDREN = 455,
     SINGLE_NON_DUPLICATE = 540,
+    KNIGHT_PROBABILITY = 688,
     MAX_NUMBER_OF_BALLONS = 1189,
     LUCKY_NUMBERS = 1380,
     MAX_POWER = 1446,
