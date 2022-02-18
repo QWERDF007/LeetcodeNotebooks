@@ -54,6 +54,7 @@ enum ProblemType {
     LINKED_LIST,
     BITWISE_OPERATION,
     BINARY_TREE,
+    GRAPH,
 };
 
 /**
@@ -87,6 +88,7 @@ enum SolutionsId {
     MAX_NUMBER_OF_BALLONS = 1189,
     LUCKY_NUMBERS = 1380,
     MAX_POWER = 1446,
+    FIND_CENTER = 1791,
     SECOND_HIGHEST = 1796,
     MINIMUM_DIFFERENCE = 1984,
 };
