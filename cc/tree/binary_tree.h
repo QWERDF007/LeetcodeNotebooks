@@ -48,6 +48,8 @@ void InOrderTraversal(TreeNode *root, std::vector<T> &res);
 template <typename T>
 void PostOrderTraversal(TreeNode *root, std::vector<T> &res);
 
+int TreeHeight(TreeNode *root);
+
 /**
  * @brief 从字符串数组层序生成二叉树，"null" 表示该结点为空，
  * 数组中只包含数字和null
@@ -136,6 +138,42 @@ public:
      * @return false 
      */
     bool Solution2(TreeNode *p, TreeNode *q);
+};
+
+class IsBalanced : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 自顶向下递归
+     * 时间复杂度：O(n^2)
+     * 空间复杂度：O(n)
+     * @param root 二叉树根节点
+     * @return true 
+     * @return false 
+     */
+    bool Solution1(TreeNode *root);
+
+    /**
+     * @brief 自底向上递归
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param root 二叉树根节点
+     * @return true 
+     * @return false 
+     */
+    bool Solution2(TreeNode *root);
+
+private:
+    int Height(TreeNode *root);
 };
 
 } // namespace tree

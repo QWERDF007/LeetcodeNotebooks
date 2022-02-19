@@ -14,6 +14,7 @@ void BinaryTreeSolution(int pid) {
 	switch (pid) {
         case SolutionsId::INORDER_TRAVERSAL: solution = new InorderTraversal(); break;
         case SolutionsId::IS_SAME_TREE: solution = new IsSameTree(); break;
+        case SolutionsId::IS_BALANCED: solution = new IsBalanced(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
 	}
 
@@ -58,6 +59,14 @@ void PostOrderTraversal(TreeNode *root, std::vector<T> &res) {
     PostOrderTraversal(root->left, res);
     PostOrderTraversal(root->right, res);
     res.emplace_back(root->val);
+}
+
+int TreeHeight(TreeNode *root) {
+    if (root == nullptr) {
+        return 0;
+    } else {
+        return std::max(TreeHeight(root->left), TreeHeight(root->right)) + 1;
+    }
 }
 
 TreeNode *NewTree(std::vector<std::string> &tree) {
@@ -306,6 +315,88 @@ bool IsSameTree::Solution2(TreeNode *p, TreeNode *q) {
     return true;
 }
 
+
+
+std::string IsBalanced::Title() {
+    return "110. 平衡二叉树\n";
+}
+
+std::string IsBalanced::Problem() {
+    return 
+        "给定一个二叉树，判断它是否是高度平衡的二叉树。\n"
+        "本题中，一棵高度平衡二叉树定义为：\n"
+        "- 一个二叉树每个节点的左右两个子树的高度差的绝对值不超过 1。\n";
+}
+
+std::string IsBalanced::Link() {
+    return "https://leetcode-cn.com/problems/balanced-binary-tree/";
+}
+
+std::string IsBalanced::Solution() {
+    return std::string();
+}
+
+void IsBalanced::Benchmark() {
+    IsBalanced solution;
+
+    int n = 50000;
+    int range = 10000;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(-range, range);
+    int null = dis(gen);
+    
+    std::vector<std::string> str_tree(n);
+    for (int i = 0; i < n; ++i) {
+        int v = dis(gen);
+        if (v != null) {
+            str_tree.emplace_back(std::to_string(v));
+        }
+        else {
+            str_tree.emplace_back("null");
+        }
+    }
+    TreeNode *root = NewTree(str_tree);
+
+    benchmark::RegisterBenchmark("BM_IsBalanced_TopToDown", [](benchmark::State &state, IsBalanced solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution1(root);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_IsBalanced_DownToTop", [](benchmark::State &state, IsBalanced solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution2(root);
+        }
+    }, solution, root);
+
+    //DeleteTree(root);
+}
+
+bool IsBalanced::Solution1(TreeNode *root) {
+    if (root == nullptr) {
+        return true;
+    } else {
+        return std::abs(TreeHeight(root->left) - TreeHeight(root->right)) <= 1 && Solution1(root->left) && Solution1(root->right);
+    }
+}
+
+bool IsBalanced::Solution2(TreeNode *root) {
+    return Height(root) >= 0;
+}
+
+int IsBalanced::Height(TreeNode *root) {
+    if (root == nullptr) {
+        return 0;
+    }
+    int left_height = Height(root->left);
+    int right_height = Height(root->right);
+    if (left_height == -1 || right_height == -1 || std::abs(left_height - right_height) > 1) {
+        return -1;
+    } else {
+        return std::max(left_height, right_height) + 1;
+    }
+}
 
 
 } // namespace tree
