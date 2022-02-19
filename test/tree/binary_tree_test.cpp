@@ -113,5 +113,28 @@ TEST(BinaryTreeTest, IsBalancedTest) {
     }
 }
 
+TEST(BinaryTreeTest, MinDepthTest) {
+    MinDepth solution;
+
+    std::vector<std::vector<std::string>> s_trees{
+        { "3","9","20","null","null","15","7" },
+        { "2","null","3","null","4","null","5","null","6" },
+    };
+    std::vector<TreeNode *> roots;
+    for (auto &s : s_trees) {
+        roots.emplace_back(NewTree(s));
+    }
+
+    EXPECT_EQ(solution.Solution1(roots[0]), 2);
+    EXPECT_EQ(solution.Solution1(roots[1]), 5);
+
+    EXPECT_EQ(solution.Solution2(roots[0]), 2);
+    EXPECT_EQ(solution.Solution2(roots[1]), 5);
+
+    for (auto root : roots) {
+        DeleteTree(root);
+    }
+}
+
 } // namespace test
 } // namespace leetcode
