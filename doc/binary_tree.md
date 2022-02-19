@@ -1,6 +1,6 @@
-| :tiger:                                  | :cat:                      | :dog: | :dragon: |
-| ---------------------------------------- | -------------------------- | ----- | -------- |
-| 94.[二叉树的中序遍历](#二叉树的中序遍历) | 100. [相同的树](#相同的树) |       |          |
+| :tiger:                                  | :cat:                      | :dog:                          | :dragon: |
+| ---------------------------------------- | -------------------------- | ------------------------------ | -------- |
+| 94.[二叉树的中序遍历](#二叉树的中序遍历) | 100. [相同的树](#相同的树) | 110. [平衡二叉树](#平衡二叉树) |          |
 
 # 二叉树的中序遍历
 
@@ -213,4 +213,90 @@ public:
     }
 };
 ```
+
+# 平衡二叉树
+
+- 链接
+- code
+
+> 给定一个二叉树，判断它是否是高度平衡的二叉树。
+>
+> 本题中，一棵高度平衡二叉树定义为：
+>
+> - 一个二叉树每个节点的左右两个子树的高度差的绝对值不超过 1。
+
+## 自顶向下递归
+
+根据定义，一棵二叉树是平衡二叉树，当且仅当其所有子树都是平衡二叉树，因此可以使用递归的方式判断二叉树是不是平衡二叉树。
+
+定义高度函数 **height**，用于计算二叉树的任意节点 p 的高度：
+$$
+height(p) =\left\{
+\begin{aligned}
+& 0, & p \neq nullptr \\
+& \max(height(p.left), height(p.right))+1, & p = nullptr\\
+\end{aligned}
+\right.
+$$
+有了计算高度的函数，可以类似先序遍历判断二叉树是否平衡二叉树，具体做法是，判断根节点的左右节点高度差是否超过 1，若不超过 1，再分别递归判断左右节点是否平衡二叉树，这是一个自顶向下的递归过程。
+
+**注意：** 自顶向下递归过程中存在大量重复计算，每次判断当前节点是否平衡二叉树时，都需计算一次当前节点的左右子树的全部节点。
+
+复杂度分析：
+
+- 时间复杂度：$O(n^2)$，需要判断 n 节点，且判断每个节点是否平衡二叉树都需重新计算一次该节点下的全部节点，最坏情况下，二叉树形成链式结构，高度为 n；
+- 空间复杂度：$O(n)$，递归所需堆栈空间，最差情况下需要递归 n 次
+
+```c++
+class Solution {
+public:
+    bool isBalanced(TreeNode* root) {
+        if (root == nullptr) {
+            return true;
+        }
+        return abs(height(root->left) - height(root->right)) <= 1 && isBalanced(root->left) && isBalanced(root->right);
+    }
+
+    int height(TreeNode *root) {
+        if (root == nullptr) {
+            return 0;
+        } else {
+            return max(height(root->left), height(root->right)) + 1;
+        }
+    }
+};
+```
+
+## 自底向上递归
+
+自顶向下递归，每个节点会被重复计算高度，如果使用自底向上递归，则每个节点只需计算一次，具体做法类似后序遍历，对于遍历到的节点，先递归地判断其左右子树是否平衡，再判断以当前节点为根的子树是否平衡。如果一棵树是平衡的，就返回它的高度（高度一定非负），否则返回 - 1。如果存在一棵子树不平衡，则整个二叉树不平衡。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，每个节点需要计算一次高度，最差情况下要计算全部节点的高度
+- 空间复杂度：$O(n)$，递归计算所需堆栈空间，最差情况下需要递归 n 次计算全部节点高度
+
+```c++
+class Solution {
+public:
+    bool isBalanced(TreeNode* root) {
+        return height(root) >= 0;
+    }
+
+    int height(TreeNode *root) {
+        if (root == nullptr) {
+            return 0;
+        } 
+        int left_height = height(root->left);
+        int right_height = height(root->right);
+        if (left_height < 0 || right_height < 0 || abs(left_height - right_height) > 1) {
+            return -1;
+        } else {
+            return max(left_height, right_height) + 1;
+        }
+    }
+};
+```
+
+
 
