@@ -86,5 +86,32 @@ TEST(BinaryTreeTest, IsSameTreeTest) {
     }
 }
 
+TEST(BinaryTreeTest, IsBalancedTest) {
+    IsBalanced solution;
+
+    std::vector<std::vector<std::string>> s_trees{
+        {"3","9","20","null","null","15","7"},
+        {"1","2","2","3","3","null","null","4","4"},
+        {}
+    };
+
+    std::vector<TreeNode *> roots;
+    for (auto &s : s_trees) {
+        roots.emplace_back(NewTree(s));
+    }
+
+    EXPECT_TRUE(solution.Solution1(roots[0]));
+    EXPECT_FALSE(solution.Solution1(roots[1]));
+    EXPECT_TRUE(solution.Solution1(roots[2]));
+
+    EXPECT_TRUE(solution.Solution2(roots[0]));
+    EXPECT_FALSE(solution.Solution2(roots[1]));
+    EXPECT_TRUE(solution.Solution2(roots[2]));
+
+    for (auto root : roots) {
+        DeleteTree(root);
+    }
+}
+
 } // namespace test
 } // namespace leetcode
