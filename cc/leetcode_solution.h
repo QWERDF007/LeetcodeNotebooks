@@ -71,6 +71,7 @@ enum SolutionsId {
     MY_SQRT = 69,
     INORDER_TRAVERSAL = 94,
     IS_SAME_TREE = 100,
+    IS_BALANCED = 110,
     CONVERT_TO_TITLE = 168,
     HAMMING_WEIGHT = 191,
     IS_HAPPY = 202,
