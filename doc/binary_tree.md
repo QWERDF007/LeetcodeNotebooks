@@ -1,6 +1,7 @@
-| :tiger:                                  | :cat:                      | :dog:                          | :dragon: |
-| ---------------------------------------- | -------------------------- | ------------------------------ | -------- |
-| 94.[二叉树的中序遍历](#二叉树的中序遍历) | 100. [相同的树](#相同的树) | 110. [平衡二叉树](#平衡二叉树) |          |
+| :tiger:                                  | :cat:                      | :dog:                          | :dragon:                                   |
+| ---------------------------------------- | -------------------------- | ------------------------------ | ------------------------------------------ |
+| 94.[二叉树的中序遍历](#二叉树的中序遍历) | 100. [相同的树](#相同的树) | 110. [平衡二叉树](#平衡二叉树) | 111. [二叉树的最小深度](#二叉树的最小深度) |
+|                                          |                            |                                |                                            |
 
 # 二叉树的中序遍历
 
@@ -216,8 +217,8 @@ public:
 
 # 平衡二叉树
 
-- 链接
-- code
+- [链接](https://leetcode-cn.com/problems/balanced-binary-tree/)
+- [code](../cc/tree/binary_tree.h)
 
 > 给定一个二叉树，判断它是否是高度平衡的二叉树。
 >
@@ -298,5 +299,85 @@ public:
 };
 ```
 
+# 二叉树的最小深度
 
+- [链接](https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/)
+- [code]((../cc/tree/binary_tree.h))
+
+> 给定一个二叉树，找出其最小深度。
+>
+> 最小深度是从根节点到最近叶子节点的最短路径上的节点数量。
+>
+> 说明：叶子节点是指没有子节点的节点。
+
+## 深度优先搜索
+
+对于每个非叶子节点，分别计算其左右子树的最小叶子节点深度，可以用递归来计算。
+
+**复杂度分析**：
+
+- 时间复杂度：$O(n)$，n 是节点数，最差情况下每个节点都要访问一次
+- 空间复杂度：$O(h)$，h 是二叉树高度，最差情况二叉树呈链状，高度为 n，空间复杂度 $O(n)$，平均情况下树的高度为与节点数的对数正相关，空间复杂度 $O(\log n)$
+
+```c++
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        if (root == nullptr) {
+            return 0;
+        } else if (root->left == nullptr && root->right == nullptr) {
+            return 1;
+        } else if (root->left == nullptr) {
+            return minDepth(root->right) + 1;
+        } else if (root->right == nullptr) {
+            return minDepth(root->left) + 1;
+        } else {
+            return min(minDepth(root->left), minDepth(root->right)) + 1;
+        }
+    }
+};
+```
+
+## 广度优先搜索
+
+可以借助队列来层序遍历二叉树，寻找叶子节点，直接返回这个叶子节点的深度。广度优先搜索保证最先搜索到的叶子节点的深度一定最小。
+
+**注意：** 虽然算法理论时间复杂度 $O(n)$，但队列操作时间对算法影响较大
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，最差情况下每个节点都需访问
+- 空间复杂度：$O(n)$，队列所需空间
+
+```c++
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        if (root == nullptr) {
+            return 0;
+        }
+        int depth = 1;
+        queue<TreeNode *> que;
+        que.emplace(root);
+        while (!que.empty()) {
+            int n = que.size();
+            for (int i = 0; i < n; ++i) {
+                TreeNode *cur = que.front();
+                que.pop();
+                if (cur->left == nullptr && cur->right == nullptr) {
+                    return depth;
+                }
+                if (cur->left) {
+                    que.emplace(cur->left);
+                }
+                if (cur->right) {
+                    que.emplace(cur->right);
+                }
+            }
+            ++depth;
+        }
+        return depth;
+    }
+};
+```
 
