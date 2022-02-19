@@ -1,13 +1,13 @@
-| :tiger:                    | :cat: | :dog: | :dragon: |
-| -------------------------- | ----- | ----- | -------- |
-| 455. [分发饼干](#分发饼干) |       |       |          |
+| :tiger:                    | :cat:                      | :dog: | :dragon: |
+| -------------------------- | -------------------------- | ----- | -------- |
+| 455. [分发饼干](#分发饼干) | 969. [煎饼排序](#煎饼排序) |       |          |
 
 
 
 # 分发饼干
 
-- 链接
-- code
+- [链接](https://leetcode-cn.com/problems/assign-cookies/)
+- [code](../cc/greedy_algorithm/greedy_algorithm.h)
 
 > 假设你是一位很棒的家长，想要给你的孩子们一些小饼干。但是，每个孩子最多只能给一块饼干。
 >
@@ -53,6 +53,55 @@ public:
             }
         }
         return cnt;
+    }
+};
+```
+
+# 煎饼排序
+
+- [链接](https://leetcode-cn.com/problems/pancake-sorting/)
+- [code](../cc/greedy_algorithm/greedy_algorithm.h)
+
+> 给你一个整数数组 arr，请使用煎饼翻转完成对数组的排序。
+> 一次煎饼翻转的执行过程如下：
+>
+> - 选择一个整数 k，1 <= k <= arr.length
+> - 反转子数组 arr[0...k-1]（下标从 0 开始）
+> 
+> 例如，arr = [3,2,1,4]，选择 k = 3 进行一次煎饼翻转，反转子数组 [3,2,1]，得到 arr = [1,2,3,4]。
+> 以数组形式返回能使 arr 有序的煎饼翻转操作所对应的 k 值序列。任何将数组排序且翻转次数在 10 * arr.length 范围内的有效答案都将被判断为正确。
+
+## 贪心算法
+
+选取子数组，寻找当前子数组中最大值，反转子数组中最大值和其前面部分，将最大值放到首部，再反转整个子数组，将最大值放到最后，因为已经将最大值放到最后了，去掉尾部元素作为新的处理数组，重复上述过程，直到处理长度为 1，即对整个数组完成排序。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，最多需要 n - 1 次寻找最大值，反转数组 2 * (n - 1) 次。查找最大值所需时间 $O(n)$，反转数组时间 $O(n)$，因此总时间是 $O(n^2)$
+- 空间复杂度：$O(1)$
+
+```c++
+class Solution {
+public:
+    vector<int> pancakeSort(vector<int>& arr) {
+        vector<int> ans;
+        for (int n = arr.size(); n > 1; --n) {
+            // 在 arr[0...n] 中找出最大值的位置
+            int index = max_element(arr.begin(), arr.begin() + n) - arr.begin();
+            // arr[0...k-1] 中最大值已经处于最右了就不反转
+            if (index == n - 1) {
+                continue;
+            }
+
+	        // 反转 arr[0...k-1]，将最大值放到最前面，将 k 放到结果
+	        // 再反转整个 arr[0...n]，将最大值放到最后面，将 n 放到结果
+	        // 完成一次循环，n 减 1
+            reverse(arr.begin(), arr.begin() + index + 1);
+            reverse(arr.begin(), arr.begin() + n);
+            ans.emplace_back(index + 1);
+            ans.emplace_back(n);
+        }
+        return ans;
     }
 };
 ```
