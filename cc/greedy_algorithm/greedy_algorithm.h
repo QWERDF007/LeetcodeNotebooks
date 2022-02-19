@@ -31,5 +31,29 @@ public:
     int Solution1(std::vector<int> &g, std::vector<int> &s);
 };
 
+class PancakeSort : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+    
+    /**
+     * @brief 贪心
+     * 时间复杂度：O(n^2)
+     * 空间复杂度：O(1)
+     * @param arr 煎饼排序的数组
+     * @return std::vector<int> 排序后的数组
+     */
+    std::vector<int> Solution1(std::vector<int> &arr);
+
+    void Pancake(std::vector<int> &arr, std::vector<int> &indices);
+};
+
 } // namespace greedy
 } // namespace leetcode
