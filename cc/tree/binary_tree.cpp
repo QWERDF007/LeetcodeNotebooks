@@ -333,7 +333,7 @@ std::string IsBalanced::Link() {
 }
 
 std::string IsBalanced::Solution() {
-    return std::string();
+    return "自底向上递归，时间：O(n)，空间：O(n)。\n";
 }
 
 void IsBalanced::Benchmark() {
