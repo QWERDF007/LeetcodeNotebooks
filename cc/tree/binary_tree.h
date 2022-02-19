@@ -48,6 +48,14 @@ void InOrderTraversal(TreeNode *root, std::vector<T> &res);
 template <typename T>
 void PostOrderTraversal(TreeNode *root, std::vector<T> &res);
 
+/**
+ * @brief 层序遍历
+ *
+ * @param root 二叉树根结点
+ * @param res 二叉树层序遍历结果
+ */
+void LevelOrderTraversal(TreeNode *root, std::vector<int> &res);
+
 int TreeHeight(TreeNode *root);
 
 /**
@@ -174,6 +182,37 @@ public:
 
 private:
     int Height(TreeNode *root);
+};
+
+class MinDepth : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 深度优先搜索 (DFS)
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(h)
+     * @param root 二叉树根节点
+     * @return int 最小深度
+     */
+    int Solution1(TreeNode *root);
+
+    /**
+     * @brief 广度优先搜索 (BFS)
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param root 二叉树根节点
+     * @return int 最小深度
+     */
+    int Solution2(TreeNode *root);
 };
 
 } // namespace tree

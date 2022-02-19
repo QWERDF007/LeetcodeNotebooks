@@ -15,6 +15,7 @@ void BinaryTreeSolution(int pid) {
         case SolutionsId::INORDER_TRAVERSAL: solution = new InorderTraversal(); break;
         case SolutionsId::IS_SAME_TREE: solution = new IsSameTree(); break;
         case SolutionsId::IS_BALANCED: solution = new IsBalanced(); break;
+        case SolutionsId::MIN_DEPTH: solution = new MinDepth(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
 	}
 
@@ -59,6 +60,26 @@ void PostOrderTraversal(TreeNode *root, std::vector<T> &res) {
     PostOrderTraversal(root->left, res);
     PostOrderTraversal(root->right, res);
     res.emplace_back(root->val);
+}
+
+
+void LevelOrderTraversal(TreeNode *root, std::vector<int> &res) {
+    if (!root) {
+        return;
+    }
+    std::queue<TreeNode *> que;
+    que.emplace(root);
+    while (!que.empty()) {
+        TreeNode *cur = que.front();
+        que.pop();
+        res.emplace_back(cur->val);
+        if (cur->left) {
+            que.emplace(cur->left);
+        }
+        if (cur->right) {
+            que.emplace(cur->right);
+        }
+    }
 }
 
 int TreeHeight(TreeNode *root) {
@@ -132,9 +153,9 @@ void InorderTraversal::Benchmark() {
     for (int i = 0; i < n; ++i) {
         int v = dis(gen);
         if (v != null) {
-            str_tree.emplace_back(std::to_string(v));
+            str_tree[i] = std::to_string(v);
         } else {
-            str_tree.emplace_back("null");
+            str_tree[i] = "null";
         }
     }
     TreeNode *root = NewTree(str_tree);
@@ -350,10 +371,10 @@ void IsBalanced::Benchmark() {
     for (int i = 0; i < n; ++i) {
         int v = dis(gen);
         if (v != null) {
-            str_tree.emplace_back(std::to_string(v));
+            str_tree[i] = std::to_string(v);
         }
         else {
-            str_tree.emplace_back("null");
+            str_tree[i] = "null";
         }
     }
     TreeNode *root = NewTree(str_tree);
@@ -398,6 +419,103 @@ int IsBalanced::Height(TreeNode *root) {
     }
 }
 
+
+std::string MinDepth::Title() {
+    return "111. 二叉树的最小深度\n";
+}
+
+std::string MinDepth::Problem() {
+    return 
+        "给定一个二叉树，找出其最小深度。\n"
+        "最小深度是从根节点到最近叶子节点的最短路径上的节点数量。\n"
+        "说明：叶子节点是指没有子节点的节点。\n";
+}
+
+std::string MinDepth::Link() {
+    return "https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/";
+}
+
+std::string MinDepth::Solution() {
+    return "DFS，时间：O(n)，空间：O(h)，h 为二叉树高度。\n";
+}
+
+void MinDepth::Benchmark() {
+    MinDepth solution;
+
+    int n = 1000;
+    int range = 1000;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(-range, range);
+    int null = dis(gen);
+
+    std::vector<std::string> str_tree(n);
+    for (int i = 0; i < n; ++i) {
+        int v = dis(gen);
+        if (v != null) {
+            str_tree[i] = std::to_string(v);
+        } else {
+            str_tree[i] = "null";
+        }
+    }
+
+    TreeNode *root = NewTree(str_tree);
+
+    benchmark::RegisterBenchmark("BM_MinDepth_DFS", [](benchmark::State &state, MinDepth solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution1(root);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_MinDepth_BFS", [](benchmark::State &state, MinDepth solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution2(root);
+        }
+    }, solution, root);
+
+    //DeleteTree(root);
+}
+
+int MinDepth::Solution1(TreeNode *root) {
+    if (root == nullptr) {
+        return 0;
+    } else if (root->left == nullptr && root->right == nullptr) {
+        return 1;
+    } else if (root->left == nullptr){
+        return Solution1(root->right) + 1;
+    } else if (root->right == nullptr) {
+        return Solution1(root->left) + 1;
+    } else {
+        return std::min(Solution1(root->left), Solution1(root->right)) + 1;
+    }
+}
+
+int MinDepth::Solution2(TreeNode *root) {
+    if (root == nullptr) {
+        return 0;
+    }
+    int depth = 1;
+    std::queue<TreeNode *> que;
+    que.emplace(root);
+    while (!que.empty()) {
+        int n = que.size();
+        for (int i = 0; i < n; ++i) {
+            TreeNode *cur = que.front();
+            que.pop();
+            if (cur->left == nullptr && cur->right == nullptr) {
+                return depth;
+            }
+            if (cur->left) {
+                que.emplace(cur->left);
+            }
+            if (cur->right) {
+                que.emplace(cur->right);
+            }
+        }
+        ++depth;
+    }
+    return depth;
+}
 
 } // namespace tree
 } // namespace leetcode
