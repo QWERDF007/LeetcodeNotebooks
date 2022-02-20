@@ -16,6 +16,7 @@ void BinaryTreeSolution(int pid) {
         case SolutionsId::IS_SAME_TREE: solution = new IsSameTree(); break;
         case SolutionsId::IS_BALANCED: solution = new IsBalanced(); break;
         case SolutionsId::MIN_DEPTH: solution = new MinDepth(); break;
+        case SolutionsId::HAS_PATH_SUM: solution = new HasPathSum(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
 	}
 
@@ -517,5 +518,127 @@ int MinDepth::Solution2(TreeNode *root) {
     return depth;
 }
 
+std::string HasPathSum::Title() {
+    return "112. 路径总和\n";
+}
+
+std::string HasPathSum::Problem() {
+    return 
+        "给你二叉树的根节点 root 和一个表示目标和的整数 targetSum。\n"
+        "判断该树中是否存在根节点到叶子节点的路径，这条路径上所有节点值相加等于目标和 targetSum。\n"
+        "如果存在，返回 true；否则，返回 false。\n"
+        "叶子节点是指没有子节点的节点。\n";
+}
+
+std::string HasPathSum::Link() {
+    return "https://leetcode-cn.com/problems/path-sum/";
+}
+
+std::string HasPathSum::Solution() {
+    return std::string();
+}
+
+void HasPathSum::Benchmark() {
+    HasPathSum solution;
+
+    int n = 1000;
+    std::vector<std::string> s_tree(n);
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(-1000, 1000);
+    int null = dis(gen);
+    int target = dis(gen);
+    for (int i = 0; i < n; ++i) {
+        int v = dis(gen);
+        if (v != null) {
+            s_tree[i] = std::to_string(v);
+        } else {
+            s_tree[i] = "null";
+        }
+    }
+
+    TreeNode *root = NewTree(s_tree);
+
+    benchmark::RegisterBenchmark("BM_HasPathSum_DFS", [](benchmark::State &state, HasPathSum solution, TreeNode *root, int target) {
+        for (auto _ : state) {
+            solution.Solution1(root, target);
+        }
+    }, solution, root, target);
+
+    benchmark::RegisterBenchmark("BM_HasPathSum_BFS_PAIR", [](benchmark::State &state, HasPathSum solution, TreeNode *root, int target) {
+        for (auto _ : state) {
+            solution.Solution2(root, target);
+        }
+    }, solution, root, target);
+
+    benchmark::RegisterBenchmark("BM_HasPathSum_BFS_DualQueue", [](benchmark::State &state, HasPathSum solution, TreeNode *root, int target) {
+        for (auto _ : state) {
+            solution.Solution3(root, target);
+        }
+    }, solution, root, target);
+    //DeleteTree(root);
+}
+
+bool HasPathSum::Solution1(TreeNode *root, int targetSum) {
+    if (root == nullptr) {
+        return false;
+    } else if (root->left == nullptr && root->right == nullptr) {
+        return root->val == targetSum;
+    } else {
+        return Solution1(root->left, targetSum - root->val) || Solution1(root->right, targetSum - root->val);
+    }
+}
+
+bool HasPathSum::Solution2(TreeNode *root, int targetSum) {
+    if (!root) {
+        return false;
+    }
+    std::queue<std::pair<TreeNode *, int>> que;
+    que.emplace(root, 0);
+    while (!que.empty()) {
+        TreeNode *cur = que.front().first;
+        int sum = que.front().second + cur->val;
+        que.pop();
+        if (!cur->left && !cur->right && sum == targetSum) {
+            return true;
+        }
+        if (cur->left) {
+            que.emplace(cur->left, sum);
+        }
+        if (cur->right) {
+            que.emplace(cur->right, sum);
+        }
+    }
+    return false;
+}
+
+bool HasPathSum::Solution3(TreeNode *root, int targetSum) {
+    if (!root) {
+        return false;
+    }
+    std::queue<TreeNode *> que_tree;
+    std::queue<int> que_sum;
+    que_tree.emplace(root);
+    que_sum.emplace(0);
+    while (!que_tree.empty()) {
+        TreeNode *cur = que_tree.front();
+        int sum = que_sum.front() + cur->val;
+        que_tree.pop();
+        que_sum.pop();
+        if (!cur->left && !cur->right && sum == targetSum) {
+            return true;
+        }
+        if (cur->left) {
+            que_tree.emplace(cur->left);
+            que_sum.emplace(sum);
+        }
+        if (cur->right) {
+            que_tree.emplace(cur->right);
+            que_sum.emplace(sum);
+        }
+    }
+    return false;
+}
+ 
 } // namespace tree
 } // namespace leetcode

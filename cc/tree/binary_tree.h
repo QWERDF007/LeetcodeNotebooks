@@ -215,5 +215,51 @@ public:
     int Solution2(TreeNode *root);
 };
 
+class HasPathSum : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 深度优先搜索 (DFS)
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(h)
+     * @param root 二叉树根节点
+     * @param targetSum 目标和
+     * @return true 
+     * @return false 
+     */
+    bool Solution1(TreeNode *root, int targetSum);
+
+    /**
+     * @brief 广度优先搜索 (BFS) + pair
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param root 二叉树根节点
+     * @param targetSum 目标和
+     * @return true 
+     * @return false 
+     */
+    bool Solution2(TreeNode *root, int targetSum);
+
+    /**
+     * @brief 广度优先搜索 (BFS) + 双队列
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param root 二叉树根节点
+     * @param targetSum 目标和
+     * @return true 
+     * @return false 
+     */
+    bool Solution3(TreeNode *root, int targetSum);
+};
+
 } // namespace tree
 } // namespace leetcode
