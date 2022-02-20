@@ -1,7 +1,7 @@
 | :tiger:                                  | :cat:                      | :dog:                          | :dragon:                                   |
 | ---------------------------------------- | -------------------------- | ------------------------------ | ------------------------------------------ |
 | 94.[二叉树的中序遍历](#二叉树的中序遍历) | 100. [相同的树](#相同的树) | 110. [平衡二叉树](#平衡二叉树) | 111. [二叉树的最小深度](#二叉树的最小深度) |
-|                                          |                            |                                |                                            |
+| 112. [路径总和](#路径总和)               |                            |                                |                                            |
 
 # 二叉树的中序遍历
 
@@ -377,6 +377,87 @@ public:
             ++depth;
         }
         return depth;
+    }
+};
+```
+
+# 路径总和
+
+- [链接]()
+- [code]((../cc/tree/binary_tree.h))
+
+> 给你二叉树的根节点 root 和一个表示目标和的整数 targetSum。
+>
+> 判断该树中是否存在根节点到叶子节点的路径，这条路径上所有节点值相加等于目标和 targetSum。
+>
+> 如果存在，返回 true；否则，返回 false。
+>
+> 叶子节点是指没有子节点的节点。
+
+## 深度优先搜索
+
+问题是求根节点到叶子节点的路径上所有节点的总和是否等于目标和，直接递归求和较难，可以将大问题转换为一个小问题：是否存在从当前节点的子节点到叶子节点的路径，满足其路径和为 `sum - val`，不难发现这满足递归的性质，若当前节点是叶子节点则直接判断 `sum == val`。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，每个节点都需要访问一次
+- 空间复杂度：$O(h)$，h 为二叉树高度，最差情况下二叉树呈链状，高度为 n
+
+```c++
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int targetSum) {
+        if (root == nullptr) {
+            return false;
+        } else if (!root->left && !root->right) {
+            return root->val == targetSum;
+        } else {
+            return hasPathSum(root->left, targetSum - root->val) || hasPathSum(root->right, targetSum - root->val);
+        }
+    }
+};
+```
+
+## 广度优先搜索
+
+可以使用队列记录根节点到当前节点的路径和。使用两个队列分别存储要遍历的节点和根节点到这些节点的路径和，也可以使用一个队列和 pair 存储。
+
+**注意：** 实际测试 pair 比双队列耗时稍微多一些。
+
+**复杂度分析**：
+
+- 时间复杂度：$O(n)$，遍历全部节点时间
+- 空间复杂度：$O(n)$，队列存储时间
+
+```c++
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int targetSum) {
+        if (!root) {
+            return false;
+        }
+        queue<TreeNode *> que_tree;
+        queue<int> que_sum;
+        que_tree.emplace(root);
+        que_sum.emplace(0);
+        while (!que_tree.empty()) {
+            TreeNode *cur = que_tree.front();
+            int sum = que_sum.front() + cur->val;
+            que_tree.pop();
+            que_sum.pop();
+            if (!cur->left && !cur->right && sum == targetSum) {
+                return true;
+            }
+            if (cur->left) {
+                que_tree.emplace(cur->left);
+                que_sum.emplace(sum);
+            }
+            if (cur->right) {
+                que_tree.emplace(cur->right);
+                que_sum.emplace(sum);
+            }
+        }
+        return false;
     }
 };
 ```
