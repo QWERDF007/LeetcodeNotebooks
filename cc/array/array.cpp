@@ -28,6 +28,7 @@ void ArraySolution(int pid) {
         case SolutionsId::FIND_DISAPPEARED_NUMBERS: solution = new FindDisappearedNumbers(); break;
         case SolutionsId::MIN_MOVES: solution = new MinMoves(); break;
         case SolutionsId::SINGLE_NON_DUPLICATE: solution = new SingleNonDuplicate(); break;
+        case SolutionsId::IS_ONE_BIT_CHARACTER: solution = new IsOneBitCharacter(); break;
         case SolutionsId::LUCKY_NUMBERS: solution = new LuckyNumbers(); break;
         case SolutionsId::MINIMUM_DIFFERENCE: solution = new MinimumDifference(); break;
         default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
@@ -884,6 +885,70 @@ int SingleNonDuplicate::Solution4(std::vector<int> &nums) {
         }
     }
     return nums[n - 1];
+}
+
+
+std::string IsOneBitCharacter::Title() {
+    return "717. 1比特与2比特字符\n";
+}
+
+std::string IsOneBitCharacter::Problem() {
+    return 
+        "有两种特殊字符：\n"
+        "- 第一种字符可以用一个比特 0 来表示\n"
+        "- 第二种字符可以用两个比特(10 或 11)来表示\n"
+        "给定一个以 0 结尾的二进制数组 bits，如果最后一个字符必须是一位字符，则返回 true。\n";
+}
+
+std::string IsOneBitCharacter::Link() {
+    return "https://leetcode-cn.com/problems/1-bit-and-2-bit-characters/";
+}
+
+std::string IsOneBitCharacter::Solution() {
+    return "倒序遍历，时间：O(n)，空间：O(1)。\n";
+}
+
+void IsOneBitCharacter::Benchmark() {
+    IsOneBitCharacter solution;
+
+    int n = 10000;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, 1);
+    std::vector<int> bits(n + 1);
+    for (int i = 0; i < n; ++i) {
+        bits[i] = dis(gen);
+    }
+
+    auto func = [](benchmark::State &state, IsOneBitCharacter solution, std::vector<int> bits) {
+        for (auto _ : state) {
+            solution.Solution1(bits);
+        }
+    };
+    benchmark::RegisterBenchmark("BM_IsOneBitCharacter_Traversal", func, solution, bits);
+
+    auto rfunc = [](benchmark::State &state, IsOneBitCharacter solution, std::vector<int> bits) {
+        for (auto _ : state) {
+            solution.Solution2(bits);
+        }
+    };
+    benchmark::RegisterBenchmark("BM_IsOneBitCharacter_Reversed", func, solution, bits);
+}
+
+bool IsOneBitCharacter::Solution1(std::vector<int> &bits) {
+    int n = bits.size() - 1, i = 0;
+    while (i < n) {
+        i += bits[i] + 1;
+    }
+    return i == n;
+}
+
+bool IsOneBitCharacter::Solution2(std::vector<int> &bits) {
+    int n = bits.size(), i = n - 2;
+    while (i >= 0 && bits[i]) {
+        --i;
+    }
+    return (n - i) % 2 == 0;
 }
 
 

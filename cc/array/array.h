@@ -387,6 +387,39 @@ public:
     int Solution4(std::vector<int> &nums);
 };
 
+class IsOneBitCharacter : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 正序遍历
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param bits 以 0 结尾的比特数组
+     * @return true 
+     * @return false 
+     */
+    bool Solution1(std::vector<int> &bits);
+
+    /**
+     * @brief 倒序遍历
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param bits 以 0 结尾的比特数组
+     * @return true 
+     * @return false 
+     */
+    bool Solution2(std::vector<int> &bits);
+};
+
 class LuckyNumbers : public LeetcodeSolution {
 public:
     std::string Title() override;
