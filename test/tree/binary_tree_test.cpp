@@ -136,5 +136,34 @@ TEST(BinaryTreeTest, MinDepthTest) {
     }
 }
 
+TEST(BinaryTreeTest, HasPathSumTest) {
+    HasPathSum solution;
+    std::vector<std::vector<std::string>> s_trees{
+        {"5","4","8","11","null","13","4","7","2","null","null","null","1"},
+        {"1","2","3"},
+        { },
+    };
+    std::vector<TreeNode *> roots;
+    for (auto &s : s_trees) {
+        roots.emplace_back(NewTree(s));
+    }
+
+    EXPECT_TRUE(solution.Solution1(roots[0], 22));
+    EXPECT_TRUE(solution.Solution2(roots[0], 22));
+    EXPECT_TRUE(solution.Solution3(roots[0], 22));
+
+    EXPECT_FALSE(solution.Solution1(roots[1], 5));
+    EXPECT_FALSE(solution.Solution2(roots[1], 5));
+    EXPECT_FALSE(solution.Solution3(roots[1], 5));
+
+    EXPECT_FALSE(solution.Solution1(roots[2], 0));
+    EXPECT_FALSE(solution.Solution2(roots[2], 0));
+    EXPECT_FALSE(solution.Solution3(roots[2], 0));
+
+    for (TreeNode *root : roots) {
+        DeleteTree(root);
+    }
+}
+
 } // namespace test
 } // namespace leetcode
