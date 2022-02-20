@@ -301,6 +301,21 @@ TEST(ArrayTest, SingleNonDuplicateTest) {
     EXPECT_EQ(solution.Solution4(nums[2]), results[2]);
 }
 
+TEST(ArrayTest, IsOneBitCharacterTest) {
+    IsOneBitCharacter solution;
+
+    std::vector<std::vector<int>> bits{
+        { 1,0,0 },
+        { 1,1,1,0 },
+    };
+
+    EXPECT_TRUE(solution.Solution1(bits[0]));
+    EXPECT_FALSE(solution.Solution1(bits[1]));
+
+    EXPECT_TRUE(solution.Solution2(bits[0]));
+    EXPECT_FALSE(solution.Solution2(bits[1]));
+}
+
 TEST(ArrayTest, LuckyNumbersTest) {
     LuckyNumbers solution;
     
