@@ -73,6 +73,7 @@ enum SolutionsId {
     IS_SAME_TREE = 100,
     IS_BALANCED = 110,
     MIN_DEPTH = 111,
+    HAS_PATH_SUM = 112,
     CONVERT_TO_TITLE = 168,
     HAMMING_WEIGHT = 191,
     IS_HAPPY = 202,
