@@ -55,7 +55,7 @@ void IsPalindrome::Benchmark() {
     
     int x = INT_MAX;
 
-    benchmark::RegisterBenchmark("BM_IsPalindrome_ToStringDualPointer", [](benchmark::State &state, IsPalindrome solution, int x) {
+    benchmark::RegisterBenchmark("BM_IsPalindrome_ToStringTwoPointers", [](benchmark::State &state, IsPalindrome solution, int x) {
         for (auto _ : state) {
             solution.Solution1(x);
         }
@@ -67,7 +67,7 @@ void IsPalindrome::Benchmark() {
         }
     }, solution, x);
 
-    benchmark::RegisterBenchmark("BM_IsPalindrome_DualPointer", [](benchmark::State &state, IsPalindrome solution, int x) {
+    benchmark::RegisterBenchmark("BM_IsPalindrome_TwoPointers", [](benchmark::State &state, IsPalindrome solution, int x) {
         for (auto _ : state) {
             solution.Solution3(x);
         }
