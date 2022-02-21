@@ -524,7 +524,7 @@ void MaxPower::Benchmark() {
         s += static_cast<char>(dis(gen));
     }
 
-    benchmark::RegisterBenchmark("BM_MaxPower_DualPointer", [](benchmark::State &state, MaxPower solution, std::string s) {
+    benchmark::RegisterBenchmark("BM_MaxPower_TwoPointers", [](benchmark::State &state, MaxPower solution, std::string s) {
         for (auto _ : state) {
             solution.Solution1(s);
         }
