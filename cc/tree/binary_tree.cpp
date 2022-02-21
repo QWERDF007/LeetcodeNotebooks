@@ -12,7 +12,9 @@ namespace tree {
 void BinaryTreeSolution(int pid) {
     LeetcodeSolution *solution = nullptr;
 	switch (pid) {
+        case SolutionsId::PREORDER_TRAVERSAL: solution = new PreorderTraversal(); break;
         case SolutionsId::INORDER_TRAVERSAL: solution = new InorderTraversal(); break;
+        case SolutionsId::POSTORDER_TRAVERSAL: solution = new PostorderTraversal(); break;
         case SolutionsId::IS_SAME_TREE: solution = new IsSameTree(); break;
         case SolutionsId::IS_BALANCED: solution = new IsBalanced(); break;
         case SolutionsId::MIN_DEPTH: solution = new MinDepth(); break;
@@ -126,6 +128,54 @@ void DeleteTree(TreeNode *root) {
     delete root;
 }
 
+
+std::string PreorderTraversal::Title() {
+    return "144. 二叉树的前序遍历\n";
+}
+
+std::string PreorderTraversal::Problem() {
+    return "给你二叉树的根节点 root，返回它节点值的前序遍历。\n";
+}
+
+std::string PreorderTraversal::Link() {
+    return "https://leetcode-cn.com/problems/binary-tree-preorder-traversal/";
+}
+
+std::string PreorderTraversal::Solution() {
+    return "递归，时间：O(n)，空间：O(h)，h 为二叉树高度。\n";
+}
+
+void PreorderTraversal::Benchmark() {
+}
+
+std::vector<int> PreorderTraversal::Solution1(TreeNode *root) {
+    std::vector<int> res;
+    PreOrderTraversal(root, res);
+    return res;
+}
+
+std::vector<int> PreorderTraversal::Solution2(TreeNode *root) {
+    std::vector<int> res;
+    std::stack<TreeNode *> stk;
+    TreeNode *cur = root;
+    while (cur != nullptr || !stk.empty()) {
+        while (cur != nullptr) {
+            res.emplace_back(cur->val);
+            stk.emplace(cur);
+            cur = cur->left;
+        }
+        cur = stk.top();
+        stk.pop();
+        cur = cur->right;
+    }
+    return res;
+}
+
+std::vector<int> PreorderTraversal::Solution3(TreeNode *root) {
+    return std::vector<int>();
+}
+
+
 std::string InorderTraversal::Title() {
     return "94. 二叉树的中序遍历\n";
 }
@@ -139,7 +189,7 @@ std::string InorderTraversal::Link() {
 }
 
 std::string InorderTraversal::Solution() {
-    return "递归，时间：O(n)，空间：O(n)，n 为结点数量。\n";
+    return "递归，时间：O(n)，空间：O(h)，h 为二叉树高度。\n";
 }
 
 void InorderTraversal::Benchmark() {
@@ -235,6 +285,60 @@ std::vector<int> InorderTraversal::Solution3(TreeNode *root) {
         }
     }
     return res;
+}
+
+
+std::string PostorderTraversal::Title() {
+    return "145. 二叉树的后序遍历\n";
+}
+
+std::string PostorderTraversal::Problem() {
+    return "给你一棵二叉树的根节点 root，返回其节点值的后序遍历。\n";
+}
+
+std::string PostorderTraversal::Link() {
+    return "https://leetcode-cn.com/problems/binary-tree-postorder-traversal/";
+}
+
+std::string PostorderTraversal::Solution() {
+    return std::string();
+}
+
+void PostorderTraversal::Benchmark() {
+}
+
+std::vector<int> PostorderTraversal::Solution1(TreeNode *root) {
+    std::vector<int> res;
+    PostOrderTraversal(root, res);
+    return res;
+}
+
+std::vector<int> PostorderTraversal::Solution2(TreeNode *root) {
+    std::vector<int> res;
+    std::stack<TreeNode *> stk;
+    TreeNode *cur = root, *prev = nullptr;
+    while (cur != nullptr || !stk.empty()) {
+        while (cur != nullptr) {
+            stk.emplace(cur);
+            cur = cur->left;
+        }
+        cur = stk.top();
+        stk.pop();
+        // 右子树为空或已经处理完则加入根节点，避免死循环
+        if (cur->right == nullptr || cur->right == prev) {
+            res.emplace_back(cur->val);
+            prev = cur;
+            cur = nullptr;
+        } else {
+            stk.emplace(cur);
+            cur = cur->right;
+        }
+    }
+    return res;
+}
+
+std::vector<int> PostorderTraversal::Solution3(TreeNode *root) {
+    return std::vector<int>();
 }
 
 
@@ -639,6 +743,7 @@ bool HasPathSum::Solution3(TreeNode *root, int targetSum) {
     }
     return false;
 }
- 
+
+
 } // namespace tree
 } // namespace leetcode

@@ -73,6 +73,25 @@ TreeNode *NewTree(std::vector<std::string> &tree);
  */
 void DeleteTree(TreeNode *root);
 
+class PreorderTraversal : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    std::vector<int> Solution1(TreeNode *root);
+
+    std::vector<int> Solution2(TreeNode *root);
+
+    std::vector<int> Solution3(TreeNode *root);
+};
+
 class InorderTraversal : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -110,6 +129,25 @@ public:
      * @param root 二叉树根节点
      * @return std::vector<int> 中序遍历结果
      */
+    std::vector<int> Solution3(TreeNode *root);
+};
+
+class PostorderTraversal : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    std::vector<int> Solution1(TreeNode *root);
+
+    std::vector<int> Solution2(TreeNode *root);
+
     std::vector<int> Solution3(TreeNode *root);
 };
 
