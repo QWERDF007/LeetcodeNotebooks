@@ -6,9 +6,47 @@ namespace test {
 
 using namespace tree;
 
+TEST(BinaryTreeTest, PreorderTraversalTest) {
+    PreorderTraversal solution;
+
+    std::vector<std::vector<std::string>> s_trees{
+        {"1","null","2","3"},
+        {},
+        {"1"},
+        { "0","1","2","3","4","5","6","7","8","9"}
+    };
+
+    std::vector<std::vector<int>> results{
+        { 1,2,3 },
+        { },
+        { 1 },
+        { 0,1,3,7,8,4,9,2,5,6 }
+    };
+
+    std::vector<TreeNode *> roots;
+    for (auto &str_tree : s_trees) {
+        TreeNode *root = NewTree(str_tree);
+        roots.emplace_back(root);
+    }
+
+    EXPECT_EQ(solution.Solution1(roots[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(roots[1]), results[1]);
+    EXPECT_EQ(solution.Solution1(roots[2]), results[2]);
+    EXPECT_EQ(solution.Solution1(roots[3]), results[3]);
+
+    EXPECT_EQ(solution.Solution2(roots[0]), results[0]);
+    EXPECT_EQ(solution.Solution2(roots[1]), results[1]);
+    EXPECT_EQ(solution.Solution2(roots[2]), results[2]);
+    EXPECT_EQ(solution.Solution2(roots[3]), results[3]);
+
+    for (auto root : roots) {
+        DeleteTree(root);
+    }
+}
+
 TEST(BinaryTreeTest, InorderTraversalTest) {
     InorderTraversal solution;
-    std::vector<std::vector<std::string>> str_trees{
+    std::vector<std::vector<std::string>> s_trees{
         { "1","null","2","3"},
         {},
         { "1" },
@@ -22,7 +60,7 @@ TEST(BinaryTreeTest, InorderTraversalTest) {
     };
 
     std::vector<TreeNode *> roots;
-    for (auto &str_tree : str_trees) {
+    for (auto &str_tree : s_trees) {
         TreeNode *root = NewTree(str_tree);
         roots.emplace_back(root);
     }
@@ -30,14 +68,17 @@ TEST(BinaryTreeTest, InorderTraversalTest) {
     EXPECT_EQ(solution.Solution1(roots[0]), results[0]);
     EXPECT_EQ(solution.Solution1(roots[1]), results[1]);
     EXPECT_EQ(solution.Solution1(roots[2]), results[2]);
+    EXPECT_EQ(solution.Solution1(roots[3]), results[3]);
 
     EXPECT_EQ(solution.Solution2(roots[0]), results[0]);
     EXPECT_EQ(solution.Solution2(roots[1]), results[1]);
     EXPECT_EQ(solution.Solution2(roots[2]), results[2]);
+    EXPECT_EQ(solution.Solution2(roots[3]), results[3]);
 
     EXPECT_EQ(solution.Solution3(roots[0]), results[0]);
     EXPECT_EQ(solution.Solution3(roots[1]), results[1]);
     EXPECT_EQ(solution.Solution3(roots[2]), results[2]);
+    EXPECT_EQ(solution.Solution3(roots[3]), results[3]);
 
     for (auto root : roots) {
         DeleteTree(root);
