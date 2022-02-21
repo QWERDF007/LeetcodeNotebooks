@@ -14,6 +14,7 @@
 #include "tree/binary_tree.h"
 #include "dynamic_programming/dynamic_programming.h"
 #include "graph/graph.h"
+#include "two_pointers/two_pointers.h"
 
 
 
@@ -47,6 +48,7 @@ int main(int argc, char* argv[]) {
             case leetcode::LINKED_LIST: leetcode::linkedlist::LinkedListSolution(pid); break;
             case leetcode::BITWISE_OPERATION: leetcode::bit::BitwiseOperationSolution(pid); break;
             case leetcode::BINARY_TREE: leetcode::tree::BinaryTreeSolution(pid); break;
+            case leetcode::TWO_POINTERS: leetcode::tp::TwoPointersSolution(pid); break;
             case leetcode::GRAPH: leetcode::graph::GraphSolution(pid); break;
             default: std::cerr << "no such type: \"" << type << "\"\n"; exit(EXIT_FAILURE); break;
         }
