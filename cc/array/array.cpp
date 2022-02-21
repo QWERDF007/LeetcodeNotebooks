@@ -154,7 +154,7 @@ void RemoveDuplicates::Benchmark() {
         }
     }, solution, nums);
 
-    benchmark::RegisterBenchmark("BM_TwoSum_DualPointer", [](benchmark::State& state, RemoveDuplicates solution, std::vector<int> nums) {
+    benchmark::RegisterBenchmark("BM_TwoSum_TwoPointers", [](benchmark::State& state, RemoveDuplicates solution, std::vector<int> nums) {
         for (auto _ : state) {
             solution.Solution2(nums);
         }
@@ -405,7 +405,7 @@ void Intersection::Benchmark() {
         }
     }, solution, nums1, nums2);
 
-    benchmark::RegisterBenchmark("BM_Intersection_SortDualPointer", [](benchmark::State& state, Intersection solution, std::vector<int> nums1, std::vector<int> nums2) {
+    benchmark::RegisterBenchmark("BM_Intersection_SortTwoPointers", [](benchmark::State& state, Intersection solution, std::vector<int> nums1, std::vector<int> nums2) {
         for (auto _ : state) {
             solution.Solution2(nums1, nums2);
         }
@@ -491,7 +491,7 @@ void Intersect::Benchmark() {
         }
     }, solution, nums1, nums2);
 
-    benchmark::RegisterBenchmark("BM_Intersection_SortDualPointer", [](benchmark::State& state, Intersect solution, std::vector<int> nums1, std::vector<int> nums2) {
+    benchmark::RegisterBenchmark("BM_Intersection_SortTwoPointers", [](benchmark::State& state, Intersect solution, std::vector<int> nums1, std::vector<int> nums2) {
         for (auto _ : state) {
             solution.Solution2(nums1, nums2);
         }
