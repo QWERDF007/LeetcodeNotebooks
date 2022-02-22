@@ -218,8 +218,7 @@ std::vector<int> PreorderTraversal::Solution3(TreeNode *root) {
             while (predecessor->right && predecessor->right != cur) {
                 predecessor = predecessor->right;
             }
-
-            // 第一次遍历到前驱，把 cur 暂存在前驱节点的右节点
+            // 第一次遍历到前驱，前驱节点的右节点指向 cur
             if (predecessor->right == nullptr) {
                 res.emplace_back(cur->val);
                 predecessor->right = cur;
@@ -228,11 +227,11 @@ std::vector<int> PreorderTraversal::Solution3(TreeNode *root) {
             // 第二次遍历到前驱，说明左子树遍历完了
             else {
                 predecessor->right = nullptr;
-                cur = cur->right;
+                cur = cur->right; // 进入右子树
             }
         } else {
             res.emplace_back(cur->val);
-            cur = cur->right;
+            cur = cur->right; // 回退根节点或进入右子树
         }
     }
     return res;
