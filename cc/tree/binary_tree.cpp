@@ -19,6 +19,7 @@ void BinaryTreeSolution(int pid) {
         case SolutionsId::IS_BALANCED: solution = new IsBalanced(); break;
         case SolutionsId::MIN_DEPTH: solution = new MinDepth(); break;
         case SolutionsId::HAS_PATH_SUM: solution = new HasPathSum(); break;
+        case SolutionsId::INVERT_TREE: solution = new InvertTree(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
 	}
 
@@ -773,7 +774,7 @@ std::string HasPathSum::Link() {
 }
 
 std::string HasPathSum::Solution() {
-    return std::string();
+    return "DFS，时间：O(n)，空间：O(h)，h 为二叉树高度。\n";
 }
 
 void HasPathSum::Benchmark() {
@@ -878,6 +879,92 @@ bool HasPathSum::Solution3(TreeNode *root, int targetSum) {
     return false;
 }
 
+
+std::string InvertTree::Title() {
+    return "226. 翻转二叉树\n";
+}
+
+std::string InvertTree::Problem() {
+    return "给你一棵二叉树的根节点 root，翻转这棵二叉树，并返回其根节点。\n";
+}
+
+std::string InvertTree::Link() {
+    return "https://leetcode-cn.com/problems/invert-binary-tree/";
+}
+
+std::string InvertTree::Solution() {
+    return "DFS，时间：O(n)，空间：O(h)，h 为二叉树高度。\n";
+}
+
+void InvertTree::Benchmark() {
+    InvertTree solution;
+
+    int n = 1000;
+    std::vector<std::string> s_tree(n);
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(-1000, 1000);
+    int null = dis(gen);
+    int target = dis(gen);
+    for (int i = 0; i < n; ++i) {
+        int v = dis(gen);
+        if (v != null) {
+            s_tree[i] = std::to_string(v);
+        }
+        else {
+            s_tree[i] = "null";
+        }
+    }
+
+    TreeNode *root = NewTree(s_tree);
+
+    benchmark::RegisterBenchmark("BM_InvertTree_DFS", [](benchmark::State &state, InvertTree solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution1(root);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_InvertTree_BFS", [](benchmark::State &state, InvertTree solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution2(root);
+        }
+    }, solution, root);
+
+    //DeleteTree(root);
+}
+
+TreeNode *InvertTree::Solution1(TreeNode *root) {
+    if (root == nullptr) {
+        return nullptr;
+    }
+    TreeNode *left = Solution1(root->left);
+    TreeNode *right = Solution1(root->right);
+    root->left = right;
+    root->right = left;
+    return root;
+}
+
+TreeNode *InvertTree::Solution2(TreeNode *root) {
+    if (root == nullptr) {
+        return nullptr;
+    }
+    std::queue<TreeNode *> que;
+    que.emplace(root);
+    while (!que.empty()) {
+        TreeNode *cur = que.front();
+        que.pop();
+        TreeNode *tmp = cur->left;
+        cur->left = cur->right;
+        cur->right = tmp;
+        if (cur->left) {
+            que.emplace(cur->left);
+        }
+        if (cur->right) {
+            que.emplace(cur->right);
+        }
+    }
+    return root;
+}
 
 } // namespace tree
 } // namespace leetcode

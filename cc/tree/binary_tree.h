@@ -344,5 +344,36 @@ public:
     bool Solution3(TreeNode *root, int targetSum);
 };
 
+class InvertTree : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 深度优先搜索 (DFS)
+     * 时间：O(n)
+     * 空间：O(h)
+     * @param root 二叉树根节点
+     * @return TreeNode* 翻转后的二叉树的根节点
+     */
+    TreeNode *Solution1(TreeNode *root);
+
+    /**
+     * @brief 广度优先搜索 (BFS)
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param root 二叉树根节点
+     * @return TreeNode* 翻转后的二叉树的根节点
+     */
+    TreeNode *Solution2(TreeNode *root);
+};
+
 } // namespace tree
 } // namespace leetcode
