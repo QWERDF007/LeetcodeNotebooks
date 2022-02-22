@@ -149,6 +149,9 @@ public:
     std::vector<int> Solution2(TreeNode *root);
 
     std::vector<int> Solution3(TreeNode *root);
+
+private:
+    void AddPath(TreeNode *root, std::vector<int> &res);
 };
 
 class IsSameTree : public LeetcodeSolution {

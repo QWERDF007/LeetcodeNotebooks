@@ -146,6 +146,43 @@ std::string PreorderTraversal::Solution() {
 }
 
 void PreorderTraversal::Benchmark() {
+    PreorderTraversal solution;
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(-100, 100);
+    int null = dis(gen);
+    int n = 1000;
+    std::vector<std::string> str_tree(n);
+    for (int i = 0; i < n; ++i) {
+        int v = dis(gen);
+        if (v != null) {
+            str_tree[i] = std::to_string(v);
+        }
+        else {
+            str_tree[i] = "null";
+        }
+    }
+    TreeNode *root = NewTree(str_tree);
+
+    benchmark::RegisterBenchmark("BM_PreorderTraversal_Recursion", [](benchmark::State &state, PreorderTraversal solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution1(root);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_PreorderTraversal_Iteration", [](benchmark::State &state, PreorderTraversal solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution2(root);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_PreorderTraversal_Morris", [](benchmark::State &state, PreorderTraversal solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution3(root);
+        }
+    }, solution, root);
+    //DeleteTree(root);
 }
 
 std::vector<int> PreorderTraversal::Solution1(TreeNode *root) {
@@ -172,7 +209,33 @@ std::vector<int> PreorderTraversal::Solution2(TreeNode *root) {
 }
 
 std::vector<int> PreorderTraversal::Solution3(TreeNode *root) {
-    return std::vector<int>();
+    std::vector<int> res;
+    TreeNode *cur = root, *predecessor = nullptr;
+    while (cur) {
+        if (cur->left) {
+            predecessor = cur->left;
+            // 找到 cur 中序遍历的前驱节点，即准备输出 cur 的前一个节点
+            while (predecessor->right && predecessor->right != cur) {
+                predecessor = predecessor->right;
+            }
+
+            // 第一次遍历到前驱，把 cur 暂存在前驱节点的右节点
+            if (predecessor->right == nullptr) {
+                res.emplace_back(cur->val);
+                predecessor->right = cur;
+                cur = cur->left;
+            } 
+            // 第二次遍历到前驱，说明左子树遍历完了
+            else {
+                predecessor->right = nullptr;
+                cur = cur->right;
+            }
+        } else {
+            res.emplace_back(cur->val);
+            cur = cur->right;
+        }
+    }
+    return res;
 }
 
 
@@ -301,10 +364,47 @@ std::string PostorderTraversal::Link() {
 }
 
 std::string PostorderTraversal::Solution() {
-    return std::string();
+    return "递归，时间：O(n)，空间：O(h)，h 为二叉树高度。\n";
 }
 
 void PostorderTraversal::Benchmark() {
+    PostorderTraversal solution;
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(-100, 100);
+    int null = dis(gen);
+    int n = 1000;
+    std::vector<std::string> str_tree(n);
+    for (int i = 0; i < n; ++i) {
+        int v = dis(gen);
+        if (v != null) {
+            str_tree[i] = std::to_string(v);
+        }
+        else {
+            str_tree[i] = "null";
+        }
+    }
+    TreeNode *root = NewTree(str_tree);
+
+    benchmark::RegisterBenchmark("BM_PostorderTraversal_Recursion", [](benchmark::State &state, PostorderTraversal solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution1(root);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_PostorderTraversal_Iteration", [](benchmark::State &state, PostorderTraversal solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution2(root);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_PostorderTraversal_Morris", [](benchmark::State &state, PostorderTraversal solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution3(root);
+        }
+    }, solution, root);
+    //DeleteTree(root);
 }
 
 std::vector<int> PostorderTraversal::Solution1(TreeNode *root) {
@@ -338,7 +438,42 @@ std::vector<int> PostorderTraversal::Solution2(TreeNode *root) {
 }
 
 std::vector<int> PostorderTraversal::Solution3(TreeNode *root) {
-    return std::vector<int>();
+    std::vector<int> res;
+    TreeNode *cur = root, *predecessor = nullptr;
+    while (cur) {
+        predecessor = cur->left;
+        if (predecessor) {
+            while (predecessor->right && predecessor->right != cur) {
+                predecessor = predecessor->right;
+            }
+
+            // 第一次访问到 cur 的中序遍历的前驱
+            if (predecessor->right == nullptr) {
+                predecessor->right = cur;
+                cur = cur->left;
+                continue;
+            } 
+            // 左子树访问完
+            else {
+                predecessor->right = nullptr;
+                AddPath(cur->left, res);
+                //cur = cur->right;
+            }
+        } 
+        cur = cur->right;
+    }
+    AddPath(root, res);
+    return res;
+}
+
+void PostorderTraversal::AddPath(TreeNode *root, std::vector<int> &res) {
+    int count = 0;
+    while (root) {
+        ++count;
+        res.emplace_back(root->val);
+        root = root->right;
+    }
+    std::reverse(res.end() - count, res.end());
 }
 
 
