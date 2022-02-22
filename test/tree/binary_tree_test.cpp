@@ -256,5 +256,43 @@ TEST(BinaryTreeTest, HasPathSumTest) {
     }
 }
 
+TEST(BinaryTreeTest, InvertTreeTest) {
+    InvertTree solution;
+    IsSameTree judge;
+
+    std::vector<std::vector<std::string>> sp{
+        { "4","2","7","1","3","6","9" },
+        { "2","1","3" },
+        { },
+    };
+
+    std::vector<std::vector<std::string>> sq{
+        { "4","7","2","9","6","3","1" },
+        { "2","3","1" },
+        {}
+    };
+
+    std::vector<TreeNode *> roots1, roots2, roots3;
+    for (int i = 0; i < sp.size(); ++i) {
+        roots1.emplace_back(NewTree(sp[i]));
+        roots2.emplace_back(NewTree(sp[i]));
+        roots3.emplace_back(NewTree(sq[i]));
+    }
+
+    EXPECT_TRUE(judge.Solution1(solution.Solution1(roots1[0]), roots3[0]));
+    EXPECT_TRUE(judge.Solution1(solution.Solution1(roots1[1]), roots3[1]));
+    EXPECT_TRUE(judge.Solution1(solution.Solution1(roots1[2]), roots3[2]));
+
+    EXPECT_TRUE(judge.Solution1(solution.Solution2(roots2[0]), roots3[0]));
+    EXPECT_TRUE(judge.Solution1(solution.Solution2(roots2[1]), roots3[1]));
+    EXPECT_TRUE(judge.Solution1(solution.Solution2(roots2[2]), roots3[2]));
+
+    for (int i = 0; i < sp.size(); ++i) {
+        DeleteTree(roots1[i]);
+        DeleteTree(roots2[i]);
+        DeleteTree(roots3[i]);
+    }
+}
+
 } // namespace test
 } // namespace leetcode
