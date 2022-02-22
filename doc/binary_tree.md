@@ -1,7 +1,7 @@
-| :tiger:                                    | :cat:                                      | :dog:                                      | :dragon:                   |
-| ------------------------------------------ | ------------------------------------------ | ------------------------------------------ | -------------------------- |
-| 144. [二叉树的前序遍历](#二叉树的前序遍历) | 94.[二叉树的中序遍历](#二叉树的中序遍历)   | 145. [二叉树的后序遍历](#二叉树的后序遍历) | 100. [相同的树](#相同的树) |
-| 110. [平衡二叉树](#平衡二叉树)             | 111. [二叉树的最小深度](#二叉树的最小深度) | 112. [路径总和](#路径总和)                 |                            |
+| :tiger:                                    | :cat:                                      | :dog:                                      | :dragon:                       |
+| ------------------------------------------ | ------------------------------------------ | ------------------------------------------ | ------------------------------ |
+| 144. [二叉树的前序遍历](#二叉树的前序遍历) | 94.[二叉树的中序遍历](#二叉树的中序遍历)   | 145. [二叉树的后序遍历](#二叉树的后序遍历) | 100. [相同的树](#相同的树)     |
+| 110. [平衡二叉树](#平衡二叉树)             | 111. [二叉树的最小深度](#二叉树的最小深度) | 112. [路径总和](#路径总和)                 | 226. [翻转二叉树](#翻转二叉树) |
 
 
 
@@ -702,6 +702,74 @@ public:
             }
         }
         return false;
+    }
+};
+```
+
+# 翻转二叉树
+
+- [链接](https://leetcode-cn.com/problems/invert-binary-tree/)
+- [code]((../cc/tree/binary_tree.h))
+
+> 给你一棵二叉树的根节点 root，翻转这棵二叉树，并返回其根节点。
+
+## 深度优先搜索
+
+翻转二叉树，从根节点开始，递归地对树进行遍历，翻转左右子树，对于子树也同样翻转其左右子树，最后当前根节点的左右子树即可。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，递归遍历全部节点时间
+- 空间复杂度：$O(h)$，递归堆栈空间，h 为二叉树高度，平均情况下 $O(\log n)$，最差情况下 $O(n)$
+
+```c++
+class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root) {
+        if (root == nullptr) {
+            return nullptr;
+        }
+        TreeNode *left = invertTree(root->left);
+        TreeNode *right = invertTree(root->right);
+        root->left = right;
+        root->right = left;
+        return root;
+    }
+};
+```
+
+## 广度优先搜索
+
+使用队列来层序遍历二叉树节点，并交换其左右子树。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，遍历全部节点时间
+- 空间复杂度：$O(n)$，队列存储空间
+
+```c++
+class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root) {
+        if (root == nullptr) {
+            return nullptr;
+        }
+        queue<TreeNode *> que;
+        que.emplace(root);
+        while (!que.empty()) {
+            TreeNode *cur = que.front();
+            que.pop();
+            TreeNode *tmp = cur->left;
+            cur->left = cur->right;
+            cur->right = tmp;
+            if (cur->left) {
+                que.emplace(cur->left);
+            }
+            if (cur->right) {
+                que.emplace(cur->right);
+            }
+        }
+        return root;
     }
 };
 ```
