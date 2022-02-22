@@ -80,6 +80,7 @@ enum SolutionsId {
     CONVERT_TO_TITLE = 168,
     HAMMING_WEIGHT = 191,
     IS_HAPPY = 202,
+    INVERT_TREE = 226,
     MISSING_NUMBER = 268,
     NUM_ARRAY = 303,
     INTERSECTION = 349,
