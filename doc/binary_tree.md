@@ -1,14 +1,9 @@
-| :tiger:                                  | :cat:                      | :dog:                          | :dragon:                                   |
-| ---------------------------------------- | -------------------------- | ------------------------------ | ------------------------------------------ |
-| 94.[二叉树的中序遍历](#二叉树的中序遍历) | 100. [相同的树](#相同的树) | 110. [平衡二叉树](#平衡二叉树) | 111. [二叉树的最小深度](#二叉树的最小深度) |
-| 112. [路径总和](#路径总和)               |                            |                                |                                            |
+| :tiger:                                    | :cat:                                      | :dog:                                      | :dragon:                   |
+| ------------------------------------------ | ------------------------------------------ | ------------------------------------------ | -------------------------- |
+| 144. [二叉树的前序遍历](#二叉树的前序遍历) | 94.[二叉树的中序遍历](#二叉树的中序遍历)   | 145. [二叉树的后序遍历](#二叉树的后序遍历) | 100. [相同的树](#相同的树) |
+| 110. [平衡二叉树](#平衡二叉树)             | 111. [二叉树的最小深度](#二叉树的最小深度) | 112. [路径总和](#路径总和)                 |                            |
 
-# 二叉树的中序遍历
 
-- [链接](https://leetcode-cn.com/problems/binary-tree-inorder-traversal/)
-- [code](../cc/tree/binary_tree.h)
-
-> 给定一个二叉树的根节点 root，返回它的中序遍历。
 
 ```c++
 /**
@@ -24,6 +19,129 @@
  */
 ```
 
+# 二叉树的前序遍历
+
+- [链接](https://leetcode-cn.com/problems/binary-tree-preorder-traversal/)
+- [code](../cc/tree/binary_tree.h)
+
+>给你二叉树的根节点 root，返回它节点值的前序遍历。
+
+## 递归
+
+先序遍历即有限访问根节点，然后访问左子树，最后访问右子树，访问子树时以相同的顺序访问。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，递归遍历全部节点时间
+- 空间复杂度：$O(h)$，递归堆栈空间，h 为树的高度，平均情况下 $O(\log n)$，最坏情况下 $O(n)$
+
+```c++
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int> res;
+        preorder(root, res);
+        return res;
+    }
+
+    void preorder(TreeNode *root, vector<int> &res) {
+        if (root == nullptr) {
+            return;
+        }
+        res.emplace_back(root->val);
+        preorder(root->left, res);
+        preorder(root->right, res);
+    }
+};
+```
+
+## 迭代
+
+递归隐式地维护了一个栈，使用迭代方法，在迭代的过程中显示地模拟这个栈。其他和递归遍历一样。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，迭代遍历全部节点时间
+- 空间复杂度：$O(n)$，迭代模拟递归遍历全部节点空间
+
+```c++
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int> res;
+        stack<TreeNode *> stk;
+        TreeNode *cur = root;
+        while (cur != nullptr || !stk.empty()) {
+            while (cur != nullptr) {
+                res.emplace_back(cur->val);
+                stk.emplace(cur);
+                cur = cur->left;
+            }
+            cur = stk.top();
+            stk.pop();
+            cur = cur->right;
+        }
+        return res;
+    }
+};
+```
+
+## Morris
+
+Morris 遍历算法是另一种遍历二叉树的方法，它能将非递归的中序遍历空间复杂度降为 O(1)。
+
+算法整体步骤如下（假设当前节点为 cur）：
+
+- 如果 `cur` 无左节点，即 `cur->left == nullptr`，将 `cur` 的值加入结果，访问 `cur` 的右节点，即 `cur = cur->right`。
+- 如果 `cur` 有左节点，则找到 `cur` 左子树上最右的节点（即左子树中序遍历的最后一个节点，`cur` 在中序遍历中的前驱节点），记为 `predecessor`。根据 `predecessor` 的右节点是否为空，进行如下操作：
+  - 如果 `predecessor` 的右节点为空，则将其右节点指向 `cur`，将 `cur` 的值加入结果，然后访问 `cur` 的左节点，即 `cur = cur->left`。
+  - 如果 `predecessor` 的右节点不为空，则此时其右节点指向 `cur`，说明已经遍历完 `cur` 的左子树，将 `predecessor` 的右节点置空，即 `predecessor->right = nullptr`，然后访问 `cur` 的右节点，即 `cur = cur->right`。
+- 重复上述操作，直到访问完整棵树。
+
+其实整个过程我们就多做一步：假设当前遍历到的节点为 cur，将 cur 的左子树中最右边的节点的右孩子指向 cur，这样在左子树遍历完成后我们通过这个指向走回了 cur，且能通过这个指向知晓我们已经遍历完成了左子树，而不用再通过栈来维护，省去了栈的空间复杂度。
+
+```c++
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int> res;
+        TreeNode *cur = root, *predecessor = nullptr;
+        while (cur) {
+            if (cur->left) {
+                predecessor = cur->left;
+                // 找到 cur 中序遍历的前驱节点，即准备输出 cur 的前一个节点
+                while (predecessor->right && predecessor->right != cur) {
+                    predecessor = predecessor->right;
+                }
+                // 第一次遍历到前驱，前驱节点的右节点指向 cur
+                if (predecessor->right == nullptr) {
+                    res.emplace_back(cur->val);
+                    predecessor->right = cur;
+                    cur = cur->left;
+                } 
+                // 第二次遍历到前驱，说明左子树遍历完了
+                else {
+                    predecessor->right = nullptr;
+                    cur = cur->right;
+                }
+            } else {
+                res.emplace_back(cur->val);
+                cur = cur->right;
+            }
+        }
+        return res;
+    }
+};
+```
+
+# 二叉树的中序遍历
+
+- [链接](https://leetcode-cn.com/problems/binary-tree-inorder-traversal/)
+- [code](../cc/tree/binary_tree.h)
+
+> 给定一个二叉树的根节点 root，返回它的中序遍历。
+
+
 ## 递归
 
 中序遍历即优先访问左子树，然后访问根，最后访问右子树的遍历方式，访问子树时以相同的顺序访问。
@@ -32,8 +150,8 @@
 
 **复杂度分析**：
 
-- 时间复杂度：$O(n)$，递归遍历每个节点所需时间
-- 空间复杂度：$O(n)$，递归堆栈空间，需要递归遍历全部节点
+- 时间复杂度：$O(n)$，递归遍历全部节点时间
+- 空间复杂度：$O(h)$，递归堆栈空间，h 为树的高度，平均情况下 $O(\log n)$，最坏情况下 $O(n)$
 
 ```c++
 class Solution {
@@ -61,8 +179,8 @@ public:
 
 **复杂度分析**：
 
-- 时间复杂度：O(n)，迭代每个节点所需时间
-- 空间复杂度：O(n)，迭代模拟递归栈所需空间，需要迭代全部节点
+- 时间复杂度：$O(n)$，迭代全部节点时间
+- 空间复杂度：$O(n)$，迭代模拟递归栈所需空间，需要迭代全部节点
 
 ```c++
 class Solution {
@@ -86,7 +204,7 @@ public:
 };
 ```
 
-## Miorris
+## Morris
 
 Morris 遍历算法是另一种遍历二叉树的方法，它能将非递归的中序遍历空间复杂度降为 O(1)。
 
@@ -138,6 +256,132 @@ public:
             }
         }
         return res;
+    }
+};
+```
+
+# 二叉树的后序遍历
+
+- [链接](https://leetcode-cn.com/problems/binary-tree-postorder-traversal/)
+- [code](../cc/tree/binary_tree.h)
+
+> 给你一棵二叉树的根节点 root，返回其节点值的后序遍历。
+
+## 递归
+
+后序遍历即先访问左子树，然后访问右子树，最后访问根节点的顺序，访问子树以相同的顺序访问。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，递归遍历全部节点时间
+- 空间复杂度：$O(h)$，递归堆栈空间，h 为树的高度，平均情况下 $O(\log n)$，最坏情况下 $O(n)$
+
+```c++
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> res;
+        postorder(root, res);
+        return res;
+    }
+
+    void postorder(TreeNode* root, vector<int> &res) {
+        if (root == nullptr) {
+            return;
+        }
+        postorder(root->left, res);
+        postorder(root->right, res);
+        res.emplace_back(root->val);
+    }
+};
+```
+
+## 迭代
+
+递归隐式地维护了一个栈，使用迭代方法，在迭代的过程中显示地模拟这个栈。其他和递归遍历一样。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，迭代全部节点时间
+- 空间复杂度：$O(n)$，迭代全部节点所需空间
+
+```c++
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> res;
+        stack<TreeNode *> stk;
+        TreeNode *cur = root, *prev = nullptr;
+        while (cur != nullptr || !stk.empty()) {
+            while (cur != nullptr) {
+                stk.emplace(cur);
+                cur = cur->left;
+            }
+            cur = stk.top();
+            stk.pop();
+            // 右子树为空或已经处理完则加入根节点，避免死循环
+            if (cur->right == nullptr || cur->right == prev) {
+                res.emplace_back(cur->val);
+                prev = cur;
+                cur = nullptr;
+            } else {
+                stk.emplace(cur);
+                cur = cur->right;
+            }
+        }
+        return res;
+    }
+};
+```
+
+## Morris
+
+分析看 leetcode 题解
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，其中 n 是二叉树的节点数。没有左子树的节点只被访问一次，有左子树的节点被访问两次
+- 空间复杂度：$O(1)$
+
+```c++
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> res;
+        TreeNode *cur = root, *predecessor = nullptr;
+        while (cur) {
+            predecessor = cur->left;
+            if (predecessor) {
+                while (predecessor->right && predecessor->right != cur) {
+                    predecessor = predecessor->right;
+                }
+                // 第一次访问到 cur 的中序遍历的前驱
+                if (predecessor->right == nullptr) {
+                    predecessor->right = cur;
+                    cur = cur->left;
+                    continue;
+                } 
+                // 左子树访问完
+                else {
+                    predecessor->right = nullptr;
+                    AddPath(cur->left, res);
+                    //cur = cur->right;
+                }
+            } 
+            cur = cur->right;
+        }
+        AddPath(root, res);
+        return res;
+    }
+
+    void AddPath(TreeNode *root, vector<int> &res) {
+        int count = 0;
+        while (root) {
+            ++count;
+            res.emplace_back(root->val);
+            root = root->right;
+        }
+        reverse(res.end() - count, res.end());
     }
 };
 ```
