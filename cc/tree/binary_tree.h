@@ -84,11 +84,32 @@ public:
     std::string Solution() override;
 
     void Benchmark() override;
-
+    
+    /**
+     * @brief 递归前序遍历
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(h)
+     * @param root 二叉树根节点
+     * @return std::vector<int> 前序遍历结果 
+     */
     std::vector<int> Solution1(TreeNode *root);
 
+    /**
+     * @brief 迭代前序遍历，模拟递归
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param root 二叉树根节点
+     * @return std::vector<int> 前序遍历结果
+     */
     std::vector<int> Solution2(TreeNode *root);
 
+    /**
+     * @brief Morris 前序遍历
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param root 二叉树根节点
+     * @return std::vector<int> 前序遍历结果
+     */
     std::vector<int> Solution3(TreeNode *root);
 };
 
@@ -144,10 +165,31 @@ public:
 
     void Benchmark() override;
 
+    /**
+     * @brief 递归后序遍历
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(h)
+     * @param root 二叉树根节点
+     * @return std::vector<int> 后序遍历结果
+     */
     std::vector<int> Solution1(TreeNode *root);
 
+    /**
+     * @brief 迭代后序遍历
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param root 二叉树根节点
+     * @return std::vector<int> 后序遍历结果
+     */
     std::vector<int> Solution2(TreeNode *root);
 
+    /**
+     * @brief Morris 后序遍历
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param root 二叉树根节点
+     * @return std::vector<int> 后序遍历结果
+     */
     std::vector<int> Solution3(TreeNode *root);
 
 private:
