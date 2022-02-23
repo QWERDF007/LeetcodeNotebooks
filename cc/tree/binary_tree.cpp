@@ -20,6 +20,7 @@ void BinaryTreeSolution(int pid) {
         case SolutionsId::MIN_DEPTH: solution = new MinDepth(); break;
         case SolutionsId::HAS_PATH_SUM: solution = new HasPathSum(); break;
         case SolutionsId::INVERT_TREE: solution = new InvertTree(); break;
+        case SolutionsId::BINARY_TREE_PATHS: solution = new BinaryTreePaths(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
 	}
 
@@ -964,6 +965,112 @@ TreeNode *InvertTree::Solution2(TreeNode *root) {
         }
     }
     return root;
+}
+
+std::string BinaryTreePaths::Title() {
+    return "257. 二叉树的所有路径\n";
+}
+
+std::string BinaryTreePaths::Problem() {
+    return 
+        "给你一个二叉树的根节点 root，按任意顺序，返回所有从根节点到叶子节点的路径。\n"
+        "叶子节点是指没有子节点的节点。\n";
+}
+
+std::string BinaryTreePaths::Link() {
+    return "https://leetcode-cn.com/problems/binary-tree-paths/";
+}
+
+std::string BinaryTreePaths::Solution() {
+    return "DFS，时间：O(n^2)，空间：O(h^2)。\n";
+}
+
+void BinaryTreePaths::Benchmark() {
+    BinaryTreePaths solution;
+
+    int n = 1000;
+    std::vector<std::string> s_tree(n);
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(-100, 100);
+    int null = dis(gen);
+    int target = dis(gen);
+    for (int i = 0; i < n; ++i) {
+        int v = dis(gen);
+        if (v != null) {
+            s_tree[i] = std::to_string(v);
+        }
+        else {
+            s_tree[i] = "null";
+        }
+    }
+
+    TreeNode *root = NewTree(s_tree);
+
+    benchmark::RegisterBenchmark("BM_BinaryTreePaths_DFS", [](benchmark::State &state, BinaryTreePaths solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution1(root);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_BinaryTreePaths_BFS", [](benchmark::State &state, BinaryTreePaths solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution2(root);
+        }
+    }, solution, root);
+
+    //DeleteTree(root);
+}
+
+std::vector<std::string> BinaryTreePaths::Solution1(TreeNode *root) {
+    std::vector<std::string> paths;
+    TreePaths(root, paths, "");
+    return paths;
+}
+
+std::vector<std::string> BinaryTreePaths::Solution2(TreeNode *root) {
+    std::vector<std::string> paths;
+    if (root == nullptr) {
+        return paths;
+    }
+    std::queue<TreeNode *> que_node;
+    std::queue<std::string> que_path;
+    que_node.emplace(root);
+    que_path.emplace("");
+    while (!que_node.empty()) {
+        TreeNode *cur = que_node.front();
+        std::string path = que_path.front();
+        que_node.pop();
+        que_path.pop();
+        path += std::to_string(cur->val);
+        if (cur->left == nullptr && cur->right == nullptr) {
+            paths.emplace_back(path);
+        } else {
+            path += "->";
+            if (cur->left) {
+                que_node.emplace(cur->left);
+                que_path.emplace(path);
+            }
+            if (cur->right) {
+                que_node.emplace(cur->right);
+                que_path.emplace(path);
+            }
+        }
+    }
+    return paths;
+}
+
+void BinaryTreePaths::TreePaths(TreeNode *root, std::vector<std::string> &paths, std::string path) {
+    if (root) {
+        path += std::to_string(root->val);
+        if (root->left == nullptr && root->right == nullptr) {
+            paths.emplace_back(path);
+        } else {
+            path += "->";
+            TreePaths(root->left, paths, path);
+            TreePaths(root->right, paths, path);
+        }
+    }
 }
 
 } // namespace tree
