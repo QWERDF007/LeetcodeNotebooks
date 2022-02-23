@@ -294,5 +294,44 @@ TEST(BinaryTreeTest, InvertTreeTest) {
     }
 }
 
+TEST(BinaryTreeTest, BinaryTreePathsTest) {
+    BinaryTreePaths solution;
+
+    std::vector<std::vector<std::string>> s_trees{
+        {"1","2","3","null","5"},
+        {"1"},
+        {"1","2","3","4","5","6","7","8","9"}
+    };
+
+    std::vector<std::vector<std::string>> results1{
+        {"1->2->5","1->3"},
+        {"1"},
+        {"1->2->4->8","1->2->4->9","1->2->5","1->3->6","1->3->7"},
+    };
+
+    std::vector<std::vector<std::string>> results2{
+        {"1->3", "1->2->5"},
+        {"1"},
+        {"1->2->5","1->3->6","1->3->7","1->2->4->8","1->2->4->9"},
+    };
+
+    std::vector<TreeNode *> roots;
+    for (auto &s_tree : s_trees) {
+        roots.emplace_back(NewTree(s_tree));
+    }
+
+    EXPECT_EQ(solution.Solution1(roots[0]), results1[0]);
+    EXPECT_EQ(solution.Solution1(roots[1]), results1[1]);
+    EXPECT_EQ(solution.Solution1(roots[2]), results1[2]);
+
+    EXPECT_EQ(solution.Solution2(roots[0]), results2[0]);
+    EXPECT_EQ(solution.Solution2(roots[1]), results2[1]);
+    EXPECT_EQ(solution.Solution2(roots[2]), results2[2]);
+
+    for (TreeNode *root : roots) {
+        DeleteTree(root);
+    }
+}
+
 } // namespace test
 } // namespace leetcode
