@@ -18,5 +18,17 @@ TEST(TwoPointersTest, PushDominoesTest) {
     EXPECT_EQ(solution.Solution2(".L.R...LR..L.."), "LL.RR.LLRRLL..");
 }
 
+TEST(TwoPointersTest, ReverseOnlyLettersTest) {
+    ReverseOnlyLetters solution;
+    
+    EXPECT_EQ(solution.Solution1("ab-cd"), "dc-ba");
+    EXPECT_EQ(solution.Solution1("a-bC-dEf-ghIj"), "j-Ih-gfE-dCba");
+    EXPECT_EQ(solution.Solution1("Test1ng-Leet=code-Q!"), "Qedo1ct-eeLg=ntse-T!");
+
+    EXPECT_EQ(solution.Solution2("ab-cd"), "dc-ba");
+    EXPECT_EQ(solution.Solution2("a-bC-dEf-ghIj"), "j-Ih-gfE-dCba");
+    EXPECT_EQ(solution.Solution2("Test1ng-Leet=code-Q!"), "Qedo1ct-eeLg=ntse-T!");
+}
+
 } // namespace test
 } // namespace leetcode
