@@ -1,13 +1,13 @@
-| :tiger:                    | :cat: | :dog: | :dragon: |
-| -------------------------- | ----- | ----- | -------- |
-| 838. [推多米诺](#推多米诺) |       |       |          |
+| :tiger:                    | :cat:                              | :dog: | :dragon: |
+| -------------------------- | ---------------------------------- | ----- | -------- |
+| 838. [推多米诺](#推多米诺) | 917. [仅仅反转字母](#仅仅反转字母) |       |          |
 
 
 
 # 推多米诺
 
-- 链接
-- code
+- [链接](https://leetcode-cn.com/problems/push-dominoes/)
+- [code](../cc/two_pointers/two_pointers.h)
 
 > n 张多米诺骨牌排成一行，将每张多米诺骨牌垂直竖立。在开始时，同时把一些多米诺骨牌向左或向右推。
 >
@@ -127,6 +127,88 @@ public:
             }
         }
         return res;
+    }
+};
+```
+
+
+
+# 仅仅反转字母
+
+- [链接](https://leetcode-cn.com/problems/reverse-only-letters/)
+- [code](../cc/two_pointers/two_pointers.h)
+
+> 给你一个字符串 s，根据下述规则反转字符串：
+>
+> - 所有非英文字母保留在原有位置。
+> - 所有英文字母（小写或大写）位置反转。
+>
+> 返回反转后的 s。
+
+## 双指针（就地）
+
+使用 left 指针从左边开始扫描字符串 s，right 指针从右边开始扫描字符串 s。如果两个指针都扫描到字母，且 left < right，那么交换 `s[left]` 和 `s[right]`，然后继续扫描；否则反转过程结束，返回处理后的字符串。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，n 是字符串的长度
+- 空间复杂度：$O(1)$，在字符串 s 上进行交换
+
+```c++
+class Solution {
+public:
+    string reverseOnlyLetters(string s) {
+        int n = s.size();
+        int left = 0, right = n - 1;
+        while (true) {
+            while (left < right && !isalpha(s[left])) {
+                ++left;
+            }
+            while (right > left && !isalpha(s[right])) {
+                --right;
+            }
+            if (left >= right) {
+                break;
+            }
+            swap(s[left], s[right]);
+            ++left;
+            --right;
+        }
+        return s;
+    }
+};
+```
+
+## 双指针
+
+创建一个长度与 s 相同的字符串进行操作，不修改字符串 s。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$
+- 空间复杂度：$O(n)$，创建字符串空间
+
+```c++
+class Solution {
+public:
+    string reverseOnlyLetters(string s) {
+        int i = 0, n = s.size(), j = n - 1;
+        string ans(n, ' ');
+        while (i < n) {
+            // 字母
+            if ((s[i] >= 'a' && s[i] <= 'z')  || (s[i] >= 'A' && s[i] <= 'Z')) {
+                while (s[j] < 'A' || (s[j] > 'Z' && s[j] < 'a')) {
+                    ans[j] = s[j];
+                    --j;
+                }
+                ans[j] = s[i];
+                --j;
+            } else {
+                ans[i] = s[i];
+            }
+            ++i;
+        }
+        return ans;
     }
 };
 ```
