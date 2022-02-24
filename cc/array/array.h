@@ -451,6 +451,28 @@ public:
     std::vector<int> Solution2(std::vector<std::vector<int>> &matrix);
 };
 
+class FindBall : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+    
+    /**
+     * @brief 模拟
+     * 时间复杂度：O(mn)
+     * 空间复杂度：O(1)
+     * @param grid 二维网格数组
+     * @return std::vector<int> 每个小球最终掉落位置
+     */
+    std::vector<int> Solution1(std::vector<std::vector<int>> &grid);
+};
+
 class MinimumDifference : public LeetcodeSolution {
 public:
     std::string Title() override;

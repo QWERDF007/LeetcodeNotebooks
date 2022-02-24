@@ -12,6 +12,8 @@
 #include "array.h"
 
 
+
+
 namespace leetcode {
 namespace array{
 
@@ -30,6 +32,7 @@ void ArraySolution(int pid) {
         case SolutionsId::SINGLE_NON_DUPLICATE: solution = new SingleNonDuplicate(); break;
         case SolutionsId::IS_ONE_BIT_CHARACTER: solution = new IsOneBitCharacter(); break;
         case SolutionsId::LUCKY_NUMBERS: solution = new LuckyNumbers(); break;
+        case SolutionsId::FIND_BALL: solution = new FindBall(); break;
         case SolutionsId::MINIMUM_DIFFERENCE: solution = new MinimumDifference(); break;
         default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
     }
@@ -1057,6 +1060,73 @@ std::vector<int> LuckyNumbers::Solution2(std::vector<std::vector<int>> &matrix) 
 }
 
 
+std::string FindBall::Title() {
+    return "1706. 球会落何处\n";
+}
+
+std::string FindBall::Problem() {
+    return 
+        "用一个大小为 m x n 的二维网格 grid 表示一个箱子。你有 n 颗球。箱子的顶部和底部都是开着的。\n"
+        "箱子中的每个单元格都有一个对角线挡板，跨过单元格的两个角，可以将球导向左侧或者右侧。\n"
+        "- 将球导向右侧的挡板跨过左上角和右下角，在网格中用 1 表示。\n"
+        "- 将球导向左侧的挡板跨过右上角和左下角，在网格中用 -1 表示。\n"
+        "在箱子每一列的顶端各放一颗球。每颗球都可能卡在箱子里或从底部掉出来。\n"
+        "如果球恰好卡在两块挡板之间的 \"V\" 形图案，或者被一块挡导向到箱子的任意一侧边上，就会卡住。\n"
+        "返回一个大小为 n 的数组 answer ，其中 answer[i] 是球放在顶部的第 i 列后从底部掉出来的那一列对应的下标，如果球卡在盒子里，则返回 -1 。\n";
+}
+
+std::string FindBall::Link() {
+    return "https://leetcode-cn.com/problems/where-will-the-ball-fall/";
+}
+
+std::string FindBall::Solution() {
+    return "模拟，时间：O(mn)，空间：O(1)。\n";
+}
+
+void FindBall::Benchmark() {
+    FindBall solution;
+
+    int m = 500, n = 1000;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, 1);
+
+    std::vector<std::vector<int>> grid(m, std::vector<int>(n));
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < n; ++j) {
+            grid[i][j] = dis(gen) == 0 ? -1 : 1;
+        }
+    }
+
+    benchmark::RegisterBenchmark("BM_FindBall_Simulate", [](benchmark::State &state, FindBall solution, std::vector<std::vector<int>> grid) {
+        for (auto _ : state) {
+            solution.Solution1(grid);
+        }
+    }, solution, grid);
+}
+
+std::vector<int> FindBall::Solution1(std::vector<std::vector<int>> &grid) {
+    int n = grid[0].size();
+    int m = grid.size();
+    std::vector<int> ans(n, -1);
+    for (int j = 0; j < n; ++j) {
+        int col = j;
+        for (int i = 0; i < m; ++i) {
+            int dir = grid[i][col];
+            col += dir;
+            if (col < 0 || col >= n || grid[i][col] != dir) {
+                col = -1;
+                break;
+            }
+        }
+        if (col >= 0) {
+            ans[j] = col;
+        }
+    }
+    return ans;
+}
+
+
 std::string MinimumDifference::Title() {
     return "1984. 学生分数的最小差值\n";
 }
@@ -1108,7 +1178,6 @@ int MinimumDifference::Solution1(std::vector<int> &nums, int k) {
     }
     return m;
 }
-
 
 } // namespace array
 } // namespace leetcode
