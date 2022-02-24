@@ -375,5 +375,39 @@ public:
     TreeNode *Solution2(TreeNode *root);
 };
 
+class BinaryTreePaths : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 深度优先搜索 (DFS)
+     * 时间复杂度：O(n^2)
+     * 空间复杂度：O(h^2)
+     * @param root 二叉树根节点
+     * @return std::vector<std::string> 根节点到叶子节点的路径
+     */
+    std::vector<std::string> Solution1(TreeNode *root);
+
+    /**
+     * @brief 广度优先搜索 (BFS)
+     * 时间复杂度：O(n^2)
+     * 空间复杂度：O(n^2)
+     * @param root 二叉树根节点
+     * @return std::vector<std::string> 根节点到叶子节点的路径
+     */
+    std::vector<std::string> Solution2(TreeNode *root);
+
+private:
+    void TreePaths(TreeNode *root, std::vector<std::string> &paths, std::string path);
+};
+
 } // namespace tree
 } // namespace leetcode

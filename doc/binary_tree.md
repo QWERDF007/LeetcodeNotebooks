@@ -2,6 +2,7 @@
 | ------------------------------------------ | ------------------------------------------ | ------------------------------------------ | ------------------------------ |
 | 144. [二叉树的前序遍历](#二叉树的前序遍历) | 94.[二叉树的中序遍历](#二叉树的中序遍历)   | 145. [二叉树的后序遍历](#二叉树的后序遍历) | 100. [相同的树](#相同的树)     |
 | 110. [平衡二叉树](#平衡二叉树)             | 111. [二叉树的最小深度](#二叉树的最小深度) | 112. [路径总和](#路径总和)                 | 226. [翻转二叉树](#翻转二叉树) |
+|                                            | 257. [二叉树的所有路径](#二叉树的所有路径) |                                            |                                |
 
 
 
@@ -770,6 +771,99 @@ public:
             }
         }
         return root;
+    }
+};
+```
+
+
+
+# 二叉树的所有路径
+
+- [链接](https://leetcode-cn.com/problems/binary-tree-paths/)
+- [code]((../cc/tree/binary_tree.h))
+
+> 给你一个二叉树的根节点 root，按任意顺序，返回所有从根节点到叶子节点的路径。
+>
+> 叶子节点是指没有子节点的节点。
+
+## 深度优先搜索
+
+使用深度优先搜索遍历二叉树，需要考虑当前节点是否叶子节点：
+
+- 如果当前当前节点不是叶子节点，则在当前路径末尾加入该节点，并继续递归遍历该节点的左右节点
+- 如果当前节点是叶子节点，则在当前路径末尾添加该节点，并将该路径加入答案
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n^2)$，递归遍历 n 个节点时间 $O(n)$，每个节点只被访问一次，每一次会对 `path` 拷贝，拷贝时间 $O(n)$，故总时间复杂度 $O(n^2)$
+- 空间复杂度：$O(h^2)$，递归所需空间 $O(h)$，h 为二叉树高度，每次遍历需要拷贝一个根节点到当前节点路径的 `path ` 空间，故总空间复杂度 $O(h^2)$
+
+```c++
+class Solution {
+public:
+    vector<string> binaryTreePaths(TreeNode* root) {
+        vector<string> paths;
+        treePaths(root, paths, "");
+        return paths;
+    }
+
+    void treePaths(TreeNode *root, vector<string> &paths, string path) {
+        if (root) {
+            path += to_string(root->val);
+            if (root->left == nullptr && root->right == nullptr) {
+                paths.emplace_back(path);
+            } else {
+                path += "->";
+                treePaths(root->left, paths, path);
+                treePaths(root->right, paths, path);
+            }
+        }
+    }
+};
+```
+
+## 广度优先搜索
+
+使用队列来层序遍历二叉树和维护到当前节点的路径，遇到叶子节点，则在当前路径末尾加入该节点，并加入答案；遇到非叶子节点，则在当前路径末尾加入该节点，并将该节点左右节点加入到队列中，将当前路径加入到队列中。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n^2)$，遍历 n 个节点时间 $O(n)$，拷贝 `path` 时间 $O(n)$
+- 空间复杂度：$O(n^2)$ ?，队列存储 n 个节点空间 $O(n)$， n 个路径空间 $O(n)$，根节点到当前节点路径 `path` 空间 $O(n)$
+
+```c++
+class Solution {
+public:
+    vector<string> binaryTreePaths(TreeNode* root) {
+        vector<string> paths;
+        if (root == nullptr) {
+            return paths;
+        }
+        queue<TreeNode *> que_node;
+        queue<string> que_path;
+        que_node.emplace(root);
+        que_path.emplace("");
+        while (!que_node.empty()) {
+            TreeNode *cur = que_node.front();
+            string path = que_path.front();
+            que_node.pop();
+            que_path.pop();
+            path += to_string(cur->val);
+            if (cur->left == nullptr && cur->right == nullptr) {
+                paths.emplace_back(path);
+            } else {
+                path += "->";
+                if (cur->left) {
+                    que_node.emplace(cur->left);
+                    que_path.emplace(path);
+                }
+                if (cur->right) {
+                    que_node.emplace(cur->right);
+                    que_path.emplace(path);
+                }
+            }
+        }
+        return paths;
     }
 };
 ```
