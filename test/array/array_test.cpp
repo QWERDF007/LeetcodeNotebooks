@@ -72,6 +72,29 @@ TEST(ArrayTest, RemoveDuplicatesTest) {
     EXPECT_EQ(solution.Solution2(nums[3]), results[3]);
 }
 
+TEST(ArrayTest, FindMissingRangesTest) {
+    FindMissingRanges solution;
+
+    std::vector<std::vector<int>> nums{
+        { 0,1,3,50,75 },
+        { -1 },
+    };
+    std::vector<int> lower{
+        0, -1,
+    };
+    std::vector<int> upper{
+        99, -1
+    };
+
+    std::vector<std::vector<std::string>> results{
+        { "2","4->49","51->74","76->99" },
+        {},
+    };
+
+    EXPECT_EQ(solution.Solution1(nums[0], lower[0], upper[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(nums[1], lower[1], upper[1]), results[1]);
+}
+
 TEST(ArrayTest, MissingNumberTest) {
     MissingNumber solution;
     std::vector<std::vector<int>> nums({
