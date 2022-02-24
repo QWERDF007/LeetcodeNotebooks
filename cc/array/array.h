@@ -93,6 +93,15 @@ public:
 
     void Benchmark() override;
 
+    /**
+     * @brief 遍历
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param nums 排序的整数数组
+     * @param lower 闭区间下限
+     * @param upper 闭区间上限
+     * @return std::vector<std::string> 缺失的区间
+     */
     std::vector<std::string> Solution1(std::vector<int> &nums, int lower, int upper);
 };
 

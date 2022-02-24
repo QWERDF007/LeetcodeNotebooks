@@ -22,6 +22,7 @@ void ArraySolution(int pid) {
     switch (pid) {
         case SolutionsId::TWO_SUM: solution = new TwoSum(); break;
         case SolutionsId::REMOVE_DUPLICATES: solution = new RemoveDuplicates(); break;
+        case SolutionsId::FIND_MISSING_RANGES: solution = new FindMissingRanges(); break;
         case SolutionsId::MISSING_NUMBER: solution = new MissingNumber(); break;
         case SolutionsId::NUM_ARRAY: solution = new NumArray(); break;
         case SolutionsId::INTERSECTION: solution = new Intersection(); break;
@@ -213,14 +214,51 @@ std::string FindMissingRanges::Link() {
 }
 
 std::string FindMissingRanges::Solution() {
-    return "TODO\n";
+    return "遍历，时间：O(n)，空间：O(1)。\n";
 }
 
 void FindMissingRanges::Benchmark() {
+    FindMissingRanges solution;
+
+    int n = 4000;
+    int lower = -10000, upper = 10000;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(1, 5);
+    std::vector<int> nums(n);
+    int cur = lower;
+    for (int i = 0; i < n; ++i) {
+        cur += dis(gen);
+        nums[i] = cur;
+    }
+    auto func = [](benchmark::State &state, FindMissingRanges solution, std::vector<int> nums, int lower, int upper) {
+        for (auto _ : state) {
+            solution.Solution1(nums, lower, upper);
+        }
+    };
+    benchmark::RegisterBenchmark("BM_FindMissingRanges_Traversal", func, solution, nums, lower, upper);
 }
 
 std::vector<std::string> FindMissingRanges::Solution1(std::vector<int> &nums, int lower, int upper) {
-    return std::vector<std::string>();
+    std::vector<std::string> ans;
+    int n = nums.size();
+    // lower - 1 将缺失 [lower] 的情况统一
+    long long prev = (long long)lower - 1;
+    for (int i = 0; i < n; ++i) {
+        int d = nums[i] - prev;
+        if (d == 2) {
+            ans.emplace_back(std::to_string(prev + 1));
+        } else if (d > 2) {
+            ans.emplace_back(std::to_string(prev + 1) + "->" + std::to_string(nums[i] - 1));
+        }
+        prev = nums[i];
+    }
+    if (upper - prev == 1) {
+        ans.emplace_back(std::to_string(prev + 1));
+    } else if (upper - prev > 1) {
+        ans.emplace_back(std::to_string(prev + 1) + "->" + std::to_string(upper));
+    }
+    return ans;
 }
 
 std::string MissingNumber::Title() {
@@ -228,8 +266,7 @@ std::string MissingNumber::Title() {
 }
 
 std::string MissingNumber::Problem() {
-    return 
-        "给定一个包含 [0, n] 中 n 个数的数组 nums，找出 [0, n] 这个范围内没有出现在数组中的那个数。\n";
+    return  "给定一个包含 [0, n] 中 n 个数的数组 nums，找出 [0, n] 这个范围内没有出现在数组中的那个数。\n";
 }
 
 std::string MissingNumber::Link() {
@@ -856,7 +893,7 @@ void SingleNonDuplicate::Benchmark() {
         }
     }, solution, nums);
 
-    benchmark::RegisterBenchmark("BM_SingleNonDuplicate_Traverse", [](benchmark::State &state, SingleNonDuplicate solution, std::vector<int> nums) {
+    benchmark::RegisterBenchmark("BM_SingleNonDuplicate_Traversal", [](benchmark::State &state, SingleNonDuplicate solution, std::vector<int> nums) {
         for (auto _ : state) {
             solution.Solution4(nums);
         }
