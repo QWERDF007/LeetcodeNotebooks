@@ -242,7 +242,7 @@ void FindMissingRanges::Benchmark() {
 std::vector<std::string> FindMissingRanges::Solution1(std::vector<int> &nums, int lower, int upper) {
     std::vector<std::string> ans;
     int n = nums.size();
-    // lower - 1 将缺失 [lower] 的情况统一
+    // lower - 1 将缺失 [lower] 的情况统一处理
     long long prev = (long long)lower - 1;
     for (int i = 0; i < n; ++i) {
         int d = nums[i] - prev;
