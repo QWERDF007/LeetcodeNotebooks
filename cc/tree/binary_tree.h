@@ -298,6 +298,21 @@ public:
     int Solution2(TreeNode *root);
 };
 
+class UpsideDownBinaryTree : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    TreeNode *Solution1(TreeNode *root);
+};
+
 class HasPathSum : public LeetcodeSolution {
 public:
     std::string Title() override;

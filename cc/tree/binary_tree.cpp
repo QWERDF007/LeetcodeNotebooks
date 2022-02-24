@@ -19,6 +19,7 @@ void BinaryTreeSolution(int pid) {
         case SolutionsId::IS_BALANCED: solution = new IsBalanced(); break;
         case SolutionsId::MIN_DEPTH: solution = new MinDepth(); break;
         case SolutionsId::HAS_PATH_SUM: solution = new HasPathSum(); break;
+        case SolutionsId::UPSIDE_DOWN_BINARY_TREE: solution = new UpsideDownBinaryTree(); break;
         case SolutionsId::INVERT_TREE: solution = new InvertTree(); break;
         case SolutionsId::BINARY_TREE_PATHS: solution = new BinaryTreePaths(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
@@ -880,6 +881,49 @@ bool HasPathSum::Solution3(TreeNode *root, int targetSum) {
     return false;
 }
 
+std::string UpsideDownBinaryTree::Title() {
+    return "156. 上下翻转二叉树\n";
+}
+
+std::string UpsideDownBinaryTree::Problem() {
+    return 
+        "给你一个二叉树的根节点 root，请你将此二叉树上下翻转，并返回新的根节点。\n"
+        "你可以按下面的步骤翻转一棵二叉树：\n"
+        "1. 原来的左子节点变成新的根节点\n"
+        "2. 原来的根节点变成新的右子节点\n"
+        "3. 原来的右子节点变成新的左子节点\n"
+        "上面的步骤逐层进行。题目数据保证每个右节点都有一个同级节点（即共享同一父节点的左节点）且不存在子节点。\n";
+}
+
+std::string UpsideDownBinaryTree::Link() {
+    return "https://leetcode-cn.com/problems/binary-tree-upside-down/";
+}
+
+std::string UpsideDownBinaryTree::Solution() {
+    return "TODO\n";
+}
+
+void UpsideDownBinaryTree::Benchmark() {
+}
+
+TreeNode *UpsideDownBinaryTree::Solution1(TreeNode *root) {
+    TreeNode *right = nullptr, *father = nullptr;
+    while (root) {
+        // 记录当前节点的左子节点
+        TreeNode *left = root->left;
+        // 更新当前节点左节点为父节点的右节点
+        root->left = right;
+        // 记录当前节点的右子节点
+        right = root->right;
+        // 跟新当前节点的右子节点为原父节点
+        root->right = father;
+        // 记录当前节点作为下一个待遍历节点的父节点
+        father = root;
+        root = left;
+        // 最终 root=nullptr ，father 指向翻转后的二叉树的根节点
+    }
+    return father;
+}
 
 std::string InvertTree::Title() {
     return "226. 翻转二叉树\n";
@@ -1072,6 +1116,7 @@ void BinaryTreePaths::TreePaths(TreeNode *root, std::vector<std::string> &paths,
         }
     }
 }
+
 
 } // namespace tree
 } // namespace leetcode
