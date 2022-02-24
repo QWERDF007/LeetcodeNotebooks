@@ -81,6 +81,21 @@ public:
 
 };
 
+class FindMissingRanges : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    std::vector<std::string> Solution1(std::vector<int> &nums, int lower, int upper);
+};
+
 class MissingNumber : public LeetcodeSolution {
 public:
     std::string Title() override;

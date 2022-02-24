@@ -199,6 +199,30 @@ int RemoveDuplicates::Solution2(std::vector<int>& nums) {
     return slow;
 }
 
+
+std::string FindMissingRanges::Title() {
+    return "163. 缺失的区间\n";
+}
+
+std::string FindMissingRanges::Problem() {
+    return "给定一个排序的整数数组 nums，其中元素的范围在闭区间 [lower, upper] 当中，返回不包含在数组中的缺失区间。\n";
+}
+
+std::string FindMissingRanges::Link() {
+    return "https://leetcode-cn.com/problems/missing-ranges/";
+}
+
+std::string FindMissingRanges::Solution() {
+    return "TODO\n";
+}
+
+void FindMissingRanges::Benchmark() {
+}
+
+std::vector<std::string> FindMissingRanges::Solution1(std::vector<int> &nums, int lower, int upper) {
+    return std::vector<std::string>();
+}
+
 std::string MissingNumber::Title() {
     return "268. 丢失的数字\n";
 }
@@ -1178,6 +1202,7 @@ int MinimumDifference::Solution1(std::vector<int> &nums, int k) {
     }
     return m;
 }
+
 
 } // namespace array
 } // namespace leetcode
