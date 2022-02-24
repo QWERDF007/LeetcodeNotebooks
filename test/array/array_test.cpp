@@ -351,6 +351,30 @@ TEST(ArrayTest, LuckyNumbersTest) {
     EXPECT_EQ(solution.Solution2(matrix2), results[2]);
 }
 
+TEST(ArrayTest, FindBallTest) {
+    FindBall solution;
+    std::vector<std::vector<std::vector<int>>> grids{
+        { {1,1,1,-1,-1},{1,1,1,-1,-1},{-1,-1,-1,1,1},{1,1,1,1,-1},{-1,-1,-1,-1,-1} },
+        { {-1} },
+        { {1,1,1,1,1,1},{-1,-1,-1,-1,-1,-1},{1,1,1,1,1,1},{-1,-1,-1,-1,-1,-1} },
+        { {1,-1,-1,1,-1,1,1,1,1,1,-1,1,1,1,1,1,1,-1,-1,-1,-1,-1,-1,1,-1,1,-1,1,-1,-1,-1,-1,1,-1,1,1,-1,-1,-1,-1,-1,1},
+          {-1,1,1,1,-1,-1,-1,-1,1,1,1,-1,-1,-1,1,-1,-1,1,1,1,1,1,1,-1,1,-1,-1,-1,-1,-1,1,-1,1,-1,-1,-1,-1,1,1,-1,1,1},
+          {1,-1,-1,-1,-1,1,-1,1,1,1,1,1,1,1,-1,1,-1,-1,-1,1,-1,-1,1,-1,1,-1,1,-1,-1,1,-1,1,-1,1,1,-1,-1,1,1,-1,1,-1} },
+    };
+
+    std::vector<std::vector<int>> results{
+        { 1,-1,-1,-1,-1 },
+        { -1 },
+        { 0,1,2,3,4,-1 },
+        { -1,-1,1,-1,-1,-1,-1,10,11,-1,-1,12,13,-1,-1,-1,-1,-1,17,-1,-1,20,-1,-1,-1,-1,-1,-1,-1,-1,27,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1 },
+    };
+
+    EXPECT_EQ(solution.Solution1(grids[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(grids[1]), results[1]);
+    EXPECT_EQ(solution.Solution1(grids[2]), results[2]);
+    EXPECT_EQ(solution.Solution1(grids[3]), results[3]);
+}
+
 TEST(ArrayTest, MinimumDifferenceTest) {
     MinimumDifference solution;
     std::vector<std::vector<int>> nums{
