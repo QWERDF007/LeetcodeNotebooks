@@ -78,21 +78,30 @@ TEST(ArrayTest, FindMissingRangesTest) {
     std::vector<std::vector<int>> nums{
         { 0,1,3,50,75 },
         { -1 },
+        {},
+        {},
+        {-1},
     };
     std::vector<int> lower{
-        0, -1,
+        0, -1, 1, -3, -1,
     };
     std::vector<int> upper{
-        99, -1
+        99, -1, 1, -1, 0,
     };
 
     std::vector<std::vector<std::string>> results{
         { "2","4->49","51->74","76->99" },
         {},
+        { "1" },
+        { "-3->-1" },
+        { "0" },
     };
 
     EXPECT_EQ(solution.Solution1(nums[0], lower[0], upper[0]), results[0]);
     EXPECT_EQ(solution.Solution1(nums[1], lower[1], upper[1]), results[1]);
+    EXPECT_EQ(solution.Solution1(nums[2], lower[2], upper[2]), results[2]);
+    EXPECT_EQ(solution.Solution1(nums[3], lower[3], upper[3]), results[3]);
+    EXPECT_EQ(solution.Solution1(nums[4], lower[4], upper[4]), results[4]);
 }
 
 TEST(ArrayTest, MissingNumberTest) {
