@@ -900,22 +900,34 @@ std::string UpsideDownBinaryTree::Link() {
 }
 
 std::string UpsideDownBinaryTree::Solution() {
-    return "TODO\n";
+    return "层序遍历，时间：O(h)，空间：O(1)，h 为二叉树高度。\n";
 }
 
 void UpsideDownBinaryTree::Benchmark() {
+    UpsideDownBinaryTree solution;
+    std::vector<std::string> s_tree{
+         "1","2","3","4","5","null","null","6","7","null","null","8","9"
+    };
+    
+    benchmark::RegisterBenchmark("BM_UpsideDownBinaryTree_Simulate", [](benchmark::State &state, UpsideDownBinaryTree solution, std::vector<std::string> s_tree) {
+        for (auto _ : state) {
+            TreeNode *root = NewTree(s_tree);
+            root = solution.Solution1(root);
+            DeleteTree(root);
+        }
+    }, solution, s_tree);
 }
 
 TreeNode *UpsideDownBinaryTree::Solution1(TreeNode *root) {
     TreeNode *right = nullptr, *father = nullptr;
     while (root) {
-        // 记录当前节点的左子节点
+        // 记录当前节点的左子节点，待下一次遍历
         TreeNode *left = root->left;
         // 更新当前节点左节点为父节点的右节点
         root->left = right;
         // 记录当前节点的右子节点
         right = root->right;
-        // 跟新当前节点的右子节点为原父节点
+        // 更新当前节点的右子节点为原父节点
         root->right = father;
         // 记录当前节点作为下一个待遍历节点的父节点
         father = root;

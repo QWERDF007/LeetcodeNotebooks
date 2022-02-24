@@ -310,6 +310,13 @@ public:
 
     void Benchmark() override;
 
+    /**
+     * @brief 层序遍历
+     * 时间复杂度：O(h)
+     * 空间复杂度：O(1)
+     * @param root 二叉树根节点
+     * @return TreeNode* 翻转后的二叉树根节点
+     */
     TreeNode *Solution1(TreeNode *root);
 };
 
