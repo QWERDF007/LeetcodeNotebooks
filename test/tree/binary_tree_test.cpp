@@ -256,6 +256,43 @@ TEST(BinaryTreeTest, HasPathSumTest) {
     }
 }
 
+TEST(BinaryTreeTest, UpsideDownBinaryTreeTest) {
+    UpsideDownBinaryTree solution;
+    IsSameTree judge;
+
+    std::vector<std::vector<std::string>> sp{
+        { "1","2","3","4","5" },
+        { },
+        { "1" },
+    };
+
+    std::vector<std::vector<std::string>> sq{
+        { "4","5","2","null","null","3","1" },
+        { },
+        { "1" },
+    };
+
+    std::vector<TreeNode *> roots0, roots1;
+    for (int i = 0; i < sp.size(); ++i) {
+        roots0.emplace_back(NewTree(sp[i]));
+        roots1.emplace_back(NewTree(sq[i]));
+    }
+
+    for (int i = 0; i < sp.size(); ++i) {
+        roots0[i] = solution.Solution1(roots0[i]);
+    }
+
+    EXPECT_TRUE(judge.Solution1(roots0[0], roots1[0]));
+    EXPECT_TRUE(judge.Solution1(roots0[1], roots1[1]));
+    EXPECT_TRUE(judge.Solution1(roots0[2], roots1[2]));
+    
+
+    for (int i = 0; i < sp.size(); ++i) {
+        DeleteTree(roots0[i]);
+        DeleteTree(roots1[i]);
+    }
+}
+
 TEST(BinaryTreeTest, InvertTreeTest) {
     InvertTree solution;
     IsSameTree judge;
