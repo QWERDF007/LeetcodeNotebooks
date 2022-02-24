@@ -214,7 +214,7 @@ std::string FindMissingRanges::Link() {
 }
 
 std::string FindMissingRanges::Solution() {
-    return "遍历，时间：O(n)，空间：O(1)。\n";
+    return "双指针，时间：O(n)，空间：O(1)。\n";
 }
 
 void FindMissingRanges::Benchmark() {
