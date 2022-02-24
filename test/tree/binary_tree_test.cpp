@@ -264,12 +264,14 @@ TEST(BinaryTreeTest, UpsideDownBinaryTreeTest) {
         { "1","2","3","4","5" },
         { },
         { "1" },
+        { "1","2","3","4","5","null","null","6","7","null","null","8","9" },
     };
 
     std::vector<std::vector<std::string>> sq{
         { "4","5","2","null","null","3","1" },
         { },
         { "1" },
+        { "8","9","6","null","null","7","4","null","null","5","2","null","null","3","1" },
     };
 
     std::vector<TreeNode *> roots0, roots1;
