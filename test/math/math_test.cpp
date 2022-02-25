@@ -71,5 +71,19 @@ TEST(MathTest, IsHappyTest) {
     EXPECT_FALSE(solution.Solution3(INT_MAX));
 }
 
+TEST(MathTest, ComplexNumberMultiplyTest) {
+    ComplexNumberMultiply solution;
+
+    EXPECT_EQ(solution.Solution1("0+0i", "0+0i"), "0+0i");
+    EXPECT_EQ(solution.Solution1("1+1i", "1+1i"), "0+2i");
+    EXPECT_EQ(solution.Solution1("1+1i", "1+-1i"), "2+0i");
+    EXPECT_EQ(solution.Solution1("100+100i", "100+-100i"), "20000+0i");
+
+    EXPECT_EQ(solution.Solution2("0+0i", "0+0i"), "0+0i");
+    EXPECT_EQ(solution.Solution2("1+1i", "1+1i"), "0+2i");
+    EXPECT_EQ(solution.Solution2("1+1i", "1+-1i"), "2+0i");
+    EXPECT_EQ(solution.Solution2("100+100i", "100+-100i"), "20000+0i");
+}
+
 } // namespace test
 } // namespace leetcode 
