@@ -1,6 +1,7 @@
-| :tiger:                  | :cat:                | :dog:                       | :dragon:               |
-| ------------------------ | -------------------- | --------------------------- | ---------------------- |
-| 7. [整数反转](#整数反转) | 9. [回文数](#回文数) | 69. [x的平方根](#x的平方根) | 202. [快乐数](#快乐数) |
+| :tiger:                    | :cat:                | :dog:                       | :dragon:               |
+| -------------------------- | -------------------- | --------------------------- | ---------------------- |
+| 7. [整数反转](#整数反转)   | 9. [回文数](#回文数) | 69. [x的平方根](#x的平方根) | 202. [快乐数](#快乐数) |
+| 537. [复数乘法](#复数乘法) |                      |                             |                        |
 
 
 
@@ -407,6 +408,84 @@ public:
         return sum;
     }
     std::unordered_set<int> cycle_nums_{ 4, 16, 37, 58, 89, 145, 42, 20 };
+};
+```
+
+
+
+# 复数乘法
+
+- [链接](https://leetcode-cn.com/problems/complex-number-multiplication/)
+- [code](../cc/math/leetcode_math.h)
+
+> 复数可以用字符串表示，遵循 "实部 + 虚部i" 的形式，并满足下述条件：
+>
+> - 实部是一个整数，取值范围是 [-100, 100]
+> - 虚部也是一个整数，取值范围是 [-100, 100]
+> - i^2 == -1
+>
+> 给你两个字符串表示的复数 num1 和 num2，请你遵循复数表示形式，返回表示它们乘积的字符串。
+
+## 遍历
+
+观察可得，题目复数的实部和虚部由字符 `+` 隔开，因此可以遍历字符串，获取复数的实部和虚部，再分别按数学计算即可得到结果。
+$$
+(a + bi) \times (c + di) = (ac - bd) + (ad + bc)i
+$$
+**复杂度分析：**
+
+- 时间复杂度：$O(n+m)$，n 和 m 分别为两个字符串数字的长度
+- 空间复杂度：$O(1)$
+
+```c++
+class Solution {
+public:
+    string complexNumberMultiply(string num1, string num2) {
+        int a, b, c, d;
+        int n = num1.size(), m = num2.size();
+        for (int i = 0; i < n; ++i) {
+            if (num1[i] == '+') {
+                a = atoi(num1.substr(0, i).c_str());
+                b = atoi(num1.substr(i+1, n-i-2).c_str());
+                break;
+            }
+        }
+        for (int i = 0; i < m; ++i) {
+            if (num2[i] == '+') {
+                c = atoi(num2.substr(0, i).c_str());
+                d = atoi(num2.substr(i+1, m-i-2).c_str());
+                break;
+            }
+        }
+        return to_string((a*c - b*d)) + "+" + to_string(a*d + b*c) + "i";
+    }
+};
+```
+
+## 正则匹配
+
+正则匹配字符串的 `+` 和 `i` 获取实部和虚部。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n+m)$，正则匹配时间
+- 空间复杂度：$O(1)$
+
+```c++
+class Solution {
+public:
+    string complexNumberMultiply(string num1, string num2) {
+        std::regex re("\\+|i");
+        std::vector<std::string> complex1(
+            std::sregex_token_iterator(num1.begin(), num1.end(), re, -1), std::sregex_token_iterator());
+        std::vector<std::string> complex2(
+            std::sregex_token_iterator(num2.begin(), num2.end(), re, -1), std::sregex_token_iterator());
+        int real1 = std::stoi(complex1[0]);
+        int imag1 = std::stoi(complex1[1]);
+        int real2 = std::stoi(complex2[0]);
+        int imag2 = std::stoi(complex2[1]);
+        return std::to_string(real1 * real2 - imag1 * imag2) + "+" + std::to_string(real1 * imag2 + real2 * imag1) + "i";
+    }
 };
 ```
 
