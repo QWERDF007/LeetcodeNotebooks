@@ -3,6 +3,7 @@
 #include <random>
 #include <climits>
 #include <cmath>
+#include <regex>
 
 #include <benchmark/benchmark.h>
 
@@ -17,6 +18,7 @@ void MathSolution(int pid) {
         case SolutionsId::IS_PALINDROME: solution = new IsPalindrome(); break;
         case SolutionsId::MY_SQRT: solution = new MySqrt(); break;
         case SolutionsId::IS_HAPPY: solution = new IsHappy(); break;
+        case SolutionsId::COMPLEX_NUMBER_MULTIPLY: solution = new ComplexNumberMultiply(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
 	}
     if (solution != nullptr) {
@@ -315,6 +317,86 @@ int IsHappy::GetNext(int n) {
         n /= 10;
     }
     return sum;
+}
+
+std::string ComplexNumberMultiply::Title() {
+    return "537. 复数乘法\n";
+}
+
+std::string ComplexNumberMultiply::Problem() {
+    return 
+        "复数可以用字符串表示，遵循 \"实部 + 虚部i\" 的形式，并满足下述条件：\n"
+        "- 实部是一个整数，取值范围是 [-100, 100]\n"
+        "- 虚部也是一个整数，取值范围是 [-100, 100]\n"
+        "- i^2 == -1\n"
+        "给你两个字符串表示的复数 num1 和 num2，请你遵循复数表示形式，返回表示它们乘积的字符串。\n";
+}
+
+std::string ComplexNumberMultiply::Link() {
+    return "https://leetcode-cn.com/problems/complex-number-multiplication/";
+}
+
+std::string ComplexNumberMultiply::Solution() {
+    return "遍历，时间：O(n+m)，空间：O(1)。\n";
+}
+
+void ComplexNumberMultiply::Benchmark() {
+    ComplexNumberMultiply solution;
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(-1000, 1000);
+    int real1 = dis(gen), imag1 = dis(gen);
+    int real2 = dis(gen), imag2 = dis(gen);
+    std::string num1 = std::to_string(real1) + "+" + std::to_string(imag1);
+    std::string num2 = std::to_string(real2) + "+" + std::to_string(imag2);
+
+    auto func1 = [](benchmark::State &state, ComplexNumberMultiply solution, std::string num1, std::string num2) {
+        for (auto _ : state) {
+            solution.Solution1(num1, num2);
+        }
+    };
+    benchmark::RegisterBenchmark("BM_ComplexNumberMultiply_Traversal", func1, solution, num1, num2);
+
+    auto func2 = [](benchmark::State &state, ComplexNumberMultiply solution, std::string num1, std::string num2) {
+        for (auto _ : state) {
+            solution.Solution2(num1, num2);
+        }
+    };
+    benchmark::RegisterBenchmark("BM_ComplexNumberMultiply_Regex", func2, solution, num1, num2);
+}
+
+std::string ComplexNumberMultiply::Solution1(std::string num1, std::string num2) {
+    int a, b, c, d;
+    int n = num1.size(), m = num2.size();
+    for (int i = 0; i < n; ++i) {
+        if (num1[i] == '+') {
+            a = std::atoi(num1.substr(0, i).c_str());
+            b = std::atoi(num1.substr(i + 1, n - i - 2).c_str());
+            break;
+        }
+    }
+    for (int j = 0; j < m; ++j) {
+        if (num2[j] == '+') {
+            c = std::atoi(num2.substr(0, j).c_str());;
+            d = std::atoi(num2.substr(j + 1, m - j - 2).c_str());
+            break;
+        }
+    }
+    return std::to_string((a * c - b * d)) + "+" + std::to_string(a * d + b * c) + "i";
+}
+
+std::string ComplexNumberMultiply::Solution2(std::string num1, std::string num2) {
+    std::regex re("\\+|i");
+    std::vector<std::string> complex1(
+        std::sregex_token_iterator(num1.begin(), num1.end(), re, -1), std::sregex_token_iterator());
+    std::vector<std::string> complex2(
+        std::sregex_token_iterator(num2.begin(), num2.end(), re, -1), std::sregex_token_iterator());
+    int real1 = std::stoi(complex1[0]);
+    int imag1 = std::stoi(complex1[1]);
+    int real2 = std::stoi(complex2[0]);
+    int imag2 = std::stoi(complex2[1]);
+    return std::to_string(real1 * real2 - imag1 * imag2) + "+" + std::to_string(real1 * imag2 + real2 * imag1) + "i";
 }
 
 } // namespace math

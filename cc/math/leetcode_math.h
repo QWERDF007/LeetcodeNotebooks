@@ -158,5 +158,39 @@ private:
     std::unordered_set<int> cycle_nums_{ 4, 16, 37, 58, 89, 145, 42, 20 };
 };
 
+
+class ComplexNumberMultiply : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 遍历
+     * 时间复杂度：O(n+m)
+     * 空间复杂度：O(1)
+     * @param num1 字符串复数
+     * @param num2 字符串复数
+     * @return std::string 复数相乘结果
+     */
+    std::string Solution1(std::string num1, std::string num2);
+
+    /**
+     * @brief 正则匹配
+     * 时间复杂度：O(n+m)
+     * 空间复杂度：O(1)
+     * @param num1 字符串复数
+     * @param num2 字符串复数
+     * @return std::string 复数相乘结果
+     */
+    std::string Solution2(std::string num1, std::string num2);
+};
+
 } // namespace math
 } // namespace leetcode
