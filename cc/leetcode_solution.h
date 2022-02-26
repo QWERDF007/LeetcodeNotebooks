@@ -107,6 +107,7 @@ enum SolutionsId {
     FIND_CENTER = 1791,
     SECOND_HIGHEST = 1796,
     MINIMUM_DIFFERENCE = 1984,
+    MAXIMUM_DIFFERENCE = 2016,
 };
     
 } // namespace leetcode
