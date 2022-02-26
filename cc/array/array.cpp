@@ -35,6 +35,7 @@ void ArraySolution(int pid) {
         case SolutionsId::LUCKY_NUMBERS: solution = new LuckyNumbers(); break;
         case SolutionsId::FIND_BALL: solution = new FindBall(); break;
         case SolutionsId::MINIMUM_DIFFERENCE: solution = new MinimumDifference(); break;
+        case SolutionsId::MAXIMUM_DIFFERENCE: solution = new MaximumDifference(); break;
         default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
     }
     if (solution != nullptr) {
@@ -1240,6 +1241,57 @@ int MinimumDifference::Solution1(std::vector<int> &nums, int k) {
     return m;
 }
 
+
+std::string MaximumDifference::Title() {
+    return "2016. 增量元素之间的最大差值\n";
+}
+
+std::string MaximumDifference::Problem() {
+    return 
+        "给你一个下标从 0 开始的整数数组 nums ，该数组的大小为 n，\n"
+        "请你计算 nums[j] - nums[i] 能求得的最大差值 ，其中 0 <= i < j < n 且 nums[i] < nums[j]。\n"
+        "返回最大差值。如果不存在满足要求的 i 和 j，返回 -1。\n";
+}
+
+std::string MaximumDifference::Link() {
+    return "https://leetcode-cn.com/problems/maximum-difference-between-increasing-elements/";
+}
+
+std::string MaximumDifference::Solution() {
+    return "前缀最小值，时间：O(n)，空间：O(1)。\n";
+}
+
+void MaximumDifference::Benchmark() {
+    MaximumDifference solution;
+    int n = 10000;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(1, 1e9);
+    std::vector<int> nums(n);
+    for (int i = 0; i < n; ++i) {
+        nums[i] = dis(gen);
+    }
+
+    auto func = [](benchmark::State &state, MaximumDifference solution, std::vector<int> nums) {
+        for (auto _ : state) {
+            solution.Solution1(nums);
+        }
+    };
+    benchmark::RegisterBenchmark("BM_MaximumDifference_PrefixMinimum", func, solution, nums);
+}
+
+int MaximumDifference::Solution1(std::vector<int> &nums) {
+    int n = nums.size();
+    int ans = -1, premin = n > 0 ? nums[0] : -1;
+    for (int i = 1; i < n; ++i) {
+        if (nums[i] > premin) {
+            ans = std::max(ans, nums[i] - premin);
+        } else {
+            premin = nums[i];
+        }
+    }
+    return ans;
+}
 
 } // namespace array
 } // namespace leetcode

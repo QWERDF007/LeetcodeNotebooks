@@ -520,5 +520,27 @@ public:
     int Solution1(std::vector<int> &nums, int k);
 };
 
+class MaximumDifference : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+    
+    /**
+     * @brief 前缀最小值
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param nums 整数数组
+     * @return int 最大差值
+     */
+    int Solution1(std::vector<int> &nums);
+};
+
 } // namespace array
 } // namespace leetcode
