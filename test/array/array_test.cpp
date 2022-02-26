@@ -428,6 +428,26 @@ TEST(ArrayTest, MinimumDifferenceTest) {
     EXPECT_EQ(solution.Solution1(nums[2], k[2]), results[2]);
 }
 
+TEST(ArrayTest, MaximumDifferenceTest) {
+    MaximumDifference solution;
+
+    std::vector<std::vector<int>> nums{
+        {},
+        { 7,1,5,4 },
+        { 9,4,3,2 },
+        { 1,5,2,10 },
+    };
+
+    std::vector<int> results{
+        -1, 4, -1, 9
+    };
+
+    EXPECT_EQ(solution.Solution1(nums[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(nums[1]), results[1]);
+    EXPECT_EQ(solution.Solution1(nums[2]), results[2]);
+    EXPECT_EQ(solution.Solution1(nums[3]), results[3]);
+}
+
 } // namespace test
 } // namespace leetcode
 
