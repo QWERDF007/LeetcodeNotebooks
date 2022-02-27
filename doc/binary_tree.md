@@ -2,7 +2,7 @@
 | ------------------------------------------ | ------------------------------------------ | ------------------------------------------ | ------------------------------ |
 | 144. [二叉树的前序遍历](#二叉树的前序遍历) | 94.[二叉树的中序遍历](#二叉树的中序遍历)   | 145. [二叉树的后序遍历](#二叉树的后序遍历) | 100. [相同的树](#相同的树)     |
 | 110. [平衡二叉树](#平衡二叉树)             | 111. [二叉树的最小深度](#二叉树的最小深度) | 112. [路径总和](#路径总和)                 | 226. [翻转二叉树](#翻转二叉树) |
-| 156. [上下翻转二叉树](#上下翻转二叉树)     | 257. [二叉树的所有路径](#二叉树的所有路径) |                                            |                                |
+| 156. [上下翻转二叉树](#上下翻转二叉树)     | 257. [二叉树的所有路径](#二叉树的所有路径) | 404. [左叶子之和](#左叶子之和)             |                                |
 
 
 
@@ -914,6 +914,89 @@ public:
             }
         }
         return paths;
+    }
+};
+```
+
+
+
+# 左叶子之和
+
+- [链接](https://leetcode-cn.com/problems/sum-of-left-leaves/)
+- [code]((../cc/tree/binary_tree.h))
+
+> 给定二叉树的根节点 root，返回所有左叶子之和。
+
+## 深度优先搜索
+
+遍历节点到 node，如果它的左子节点是一个叶子节点，那么将它的左子节点的值加入答案。
+
+自底向上看，当最底层的子树计算完左叶子节点之和后，可以向上抽象成一棵新的树，树的子节点之值为其左叶子节点之和，逐层向上抽象。因此可以通过递归完成累加。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，遍历全部节点时间
+- 空间复杂度：$O(h)$，h 为二叉树高度
+
+```c++
+class Solution {
+public:
+    int sumOfLeftLeaves(TreeNode* root) {
+        int ans = 0;
+        if (root->left) {
+            ans = isLeafNode(root->left) ? root->left->val : sumOfLeftLeaves(root->left);
+        }
+        if (root->right && !isLeafNode(root->right)) {
+            ans += sumOfLeftLeaves(root->right);
+        }
+        return ans;
+    }
+
+    bool isLeafNode(TreeNode *node) {
+        return !node->left && !node->right;
+    }
+};
+```
+
+## 广度优先搜索
+
+通过队列模拟递归遍历，遇到左叶子节点将值累加至答案。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，遍历全部节点时间
+- 空间复杂度：$O(n)$，队列存储全部节点空间
+
+```c++
+class Solution {
+public:
+    int sumOfLeftLeaves(TreeNode* root) {
+        if (root == nullptr) {
+            return 0;
+        }
+        
+        queue<TreeNode *> q;
+        q.emplace(root);
+        int ans = 0;
+        while (!q.empty()) {
+            TreeNode *cur = q.front();
+            q.pop();
+            if (cur->left) {
+                if (isLeafNode(cur->left)) {
+                    ans += cur->left->val;
+                } else {
+                    q.emplace(cur->left);
+                }
+            }
+            if (cur->right && !isLeafNode(cur->right)) {
+                q.emplace(cur->right);
+            }
+        }
+        return ans;
+    }
+
+    bool isLeafNode(TreeNode *node) {
+        return !node->left && !node->right;
     }
 };
 ```
