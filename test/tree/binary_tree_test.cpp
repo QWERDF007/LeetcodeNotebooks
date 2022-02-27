@@ -372,5 +372,32 @@ TEST(BinaryTreeTest, BinaryTreePathsTest) {
     }
 }
 
+TEST(BinaryTreeTest, SumOfLeftLeavesTest) {
+    SumOfLeftLeaves solution;
+    std::vector<std::vector<std::string>> s_trees{
+        { "3","9","20","null","null","15","7" },
+        { "1" },
+    };
+
+    std::vector<int> results{
+        24, 0,
+    };
+
+    std::vector<TreeNode *> roots;
+
+    for (auto &s_tree : s_trees) {
+        roots.emplace_back(NewTree(s_tree));
+    }
+
+    EXPECT_EQ(solution.Solution1(roots[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(roots[1]), results[1]);
+    EXPECT_EQ(solution.Solution2(roots[0]), results[0]);
+    EXPECT_EQ(solution.Solution2(roots[1]), results[1]);
+
+    for (TreeNode *root : roots) {
+        DeleteTree(root);
+    }
+}
+
 } // namespace test
 } // namespace leetcode
