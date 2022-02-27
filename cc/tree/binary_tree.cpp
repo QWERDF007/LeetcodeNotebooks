@@ -22,6 +22,7 @@ void BinaryTreeSolution(int pid) {
         case SolutionsId::UPSIDE_DOWN_BINARY_TREE: solution = new UpsideDownBinaryTree(); break;
         case SolutionsId::INVERT_TREE: solution = new InvertTree(); break;
         case SolutionsId::BINARY_TREE_PATHS: solution = new BinaryTreePaths(); break;
+        case SolutionsId::SUM_OF_LEFT_LEAVES: solution = new SumOfLeftLeaves(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
 	}
 
@@ -1129,6 +1130,96 @@ void BinaryTreePaths::TreePaths(TreeNode *root, std::vector<std::string> &paths,
     }
 }
 
+
+std::string SumOfLeftLeaves::Title() {
+    return "404. 左叶子之和\n";
+}
+
+std::string SumOfLeftLeaves::Problem() {
+    return "给定二叉树的根节点 root，返回所有左叶子之和。\n";
+}
+
+std::string SumOfLeftLeaves::Link() {
+    return "https://leetcode-cn.com/problems/sum-of-left-leaves/";
+}
+
+std::string SumOfLeftLeaves::Solution() {
+    return "DFS，时间：O(n)，空间：O(h)，h 为二叉树高度。\n";
+}
+
+void SumOfLeftLeaves::Benchmark() {
+    SumOfLeftLeaves solution;
+    int n = 1000;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(-1000, 1000);
+    std::vector<std::string> s_tree(n);
+    int null = dis(gen);
+    for (int i = 0; i < n; ++i) {
+        int v = dis(gen);
+        if (v != null) {
+            s_tree[i] = std::to_string(v);
+        }
+        else {
+            s_tree[i] = "null";
+        }
+    }
+    TreeNode *root = NewTree(s_tree);
+
+    benchmark::RegisterBenchmark("BM_SumOfLeftLeaves_DFS", [](benchmark::State &state, SumOfLeftLeaves solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution1(root);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_SumOfLeftLeaves_BFS", [](benchmark::State &state, SumOfLeftLeaves solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution2(root);
+        }
+    }, solution, root);
+
+    // DeleteTree(root);
+}
+
+int SumOfLeftLeaves::Solution1(TreeNode *root) {
+    int ans = 0;
+    if (root->left) {
+        ans = IsLeafNode(root->left) ? root->left->val : Solution1(root->left);
+    }
+    if (root->right && !IsLeafNode(root->right)) {
+        ans += Solution1(root->right);
+    }
+    return ans;
+}
+
+int SumOfLeftLeaves::Solution2(TreeNode *root) {
+    if (root == nullptr) {
+        return 0;
+    }
+    
+    std::queue<TreeNode *> q;
+    q.emplace(root);
+    int ans = 0;
+    while (!q.empty()) {
+        TreeNode *cur = q.front();
+        q.pop();
+        if (cur->left) {
+            if (IsLeafNode(cur->left)) {
+                ans += cur->left->val;
+            } else {
+                q.emplace(cur->left);
+            }
+        }
+        if (cur->right && !IsLeafNode(cur->right)) {
+            q.emplace(cur->right);
+        }
+    }
+    return ans;
+}
+
+bool SumOfLeftLeaves::IsLeafNode(TreeNode *node) {
+    return !node->left && !node->right;
+}
 
 } // namespace tree
 } // namespace leetcode

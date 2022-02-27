@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include <vector>
 #include <string>
@@ -429,6 +429,47 @@ public:
 
 private:
     void TreePaths(TreeNode *root, std::vector<std::string> &paths, std::string path);
+};
+
+class SumOfLeftLeaves : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 深度优先搜索 (DFS)
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(h)
+     * @param root 二叉树根节点
+     * @return int 左叶子节点之和
+     */
+    int Solution1(TreeNode *root);
+
+    /**
+     * @brief 广度优先搜索 (DFS)
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param root 二叉树根节点
+     * @return int 左叶子节点之和
+     */
+    int Solution2(TreeNode *root);
+
+private:
+    /**
+     * @brief 判断是否叶子节点
+     * 
+     * @param node 二叉树节点
+     * @return true 
+     * @return false 
+     */
+    bool IsLeafNode(TreeNode *node);
 };
 
 } // namespace tree
