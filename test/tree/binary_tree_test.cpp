@@ -333,6 +333,66 @@ TEST(BinaryTreeTest, InvertTreeTest) {
     }
 }
 
+TEST(BinaryTreeTest, LowestCommonAncestorTest) {
+    LowestCommonAncestor solution;
+
+    std::vector<std::vector<std::string>> s_trees{
+        { "6","2","8","0","4","7","9","null","null","3","5" },
+        { "6","2","8","0","4","7","9","null","null","3","5" },
+        { "2","1" },
+        { "28","12","45","4","24","35","47","2","9","14","25","31","42","46","48","0","3","8","11","13","20",
+          "null","26","30","33","41","43","null","null","null","49","null","1","null","null","7","null","10",
+          "null","null","null","17","22","null","27","29","null","32","34","36","null","null","44","null","null",
+          "null","null","6","null","null","null","16","18","21","23","null","null","null","null","null","null",
+          "null","null","null","37","null","null","5","null","15","null","null","19","null","null","null","null",
+          "null","40","null","null","null","null","null","null","39","null","38" },
+    };
+
+    std::vector<int> p{
+        2, 2, 2, 1
+    };
+
+    std::vector<int> q{
+        8, 4, 1, 23
+    };
+
+    std::vector<int> results{
+        6, 2, 2, 12
+    };
+
+    std::vector<TreeNode *> roots, p_nodes, q_nodes;
+    for (auto &s_tree : s_trees) {
+        roots.emplace_back(NewTree(s_tree));
+    }
+    for (int v : p) {
+        p_nodes.emplace_back(new TreeNode(v));
+    }
+    for (int v : q) {
+        q_nodes.emplace_back(new TreeNode(v));
+    }
+
+    EXPECT_EQ(solution.Solution1(roots[0], p_nodes[0], q_nodes[0])->val, results[0]);
+    EXPECT_EQ(solution.Solution1(roots[1], p_nodes[1], q_nodes[1])->val, results[1]);
+    EXPECT_EQ(solution.Solution1(roots[2], p_nodes[2], q_nodes[2])->val, results[2]);
+    EXPECT_EQ(solution.Solution1(roots[3], p_nodes[3], q_nodes[3])->val, results[3]);
+
+    EXPECT_EQ(solution.Solution2(roots[0], p_nodes[0], q_nodes[0])->val, results[0]);
+    EXPECT_EQ(solution.Solution2(roots[1], p_nodes[1], q_nodes[1])->val, results[1]);
+    EXPECT_EQ(solution.Solution2(roots[2], p_nodes[2], q_nodes[2])->val, results[2]);
+    EXPECT_EQ(solution.Solution2(roots[3], p_nodes[3], q_nodes[3])->val, results[3]);
+
+    for (TreeNode *root : roots) {
+        DeleteTree(root);
+    }
+    for (TreeNode *node : p_nodes) {
+        delete node;
+    }
+    for (TreeNode *node : q_nodes) {
+        delete node;
+    }
+}
+
+
 TEST(BinaryTreeTest, BinaryTreePathsTest) {
     BinaryTreePaths solution;
 
