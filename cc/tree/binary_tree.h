@@ -397,6 +397,52 @@ public:
     TreeNode *Solution2(TreeNode *root);
 };
 
+
+class LowestCommonAncestor : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 遍历
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param root 二叉搜索树根节点
+     * @param p root 的节点
+     * @param q root 的节点
+     * @return TreeNode* 最近公共祖先
+     */
+    TreeNode *Solution1(TreeNode *root, TreeNode *p, TreeNode *q);
+
+    /**
+     * @brief 递归
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(h)
+     * @param root 二叉搜索树根节点
+     * @param p root 的节点
+     * @param q root 的节点
+     * @return TreeNode* 最近公共祖先
+     */
+    TreeNode *Solution2(TreeNode *root, TreeNode *p, TreeNode *q);
+
+private:
+    /**
+     * @brief 获取到二叉搜索树根节点到目标节点的路径
+     * 
+     * @param root 二叉搜索树根节点
+     * @param target 目标节点
+     * @return std::vector<TreeNode *> 根节点到目标节点的路径
+     */
+    std::vector<TreeNode *> GetPath(TreeNode *root, TreeNode *target);
+};
+
 class BinaryTreePaths : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -414,7 +460,7 @@ public:
      * 时间复杂度：O(n^2)
      * 空间复杂度：O(h^2)
      * @param root 二叉树根节点
-     * @return std::vector<std::string> 根节点到叶子节点的路径
+     * @return std::vector<std::string> 根节点到全部叶子节点的字符串路径
      */
     std::vector<std::string> Solution1(TreeNode *root);
 
@@ -423,11 +469,18 @@ public:
      * 时间复杂度：O(n^2)
      * 空间复杂度：O(n^2)
      * @param root 二叉树根节点
-     * @return std::vector<std::string> 根节点到叶子节点的路径
+     * @return std::vector<std::string> 根节点到全部叶子节点字符串的路径
      */
     std::vector<std::string> Solution2(TreeNode *root);
 
 private:
+    /**
+     * @brief 深度优先搜索获取根节点到叶子节点的路径
+     * 
+     * @param root 二叉树根节点
+     * @param paths 根节点到全部叶子节点的字符串路径
+     * @param path 到当前节点的父节点的字符串路径
+     */
     void TreePaths(TreeNode *root, std::vector<std::string> &paths, std::string path);
 };
 

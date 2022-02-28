@@ -21,6 +21,7 @@ void BinaryTreeSolution(int pid) {
         case SolutionsId::HAS_PATH_SUM: solution = new HasPathSum(); break;
         case SolutionsId::UPSIDE_DOWN_BINARY_TREE: solution = new UpsideDownBinaryTree(); break;
         case SolutionsId::INVERT_TREE: solution = new InvertTree(); break;
+        case SolutionsId::LOWEST_COMMON_ANCESTOR: solution = new LowestCommonAncestor(); break;
         case SolutionsId::BINARY_TREE_PATHS: solution = new BinaryTreePaths(); break;
         case SolutionsId::SUM_OF_LEFT_LEAVES: solution = new SumOfLeftLeaves(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
@@ -1024,6 +1025,100 @@ TreeNode *InvertTree::Solution2(TreeNode *root) {
     return root;
 }
 
+
+std::string LowestCommonAncestor::Title() {
+    return "235. 二叉搜索树的最近公共祖先\n";
+}
+
+std::string LowestCommonAncestor::Problem() {
+    return 
+        "给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。\n"
+        "百度百科中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，\n"
+        "最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”\n";
+}
+
+std::string LowestCommonAncestor::Link() {
+    return "https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/";
+}
+
+std::string LowestCommonAncestor::Solution() {
+    return "递归，时间：O(n)，空间：O(h)，h 为二叉树高度。\n";
+}
+
+void LowestCommonAncestor::Benchmark() {
+    LowestCommonAncestor solution;
+    std::vector<std::string> s_tree{
+        "28","12","45","4","24","35","47","2","9","14","25","31","42","46","48","0","3","8","11","13","20",
+        "null","26","30","33","41","43","null","null","null","49","null","1","null","null","7","null","10",
+        "null","null","null","17","22","null","27","29","null","32","34","36","null","null","44","null","null",
+        "null","null","6","null","null","null","16","18","21","23","null","null","null","null","null","null",
+        "null","null","null","37","null","null","5","null","15","null","null","19","null","null","null","null",
+        "null","40","null","null","null","null","null","null","39","null","38",
+    };
+    TreeNode *root = NewTree(s_tree);
+    TreeNode *p = new TreeNode(1);
+    TreeNode *q = new TreeNode(23);
+
+    auto func1 = [](benchmark::State &state, LowestCommonAncestor solution, TreeNode *root, TreeNode *p, TreeNode *q) {
+        for (auto _ : state) {
+            solution.Solution1(root, p, q);
+        }
+    };
+    benchmark::RegisterBenchmark("BM_LowestCommonAncestor_Recursion", func1, solution, root, p, q);
+
+    auto func2 = [](benchmark::State &state, LowestCommonAncestor solution, TreeNode *root, TreeNode *p, TreeNode *q) {
+        for (auto _ : state) {
+            solution.Solution2(root, p, q);
+        }
+    };
+    benchmark::RegisterBenchmark("BM_LowestCommonAncestor_Traversal", func2, solution, root, p, q);
+
+    //DeleteTree(root);
+    //delete p;
+    //delete q;
+}
+
+TreeNode *LowestCommonAncestor::Solution1(TreeNode *root, TreeNode *p, TreeNode *q) {
+    if (p->val < root->val && q->val < root->val) {
+        return Solution1(root->left, p, q);
+    } else if (p->val > root->val && q->val > root->val) {
+        return Solution1(root->right, p, q);
+    } else {
+        return root;
+    }
+}
+
+TreeNode *LowestCommonAncestor::Solution2(TreeNode *root, TreeNode *p, TreeNode *q) {
+    std::vector<TreeNode *> p_path = GetPath(root, p);
+    std::vector<TreeNode *> q_path = GetPath(root, q);
+    int n = p_path.size(), m = q_path.size();
+    TreeNode *ancestor = nullptr;
+    for (int i = 0; i < n && i < m; ++i) {
+        if (p_path[i] == q_path[i]) {
+            ancestor = p_path[i];
+        } else {
+            break;
+        }
+    }
+    return ancestor;
+}
+
+std::vector<TreeNode *> LowestCommonAncestor::GetPath(TreeNode *root, TreeNode *target) {
+    std::vector<TreeNode *> path;
+    TreeNode *cur = root;
+    while (cur && cur->val != target->val) {
+        path.emplace_back(cur);
+        if (target->val < cur->val) {
+            cur = cur->left;
+        } else {
+            cur = cur->right;
+        }
+    }
+    path.emplace_back(cur); // 加入 target 节点
+    return path;
+}
+
+
 std::string BinaryTreePaths::Title() {
     return "257. 二叉树的所有路径\n";
 }
@@ -1220,6 +1315,7 @@ int SumOfLeftLeaves::Solution2(TreeNode *root) {
 bool SumOfLeftLeaves::IsLeafNode(TreeNode *node) {
     return !node->left && !node->right;
 }
+
 
 } // namespace tree
 } // namespace leetcode
