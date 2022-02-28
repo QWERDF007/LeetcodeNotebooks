@@ -1,8 +1,8 @@
-| :tiger:                                    | :cat:                                      | :dog:                                      | :dragon:                       |
-| ------------------------------------------ | ------------------------------------------ | ------------------------------------------ | ------------------------------ |
-| 144. [二叉树的前序遍历](#二叉树的前序遍历) | 94.[二叉树的中序遍历](#二叉树的中序遍历)   | 145. [二叉树的后序遍历](#二叉树的后序遍历) | 100. [相同的树](#相同的树)     |
-| 110. [平衡二叉树](#平衡二叉树)             | 111. [二叉树的最小深度](#二叉树的最小深度) | 112. [路径总和](#路径总和)                 | 226. [翻转二叉树](#翻转二叉树) |
-| 156. [上下翻转二叉树](#上下翻转二叉树)     | 257. [二叉树的所有路径](#二叉树的所有路径) | 404. [左叶子之和](#左叶子之和)             |                                |
+| :tiger:                                    | :cat:                                                      | :dog:                                      | :dragon:                       |
+| ------------------------------------------ | ---------------------------------------------------------- | ------------------------------------------ | ------------------------------ |
+| 144. [二叉树的前序遍历](#二叉树的前序遍历) | 94.[二叉树的中序遍历](#二叉树的中序遍历)                   | 145. [二叉树的后序遍历](#二叉树的后序遍历) | 100. [相同的树](#相同的树)     |
+| 110. [平衡二叉树](#平衡二叉树)             | 111. [二叉树的最小深度](#二叉树的最小深度)                 | 112. [路径总和](#路径总和)                 | 226. [翻转二叉树](#翻转二叉树) |
+| 156. [上下翻转二叉树](#上下翻转二叉树)     | 235. [二叉搜索树的最近公共祖先](#二叉搜索树的最近公共祖先) | 257. [二叉树的所有路径](#二叉树的所有路径) | 404. [左叶子之和](#左叶子之和) |
 
 
 
@@ -821,6 +821,87 @@ public:
             // 最终 root=nullptr ，father 指向翻转后的二叉树的根节点
         }
         return father;
+    }
+};
+```
+
+
+
+# 二叉搜索树的最近公共祖先
+
+- [链接](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-search-tree/)
+- [code]((../cc/tree/binary_tree.h))
+
+> 给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。
+>
+> 百度百科中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
+
+## 递归
+
+注意到题目所给的是二叉搜索树，其性质为比根节点小的节点都在根节点左边，比根节点大的节点都在根节点右边，子树也满足该性质。因此可以判断 p 和 q 是否位于当前节点的同一侧，不是则当前节点为 p 和 q 的最近公共祖先，否则访问同一侧的子树。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，递归遍历时间，最差情况下有一半节点被访问
+- 空间复杂度：$O(h)$，h 为二叉树高度
+
+```c++
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (p->val < root->val && q->val < root->val) {
+            return lowestCommonAncestor(root->left, p, q);
+        } else if (p->val > root->val && q->val > root->val) {
+            return lowestCommonAncestor(root->right, p, q);
+        } else {
+            return root;
+        }
+    }
+};
+```
+
+
+
+## 遍历
+
+根据二叉搜索树的性质，遍历获取根节点到 p 和 q 的路径，比较条路径，当出现不同时，则该节点为 p 和 q 的最近公共祖先。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，遍历获取路径时间 $O(n)$，比较路径不同时间 $O(n)$
+- 空间复杂度：$O(n)$
+
+```c++
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        vector<TreeNode *> p_path = getPath(root, p);
+        vector<TreeNode *> q_path = getPath(root, q);
+        int n = p_path.size(), m = q_path.size();
+        TreeNode *ancestor = nullptr;
+        for (int i = 0; i < n && i < m; ++i) {
+            if (p_path[i] == q_path[i]) {
+                ancestor = p_path[i];
+            } else {
+                break;
+            }
+        }
+        return ancestor;
+    }
+
+    std::vector<TreeNode *> getPath(TreeNode *root, TreeNode *target) {
+        vector<TreeNode *> path;
+        TreeNode *cur = root;
+        while (cur && cur->val != target->val) {
+            path.emplace_back(cur);
+            if (target->val < cur->val) {
+                cur = cur->left;
+            } else {
+                cur = cur->right;
+            }
+        }
+        path.emplace_back(cur);
+        return path;
     }
 };
 ```
