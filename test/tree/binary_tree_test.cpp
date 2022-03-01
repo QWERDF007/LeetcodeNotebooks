@@ -1,4 +1,5 @@
-﻿#include <gtest/gtest.h>
+﻿#include <algorithm>
+#include <gtest/gtest.h>
 #include "tree/binary_tree.h"
 
 namespace leetcode {
@@ -453,6 +454,61 @@ TEST(BinaryTreeTest, SumOfLeftLeavesTest) {
     EXPECT_EQ(solution.Solution1(roots[1]), results[1]);
     EXPECT_EQ(solution.Solution2(roots[0]), results[0]);
     EXPECT_EQ(solution.Solution2(roots[1]), results[1]);
+
+    for (TreeNode *root : roots) {
+        DeleteTree(root);
+    }
+}
+
+TEST(BinaryTreeTest, FindModeTest) {
+    FindMode solution;
+    std::vector<std::vector<std::string>> s_trees{
+        { "1","null","2","2" },
+        { "0" },
+        { "2","null","3","null","4","null","5","null","6" },
+    };
+
+    std::vector<std::vector<int>> results{
+        { 2 },
+        { 0 },
+        { 2,3,4,5,6 },
+    };
+
+    std::vector<TreeNode *> roots;
+    for (auto &s_tree : s_trees) {
+        roots.emplace_back(NewTree(s_tree));
+    }
+    
+    std::vector<std::vector<int>> solution1_ans, solution2_ans, solution3_ans;
+    for (TreeNode *root : roots) {
+        solution1_ans.emplace_back(solution.Solution1(root));
+        solution2_ans.emplace_back(solution.Solution2(root));
+        solution3_ans.emplace_back(solution.Solution3(root));
+    }
+
+    for (auto &vec : solution1_ans) {
+        std::sort(vec.begin(), vec.end());
+    }
+
+    for (auto &vec : solution2_ans) {
+        std::sort(vec.begin(), vec.end());
+    }
+
+    for (auto &vec : solution3_ans) {
+        std::sort(vec.begin(), vec.end());
+    }
+
+    EXPECT_EQ(solution1_ans[0], results[0]);
+    EXPECT_EQ(solution1_ans[1], results[1]);
+    EXPECT_EQ(solution1_ans[2], results[2]);
+
+    EXPECT_EQ(solution2_ans[0], results[0]);
+    EXPECT_EQ(solution2_ans[1], results[1]);
+    EXPECT_EQ(solution2_ans[2], results[2]);
+
+    EXPECT_EQ(solution3_ans[0], results[0]);
+    EXPECT_EQ(solution3_ans[1], results[1]);
+    EXPECT_EQ(solution3_ans[2], results[2]);
 
     for (TreeNode *root : roots) {
         DeleteTree(root);
