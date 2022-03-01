@@ -1,8 +1,9 @@
-| :tiger:                                    | :cat:                                                      | :dog:                                      | :dragon:                       |
-| ------------------------------------------ | ---------------------------------------------------------- | ------------------------------------------ | ------------------------------ |
-| 144. [二叉树的前序遍历](#二叉树的前序遍历) | 94.[二叉树的中序遍历](#二叉树的中序遍历)                   | 145. [二叉树的后序遍历](#二叉树的后序遍历) | 100. [相同的树](#相同的树)     |
-| 110. [平衡二叉树](#平衡二叉树)             | 111. [二叉树的最小深度](#二叉树的最小深度)                 | 112. [路径总和](#路径总和)                 | 226. [翻转二叉树](#翻转二叉树) |
-| 156. [上下翻转二叉树](#上下翻转二叉树)     | 235. [二叉搜索树的最近公共祖先](#二叉搜索树的最近公共祖先) | 257. [二叉树的所有路径](#二叉树的所有路径) | 404. [左叶子之和](#左叶子之和) |
+| :tiger:                                        | :cat:                                                      | :dog:                                      | :dragon:                       |
+| ---------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------ | ------------------------------ |
+| 144. [二叉树的前序遍历](#二叉树的前序遍历)     | 94.[二叉树的中序遍历](#二叉树的中序遍历)                   | 145. [二叉树的后序遍历](#二叉树的后序遍历) | 100. [相同的树](#相同的树)     |
+| 110. [平衡二叉树](#平衡二叉树)                 | 111. [二叉树的最小深度](#二叉树的最小深度)                 | 112. [路径总和](#路径总和)                 | 226. [翻转二叉树](#翻转二叉树) |
+| 156. [上下翻转二叉树](#上下翻转二叉树)         | 235. [二叉搜索树的最近公共祖先](#二叉搜索树的最近公共祖先) | 257. [二叉树的所有路径](#二叉树的所有路径) | 404. [左叶子之和](#左叶子之和) |
+| 501. [二叉搜索树中的众数](#二叉搜索树中的众数) |                                                            |                                            |                                |
 
 
 
@@ -1078,6 +1079,172 @@ public:
 
     bool isLeafNode(TreeNode *node) {
         return !node->left && !node->right;
+    }
+};
+```
+
+
+
+# 二叉搜索树中的众数
+
+- [链接]()
+- [code]((../cc/tree/binary_tree.h))
+
+> 给你一个含重复值的二叉搜索树（BST）的根节点 root，找出并返回 BST 中的所有众数（即，出现频率最高的元素）。
+>
+> 如果树中有不止一个众数，可以按任意顺序返回。
+>
+> 假定 BST 满足如下定义：
+>
+> - 结点左子树中所含节点的值小于等于当前节点的值
+> - 结点右子树中所含节点的值大于等于当前节点的值
+> - 左子树和右子树都是二叉搜索树
+
+## 哈希表
+
+根据二叉搜索树的性质可知，对这棵树的中序遍历出来的结果将是一个有序的序列，因此可以先获取这棵树的中序遍历，再遍历，用哈希表来统计出现次数，最后再找到出现次数最多的元素加入结果即可。
+
+**注意： ** 哈希表操作时间复杂度理论为 $O(1)$，但对算法时间影响较大
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，中序遍历时间 $O(n)$，遍历有序序列统计出现次数时间 $O(n)$，获取出现次数最多的元素时间 $O(n)$
+- 空间复杂度：$O(n)$，存储有序序列空间 $O(n)$，哈希表存储空间 $O(n)$
+
+```c++
+class Solution {
+public:
+    vector<int> findMode(TreeNode* root) {
+        unordered_map<int, int> map;
+        vector<int> nums, ans;
+        inorder(root, nums);
+        int max_count = 0;
+        for (int num : nums) {
+            ++map[num];
+            if (map[num] > max_count) {
+                max_count = map[num];
+            }
+        }
+        for (auto &element : map) {
+            if (element.second == max_count) {
+                ans.emplace_back(element.first);
+            }
+        }
+        return ans;
+    }
+
+    void inorder(TreeNode *root, vector<int> &nums) {
+        if (root == nullptr) {
+            return;
+        }
+        inorder(root->left, nums);
+        nums.emplace_back(root->val);
+        inorder(root->right, nums);
+    }
+};
+```
+
+## 递归
+
+可以在中序遍历的递归过程中更新结果，用 num 表示当前数字，base 表示正在统计的数字，count 表示当前数字出现次数，max_count 表示众数出现次数，用 ans 记录众数，首先更新 base 和 count：
+
+- `num == base`，count 自增 1
+- `num != base`，count 重置为 1，并更新 `base = num`
+
+再更新 max_count：
+
+- `count > max_count`，表示 base 不是众数，更新 `max_count = count`，`base = num`，清空 ans，并加入当前数字 num
+- `count == max_count`，表示 base 在目前看是众数，加入到结果 ans 中
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，递归遍历节点时间 $O(n)$，更新结果时间 $O(1)$
+- 空间复杂度：$O(1)$，题目说明递归的隐式调用栈不算开销
+
+```c++
+class Solution {
+public:
+    vector<int> findMode(TreeNode* root) {
+        int base = 1e-5 - 1, count = 0, max_count = 0;
+        vector<int> ans;
+        inorder(root, count, max_count, base, ans);
+        return ans;
+    }
+
+    void inorder(TreeNode *root, int &count, int &max_count, int &base, std::vector<int> &ans) {
+        if (!root) {
+            return;
+        }
+        inorder(root->left, count, max_count, base, ans);
+        update(root->val, count, max_count, base, ans);
+        inorder(root->right, count, max_count, base, ans);
+    }
+
+    void update(int num, int &count, int &max_count, int &base, std::vector<int> &ans) {
+        if (num == base) {
+            ++count;
+        } else {
+            count = 1;
+            base = num;
+        }
+
+        if (count == max_count) {
+            ans.emplace_back(num);
+        } else if (count > max_count) {
+            max_count = count;
+            ans = std::vector<int>({ base });
+        }
+    }
+};
+```
+
+## 迭代
+
+利用堆栈手动模拟递归中序遍历，其他和递归方法一样。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，遍历节点时间 $O(n)$，更新结果时间 $O(1)$
+- 空间复杂度：$O(n)$，显示维护调用堆栈空间 $O(n)$
+
+```c++
+class Solution {
+public:
+    vector<int> findMode(TreeNode* root) {
+        int base = 1e-5 - 1, count = 0, max_count = 0;
+        vector<int> ans;
+        if (!root) {
+            return ans;
+        }
+        stack<TreeNode *> stk;
+        TreeNode *cur = root;
+        while (cur || !stk.empty()) {
+            while (cur) {
+                stk.emplace(cur);
+                cur = cur->left;
+            }
+            cur = stk.top();
+            stk.pop();
+            update(cur->val, count, max_count, base, ans);
+            cur = cur->right;
+        }
+        return ans;
+    }
+
+    void update(int num, int &count, int &max_count, int &base, std::vector<int> &ans) {
+        if (num == base) {
+            ++count;
+        } else {
+            count = 1;
+            base = num;
+        }
+
+        if (count == max_count) {
+            ans.emplace_back(num);
+        } else if (count > max_count) {
+            max_count = count;
+            ans = std::vector<int>({ base });
+        }
     }
 };
 ```
