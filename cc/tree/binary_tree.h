@@ -525,5 +525,68 @@ private:
     bool IsLeafNode(TreeNode *node);
 };
 
+class FindMode : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 哈希表
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param root 二叉搜索树根节点
+     * @return std::vector<int> 众数
+     */
+    std::vector<int> Solution1(TreeNode *root);
+
+    /**
+     * @brief 递归
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param root 二叉搜索树根节点
+     * @return std::vector<int> 众数
+     */
+    std::vector<int> Solution2(TreeNode *root);
+
+    /**
+     * @brief 迭代
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param root 二叉搜索树根节点
+     * @return std::vector<int> 众数
+     */
+    std::vector<int> Solution3(TreeNode *root);
+
+private:
+    /**
+     * @brief 中序遍历更新众数
+     * 
+     * @param root 二叉搜索树根节点
+     * @param count base 的出现次数
+     * @param max_count 最大出现次数
+     * @param base 当前统计的元素
+     * @param ans 众数
+     */
+    void Inorder(TreeNode *root, int &count, int &max_count, int &base, std::vector<int> &ans);
+
+    /**
+     * @brief 更新众数
+     * 
+     * @param num 当前元素
+     * @param count 当前元素出现次数
+     * @param max_count 最大出现次数
+     * @param base 当前统计的元素
+     * @param ans 众数
+     */
+    void Update(int num, int &count, int &max_count, int &base, std::vector<int> &ans);
+};
+
 } // namespace tree
 } // namespace leetcode

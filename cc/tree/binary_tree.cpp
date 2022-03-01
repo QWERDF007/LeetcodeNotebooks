@@ -2,6 +2,7 @@
 #include <queue>
 #include <random>
 #include <iostream>
+#include <unordered_map>
 #include <benchmark/benchmark.h>
 
 #include "binary_tree.h"
@@ -24,6 +25,7 @@ void BinaryTreeSolution(int pid) {
         case SolutionsId::LOWEST_COMMON_ANCESTOR: solution = new LowestCommonAncestor(); break;
         case SolutionsId::BINARY_TREE_PATHS: solution = new BinaryTreePaths(); break;
         case SolutionsId::SUM_OF_LEFT_LEAVES: solution = new SumOfLeftLeaves(); break;
+        case SolutionsId::FIND_MODE: solution = new FindMode(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
 	}
 
@@ -1316,6 +1318,136 @@ bool SumOfLeftLeaves::IsLeafNode(TreeNode *node) {
     return !node->left && !node->right;
 }
 
+
+std::string FindMode::Title() {
+    return "501. 二叉搜索树中的众数\n";
+}
+
+std::string FindMode::Problem() {
+    return
+        "给你一个含重复值的二叉搜索树（BST）的根节点 root，找出并返回 BST 中的所有众数（即，出现频率最高的元素）。\n"
+        "如果树中有不止一个众数，可以按任意顺序返回。\n"
+        "假定 BST 满足如下定义：\n"
+        "- 结点左子树中所含节点的值小于等于当前节点的值\n"
+        "- 结点右子树中所含节点的值大于等于当前节点的值\n"
+        "- 左子树和右子树都是二叉搜索树\n";
+}
+
+std::string FindMode::Link() {
+    return "https://leetcode-cn.com/problems/find-mode-in-binary-search-tree/";
+}
+
+std::string FindMode::Solution() {
+    return "递归，时间：O(n)，空间：O(1)。\n";
+}
+
+void FindMode::Benchmark() {
+    FindMode solution;
+
+    std::vector<std::string> s_tree{
+        "41","37","44","24","39","42","48","1","35","38","40","null","43","46","49","0",
+        "2","30","36","null","null","null","null","null","null","45","47","null","null",
+        "null","null","null","4","29","32","null","null","null","null","null","null","3",
+        "9","26","null","31","34","null","null","7","11","25","27","null","null","33",
+        "null","6","8","10","16","null","null","null","28","null","null","5","null","null",
+        "null","null","null","15","19","null","null","null","null","12","null","18","20",
+        "null","13","17","null","null","22","null","14","null","null","21","24"
+    };
+
+    TreeNode *root = NewTree(s_tree);
+
+    benchmark::RegisterBenchmark("BM_FindMode_HashMap", [](benchmark::State &state, FindMode solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution1(root);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_FindMode_Recursion", [](benchmark::State &state, FindMode solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution2(root);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_FindMode_Iteration", [](benchmark::State &state, FindMode solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution3(root);
+        }
+    }, solution, root);
+
+    //DeleteTree(root);
+}
+
+std::vector<int> FindMode::Solution1(TreeNode *root) {
+    std::vector<int> nums, ans;
+    std::unordered_map<int, int> counts;
+    InOrderTraversal(root, nums);
+    int max_count = 0;
+    for (int num : nums) {
+        ++counts[num];
+        if (counts[num] > max_count) {
+            max_count = counts[num];
+        }
+    }
+    for (std::unordered_map<int, int>::iterator ite = counts.begin(); ite != counts.end(); ++ite) {
+        if (ite->second == max_count) {
+            ans.emplace_back(ite->first);
+        }
+    }
+    return ans;
+}
+
+std::vector<int> FindMode::Solution2(TreeNode *root) {
+    int base = 1e-5 - 1, count = 0, max_count = 0;
+    std::vector<int> ans;
+    Inorder(root, count, max_count, base, ans);
+    return ans;
+}
+
+std::vector<int> FindMode::Solution3(TreeNode *root) {
+    int base = 1e-5 - 1, count = 0, max_count = 0;
+    std::vector<int> ans;
+    if (!root) {
+        return ans;
+    }
+    std::stack<TreeNode *> stk;
+    TreeNode *cur = root;
+    while (cur || !stk.empty()) {
+        while (cur) {
+            stk.emplace(cur);
+            cur = cur->left;
+        }
+        cur = stk.top();
+        stk.pop();
+        Update(cur->val, count, max_count, base, ans);
+        cur = cur->right;
+    }
+    return ans;
+}
+
+void FindMode::Inorder(TreeNode *root, int &count, int &max_count, int &base, std::vector<int> &ans) {
+    if (!root) {
+        return;
+    }
+    Inorder(root->left, count, max_count, base, ans);
+    Update(root->val, count, max_count, base, ans);
+    Inorder(root->right, count, max_count, base, ans);
+}
+
+void FindMode::Update(int num, int &count, int &max_count, int &base, std::vector<int> &ans) {
+    if (num == base) {
+        ++count;
+    } else {
+        count = 1;
+        base = num;
+    }
+
+    if (count == max_count) {
+        ans.emplace_back(num);
+    } else if (count > max_count) {
+        max_count = count;
+        ans = std::vector<int>({ base });
+    }
+}
 
 } // namespace tree
 } // namespace leetcode
