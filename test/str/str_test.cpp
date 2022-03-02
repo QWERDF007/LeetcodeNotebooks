@@ -95,6 +95,24 @@ TEST(StrTest, LongestPalindromeTest) {
     EXPECT_EQ(solution.Solution2("bb"), 2);
 }
 
+TEST(StrTest, CommonCharsTest) {
+    CommonChars solution;
+
+    std::vector<std::vector<std::string>> words{
+        { "bella","label","roller" },
+        { "cool","lock","cook" },
+    };
+
+    std::vector<std::vector<std::string>> results{
+        { "e", "l", "l" },
+        { "c", "o" },
+    };
+
+    // 需要对结果字符串排序再比较
+    EXPECT_EQ(solution.Solution1(words[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(words[1]), results[1]);
+}
+
 TEST(StrTest, MaxNumberOfBallonsTest) {
     MaxNumberOfBallons solution;
 
