@@ -1393,6 +1393,7 @@ std::vector<int> FindMode::Solution1(TreeNode *root) {
             ans.emplace_back(ite->first);
         }
     }
+    std::min_element(nums.begin(), nums.end());
     return ans;
 }
 

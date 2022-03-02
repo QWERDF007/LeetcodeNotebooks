@@ -19,6 +19,7 @@ void StrSolution(int pid) {
         case SolutionsId::ADD_BINARY: solution = new AddBinary(); break;
         case SolutionsId::CONVERT_TO_TITLE: solution = new ConvertToTitle(); break;
         case SolutionsId::LONGEST_PALINDROME: solution = new LongestPalindrome(); break;
+        case SolutionsId::COMMON_CHARS: solution = new CommonChars(); break;
         case SolutionsId::MAX_NUMBER_OF_BALLONS: solution = new MaxNumberOfBallons(); break;
         case SolutionsId::MAX_POWER: solution = new MaxPower(); break;
         case SolutionsId::SECOND_HIGHEST: solution = new SecondHighest(); break;
@@ -434,6 +435,67 @@ int LongestPalindrome::Solution2(std::string s) {
         cnt += p.second / 2 * 2;
     }
     return cnt < s.size() ? cnt + 1 : cnt;
+}
+
+std::string CommonChars::Title() {
+    return "1002. 查找共用字符\n";
+}
+
+std::string CommonChars::Problem() {
+    return 
+        "给你一个字符串数组 words，请你找出所有在 words 的每个字符串中都出现的共用字符（ 包括重复字符），并以数组形式返回。你可以按任意顺序返回答案。\n";
+}
+
+std::string CommonChars::Link() {
+    return "https://leetcode-cn.com/problems/find-common-characters/";
+}
+
+std::string CommonChars::Solution() {
+    return "统计，时间：O(n(m+k))，空间：O(k)。m 为平均字符串长度，k=26 为小写字母数。\n";
+}
+
+void CommonChars::Benchmark() {
+    CommonChars solution;
+    int n = 100;
+    std::vector<std::string> words(n);
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(1, 100);
+    for (int i = 0; i < n; ++i) {
+        int len = dis(gen);
+        for (int j = 0; j < len; ++j) {
+            int num = dis(gen);
+            words[i] += 'a' + num % 26;
+        }
+    }
+
+    benchmark::RegisterBenchmark("BM_CommonChars_Stats", [](benchmark::State &state, CommonChars solution, std::vector<std::string> words) {
+        for (auto _ : state) {
+            solution.Solution1(words);
+        }
+    }, solution, words);
+}
+
+std::vector<std::string> CommonChars::Solution1(std::vector<std::string> &words) {
+    int n = words.size();
+    std::vector<int> min_freq(26, INT_MAX);
+    std::vector<int> freq(26);
+    for (const std::string &word : words) {
+        std::fill(freq.begin(), freq.end(), 0);
+        for (char c : word) {
+            ++freq[c - 'a'];
+        }
+        for (int i = 0; i < 26; ++i) {
+            min_freq[i] = std::min(min_freq[i], freq[i]);
+        }
+    }
+    std::vector<std::string> ans;
+    for (int i = 0; i < 26; ++i) {
+        for (int j = 0; j < min_freq[i]; ++j) {
+            ans.emplace_back(std::string(1, 'a' + i));
+        }
+    }
+    return ans;
 }
 
 std::string MaxNumberOfBallons::Title() {

@@ -143,6 +143,28 @@ public:
     int Solution2(std::string s);
 };
 
+class CommonChars : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 统计
+     * 时间复杂度：O(n(m+k))
+     * 空间复杂度：O(k)
+     * @param words 字符串数组
+     * @return std::vector<std::string> 共用字符
+     */
+    std::vector<std::string> Solution1(std::vector<std::string> &words);
+};
+
 class MaxNumberOfBallons : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -155,7 +177,14 @@ public:
 
     void Benchmark() override;
 
-    int Solution1(std::string s);
+    /**
+     * @brief 统计
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param text 用来拼凑的字符串
+     * @return int 单词 balloon 的数量
+     */
+    int Solution1(std::string text);
 };
 
 class MaxPower : public LeetcodeSolution {
