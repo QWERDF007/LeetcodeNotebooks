@@ -1,7 +1,8 @@
-| :tiger:                               | :cat:                                               | :dog:                                   | :dragon:                       |
-| ------------------------------------- | --------------------------------------------------- | --------------------------------------- | ------------------------------ |
-| 13. [罗马数字转整数](#罗马数字转整数) | 67. [二进制求和](#二进制求和)                       | 168. [Excel表列名称](#Excel表列名称)    | 409. [最长回文串](#最长回文串) |
-| 1446. [连续字符](#连续字符)           | 1796. [字符串中第二大的数字](#字符串中第二大的数字) | 1189. [气球的最大数量](#气球的最大数量) |                                |
+| :tiger:                               | :cat:                               | :dog:                                   | :dragon:                                            |
+| ------------------------------------- | ----------------------------------- | --------------------------------------- | --------------------------------------------------- |
+| 13. [罗马数字转整数](#罗马数字转整数) | 67. [二进制求和](#二进制求和)       | 168. [Excel表列名称](#Excel表列名称)    | 409. [最长回文串](#最长回文串)                      |
+|                                       | 1002. [查找共用字符](#查找共用字符) | 1189. [气球的最大数量](#气球的最大数量) |                                                     |
+|                                       |                                     | 1446. [连续字符](#连续字符)             | 1796. [字符串中第二大的数字](#字符串中第二大的数字) |
 
 
 
@@ -449,6 +450,99 @@ public:
 };
 ```
 
+
+
+# 查找共用字符
+
+- [链接](https://leetcode-cn.com/problems/find-common-characters/)
+- [code](../cc/str/str.h)
+
+>给你一个字符串数组 words，请你找出所有在 words 的每个字符串中都出现的共用字符（ 包括重复字符），并以数组形式返回。你可以按任意顺序返回答案。
+
+## 统计
+
+根据题意，只需要统计 26 个字母在每个字符串的出现次数，并找出每个字母的最小出现次数，加入到结果中即可。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n(m+k))$，n 是字符串数组的长度，m 是字符串的平均长度，k 是字符集大小，本题中 k 是小写字母数量，即 26，遍历字符串数组时间 $O(n)$，遍历字符串平均时间 $O(m)$，寻找字母最小出现次数时间 $O(k)$，遍历全部字符串并统计字母最小出现次数时间 $O(n(m+k))$，
+- 空间复杂度：$O(k)$，存储每个字母出现次数空间 $O(k)$，存储字母最小出现次数空间 $O(k)$
+
+```c++
+class Solution {
+public:
+    vector<string> commonChars(vector<string>& words) {
+        int n = words.size();
+        vector<int> min_freq(26, INT_MAX);
+        vector<int> freq(26);
+        for (const string &word : words) {
+            fill(freq.begin(), freq.end(), 0);
+            for (char c : word) {
+                ++freq[c - 'a'];
+            }
+            for (int i = 0; i < 26; ++i) {
+                min_freq[i] = min(min_freq[i], freq[i]);
+            }
+        }
+        vector<string> ans;
+        for (int i = 0; i < 26; ++i) {
+            for (int j = 0; j < min_freq[i]; ++j) {
+                ans.emplace_back(string(1, 'a' + i));
+            }
+        }
+        return ans;
+    }
+};
+```
+
+
+
+# 气球的最大数量
+
+- [链接](https://leetcode-cn.com/problems/maximum-number-of-balloons/)
+- [code](../cc/str/str.h)
+
+> 给你一个字符串 text，你需要使用 text 中的字母来拼凑尽可能多的单词 balloon（气球）。
+>
+> 字符串 text 中的每个字母最多只能被使用一次。请你返回最多可以拼凑出多少个单词 balloon。
+
+## 统计
+
+"balloon" 由一个 'b'，'a', 'n' 和两个 'l'，'o' 组成，统计text中构成 "balloon" 单词的字母，然后再找出统计中最小的数。注意的是 'l' 和 'n' 的统计数量需要除以 2。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，遍历字符串时间 $O(n)$，遍历统计时间 $O(C)$，C 为单词中字符种类数量，本题 $C=5$。总体时间：$O(n+C) = O(n)$
+- 空间复杂度：$O(1)$，统计单词字符的种类空间
+
+```c++
+class Solution {
+public:
+    int maxNumberOfBalloons(string text) {
+        int counts[5] = { 0 };
+        for (char c : text) {
+            switch (c) {
+                case 'b': counts[0] += 2; break;
+                case 'a': counts[1] += 2; break;
+                case 'l': counts[2] += 1; break;
+                case 'o': counts[3] += 1; break;
+                case 'n': counts[4] += 2; break;
+                default: break;
+            }
+        }
+        int m = INT_MAX;
+        for (int count : counts) {
+            if (count < m) {
+                m = count;
+            }
+        }
+        return m / 2;
+    }
+};
+```
+
+
+
 # 连续字符
 
 - [链接](https://leetcode-cn.com/problems/consecutive-characters/)
@@ -589,50 +683,6 @@ public:
             }
         }
         return -1;
-    }
-};
-```
-
-# 气球的最大数量
-
-- [链接](https://leetcode-cn.com/problems/maximum-number-of-balloons/)
-- [code](../cc/str/str.h)
-
-> 给你一个字符串 text，你需要使用 text 中的字母来拼凑尽可能多的单词 balloon（气球）。
->
-> 字符串 text 中的每个字母最多只能被使用一次。请你返回最多可以拼凑出多少个单词 balloon。
-
-## 统计
-
-"balloon" 由一个 'b'，'a', 'n' 和两个 'l'，'o' 组成，统计text中构成 "balloon" 单词的字母，然后再找出统计中最小的数。注意的是 'l' 和 'n' 的统计数量需要除以 2。
-
-**复杂度分析：**
-
-- 时间复杂度：$O(n)$，遍历字符串时间 $O(n)$，遍历统计时间 $O(C)$，C 为单词中字符种类数量，本题 $C=5$。总体时间：$O(n+C) = O(n)$
-- 空间复杂度：$O(1)$，统计单词字符的种类空间
-
-```c++
-class Solution {
-public:
-    int maxNumberOfBalloons(string text) {
-        int counts[5] = { 0 };
-        for (char c : text) {
-            switch (c) {
-                case 'b': counts[0] += 2; break;
-                case 'a': counts[1] += 2; break;
-                case 'l': counts[2] += 1; break;
-                case 'o': counts[3] += 1; break;
-                case 'n': counts[4] += 2; break;
-                default: break;
-            }
-        }
-        int m = INT_MAX;
-        for (int count : counts) {
-            if (count < m) {
-                m = count;
-            }
-        }
-        return m / 2;
     }
 };
 ```
