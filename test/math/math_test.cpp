@@ -71,6 +71,25 @@ TEST(MathTest, IsHappyTest) {
     EXPECT_FALSE(solution.Solution3(INT_MAX));
 }
 
+TEST(MathTest, AddDigitsTest) {
+    AddDigits solution;
+    std::vector<int> nums{
+        38, 0,
+    };
+    std::vector<int> results{
+        2, 0
+    };
+
+    EXPECT_EQ(solution.Solution1(nums[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(nums[1]), results[1]);
+
+    EXPECT_EQ(solution.Solution2(nums[0]), results[0]);
+    EXPECT_EQ(solution.Solution2(nums[1]), results[1]);
+
+    EXPECT_EQ(solution.Solution3(nums[0]), results[0]);
+    EXPECT_EQ(solution.Solution3(nums[1]), results[1]);
+}
+
 TEST(MathTest, ComplexNumberMultiplyTest) {
     ComplexNumberMultiply solution;
 
