@@ -1,7 +1,7 @@
 | :tiger:                    | :cat:                | :dog:                       | :dragon:               |
 | -------------------------- | -------------------- | --------------------------- | ---------------------- |
 | 7. [整数反转](#整数反转)   | 9. [回文数](#回文数) | 69. [x的平方根](#x的平方根) | 202. [快乐数](#快乐数) |
-| 537. [复数乘法](#复数乘法) |                      |                             |                        |
+| 258. [各位相加](#各位相加) |                      | 537. [复数乘法](#复数乘法)  |                        |
 
 
 
@@ -408,6 +408,80 @@ public:
         return sum;
     }
     std::unordered_set<int> cycle_nums_{ 4, 16, 37, 58, 89, 145, 42, 20 };
+};
+```
+
+
+
+# 各位相加
+
+- [链接](https://leetcode-cn.com/problems/add-digits/)
+- [code](../cc/math/leetcode_math.h)
+
+> 给定一个非负整数 num，反复将各个位上的数字相加，直到结果为一位数。返回这个结果。
+
+## 递归
+
+根据题意，可以递归的计算各位之和，然后再递归计算结果的各位之和。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(\log n)$，每次计算各位之和时间 $O(\log n)$，由于 num < 2^31 - 1，因此一次计算最大可能结果为 82，对于任意两位数最多只需计算两次各位相加的结果即可得到一位数
+- 空间复杂度：$O(\log n)$，递归空间
+
+```c++
+class Solution {
+public:
+    int addDigits(int num) {
+        if (num / 10 == 0) {
+            return num;
+        }
+        return addDigits(addDigits(num / 10) + num % 10);
+    }
+};
+```
+
+## 循环
+
+循环计算每次各位相加，再计算结果的各位相加，两个循环即可。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(\log n)$，分析同递归
+- 空间复杂度：$O(1)$
+
+```c++
+class Solution {
+public:
+    int addDigits(int num) {
+        while (num / 10) {
+            int sum = 0;
+            while (num) {
+                sum += num % 10;
+                num /= 10;
+            }
+            num = sum;
+        }
+        return num;
+    }
+};
+```
+
+## 数学
+
+根据定义，本题是在求数根，一个数的数根是它对9的余数。[数学证明](https://www.zhihu.com/question/30972581/answer/379865832)。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(1)$
+- 空间复杂度：$O(1)$
+
+```c++
+class Solution {
+public:
+    int addDigits(int num) {
+        return (num - 1) % 9  + 1;
+    }
 };
 ```
 
