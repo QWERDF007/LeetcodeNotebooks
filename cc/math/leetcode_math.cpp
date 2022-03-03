@@ -18,6 +18,7 @@ void MathSolution(int pid) {
         case SolutionsId::IS_PALINDROME: solution = new IsPalindrome(); break;
         case SolutionsId::MY_SQRT: solution = new MySqrt(); break;
         case SolutionsId::IS_HAPPY: solution = new IsHappy(); break;
+        case SolutionsId::ADD_DIGITS: solution = new AddDigits(); break;
         case SolutionsId::COMPLEX_NUMBER_MULTIPLY: solution = new ComplexNumberMultiply(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
 	}
@@ -319,6 +320,71 @@ int IsHappy::GetNext(int n) {
     return sum;
 }
 
+
+std::string AddDigits::Title() {
+    return "258. 各位相加\n";
+}
+
+std::string AddDigits::Problem() {
+    return "给定一个非负整数 num，反复将各个位上的数字相加，直到结果为一位数。返回这个结果。\n";
+}
+
+std::string AddDigits::Link() {
+    return "https://leetcode-cn.com/problems/add-digits/";
+}
+
+std::string AddDigits::Solution() {
+    return "数学，时间：O(1)，空间：O(1)。\n";
+}
+
+void AddDigits::Benchmark() {
+    AddDigits solution;
+
+    int num = INT_MAX;
+
+    benchmark::RegisterBenchmark("BM_AddDigits_Recursion", [](benchmark::State &state, AddDigits solution, int num) {
+        for (auto _ : state) {
+            solution.Solution1(num);
+        }
+    }, solution, num);;
+
+    benchmark::RegisterBenchmark("BM_AddDigits_Loop", [](benchmark::State &state, AddDigits solution, int num) {
+        for (auto _ : state) {
+            solution.Solution2(num);
+        }
+    }, solution, num);;
+
+    benchmark::RegisterBenchmark("BM_AddDigits_Math", [](benchmark::State &state, AddDigits solution, int num) {
+        for (auto _ : state) {
+            solution.Solution3(num);
+        }
+    }, solution, num);;
+}
+
+int AddDigits::Solution1(int num) {
+    if (num / 10 == 0) {
+        return num;
+    }
+    return Solution1(Solution1(num / 10) + num % 10);
+}
+
+int AddDigits::Solution2(int num) {
+    while (num >= 10) {
+        int sum = 0;
+        while (num) {
+            sum += num % 10;
+            num /= 10;
+        }
+        num = sum;
+    }
+    return num;
+}
+
+int AddDigits::Solution3(int num) {
+    return (num - 1) % 9 + 1;
+}
+
+
 std::string ComplexNumberMultiply::Title() {
     return "537. 复数乘法\n";
 }
@@ -398,6 +464,7 @@ std::string ComplexNumberMultiply::Solution2(std::string num1, std::string num2)
     int imag2 = std::stoi(complex2[1]);
     return std::to_string(real1 * real2 - imag1 * imag2) + "+" + std::to_string(real1 * imag2 + real2 * imag1) + "i";
 }
+
 
 } // namespace math
 } // namespace leetcode

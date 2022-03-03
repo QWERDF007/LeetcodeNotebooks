@@ -52,7 +52,7 @@ public:
 
     /**
      * @brief 转字符串+反转字符串
-     * 时间复杂度：O(logn)
+     * 时间复杂度：O(log n)
      * 空间复杂度：O(1)
      * @param x 
      * @return true 
@@ -156,6 +156,47 @@ private:
     int GetNext(int n);
 
     std::unordered_set<int> cycle_nums_{ 4, 16, 37, 58, 89, 145, 42, 20 };
+};
+
+
+class AddDigits : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 递归
+     * 时间复杂度：O(log n)
+     * 空间复杂度：O(log n)
+     * @param num 
+     * @return int 数根
+     */
+    int Solution1(int num);
+
+    /**
+     * @brief 循环
+     * 时间复杂度：O(log n)
+     * 空间复杂度：O(1)
+     * @param num 
+     * @return int 数根
+     */
+    int Solution2(int num);
+
+    /**
+     * @brief 数学
+     * 时间复杂度：O(1)
+     * 空间复杂度：O(1)
+     * @param num 
+     * @return int 数根
+     */
+    int Solution3(int num);
 };
 
 
