@@ -599,6 +599,25 @@ public:
     std::string Solution() override;
 
     void Benchmark() override;
+
+    /**
+     * @brief 深度优先搜索 (DFS)
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(h)
+     * @param root 二叉树根节点
+     * @return int 二叉树的坡度
+     */
+    int Solution1(TreeNode *root);
+
+private:
+    /**
+     * @brief 深度优先搜索计算二叉树坡度
+     * 
+     * @param root 二叉树根节点
+     * @param res 二叉树的坡度
+     * @return int 二叉树节点之和
+     */
+    int Dfs(TreeNode *root, int &res);
 };
 
 } // namespace tree

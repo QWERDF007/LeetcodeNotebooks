@@ -1456,18 +1456,64 @@ std::string FindTilt::Title() {
 }
 
 std::string FindTilt::Problem() {
-    return std::string();
+    return 
+        "给你一个二叉树的根节点 root，计算并返回整个树的坡度。\n"
+        "一个树的节点的坡度定义即为，该节点左子树的节点之和和右子树节点之和的差的绝对值。\n"
+        "如果没有左子树的话，左子树的节点之和为 0；没有右子树的话也是一样。空结点的坡度是 0。\n"
+        "整个树的坡度就是其所有节点的坡度之和。\n";
 }
 
 std::string FindTilt::Link() {
-    return std::string();
+    return "https://leetcode-cn.com/problems/binary-tree-tilt/";
 }
 
 std::string FindTilt::Solution() {
-    return std::string();
+    return "DFS，时间：O(n)，空间：O(h)，h 为二叉树高度。";
 }
 
 void FindTilt::Benchmark() {
+    FindTilt solution;
+
+    int n = 10000;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(-1000, 1000);
+    std::vector<std::string> s_tree(n);
+    int null = dis(gen);
+    for (int i = 0; i < n; ++i) {
+        int v = dis(gen);
+        if (v != null) {
+            s_tree[i] = std::to_string(v);
+        }
+        else {
+            s_tree[i] = "null";
+        }
+    }
+    TreeNode *root = NewTree(s_tree);
+
+    benchmark::RegisterBenchmark("BM_FindTilt_DFS", [](benchmark::State &state, FindTilt solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution1(root);
+        }
+    }, solution, root);
+
+    //DeleteTree(root);
+}
+
+int FindTilt::Solution1(TreeNode *root) {
+    int ans = 0;
+    Dfs(root, ans);
+    return ans;
+}
+
+int FindTilt::Dfs(TreeNode *root, int &res) {
+    if (root == nullptr) {
+        return 0;
+    }
+    int sum_left = Dfs(root->left, res);
+    int sum_right = Dfs(root->right, res);
+    res += std::abs(sum_left - sum_right);
+    return root->val + sum_left + sum_right;
 }
 
 } // namespace tree
