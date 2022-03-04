@@ -26,6 +26,7 @@ void BinaryTreeSolution(int pid) {
         case SolutionsId::BINARY_TREE_PATHS: solution = new BinaryTreePaths(); break;
         case SolutionsId::SUM_OF_LEFT_LEAVES: solution = new SumOfLeftLeaves(); break;
         case SolutionsId::FIND_MODE: solution = new FindMode(); break;
+        case SolutionsId::FIND_TILT: solution = new FindTilt(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
 	}
 
@@ -1448,6 +1449,25 @@ void FindMode::Update(int num, int &count, int &max_count, int &base, std::vecto
         max_count = count;
         ans = std::vector<int>({ base });
     }
+}
+
+std::string FindTilt::Title() {
+    return "563. 二叉树的坡度\n";
+}
+
+std::string FindTilt::Problem() {
+    return std::string();
+}
+
+std::string FindTilt::Link() {
+    return std::string();
+}
+
+std::string FindTilt::Solution() {
+    return std::string();
+}
+
+void FindTilt::Benchmark() {
 }
 
 } // namespace tree

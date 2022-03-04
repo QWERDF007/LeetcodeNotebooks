@@ -588,5 +588,18 @@ private:
     void Update(int num, int &count, int &max_count, int &base, std::vector<int> &ans);
 };
 
+class FindTilt : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+};
+
 } // namespace tree
 } // namespace leetcode
