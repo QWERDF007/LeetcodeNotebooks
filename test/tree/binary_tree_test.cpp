@@ -542,5 +542,34 @@ TEST(BinaryTreeTest, FindTiltTest) {
     }
 }
 
+TEST(BinaryTreeTest, Tree2StrTest) {
+    Tree2Str solution;
+
+    std::vector<std::vector<std::string>> s_trees{
+        { "1","2","3","4" },
+        { "1","2","3","null","4" },
+    };
+
+    std::vector<std::string> results{
+        "1(2(4))(3)",
+        "1(2()(4))(3)",
+    };
+
+    std::vector<TreeNode *> roots;
+    for (auto &s_tree : s_trees) {
+        roots.emplace_back(NewTree(s_tree));
+    }
+
+    EXPECT_EQ(solution.Solution1(roots[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(roots[1]), results[1]);
+
+    EXPECT_EQ(solution.Solution2(roots[0]), results[0]);
+    EXPECT_EQ(solution.Solution2(roots[1]), results[1]);
+
+    for (TreeNode *root : roots) {
+        DeleteTree(root);
+    }
+}
+
 } // namespace test
 } // namespace leetcode
