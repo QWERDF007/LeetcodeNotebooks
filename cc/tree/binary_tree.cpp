@@ -3,6 +3,7 @@
 #include <random>
 #include <iostream>
 #include <unordered_map>
+#include <unordered_set>
 #include <benchmark/benchmark.h>
 
 #include "binary_tree.h"
@@ -27,6 +28,7 @@ void BinaryTreeSolution(int pid) {
         case SolutionsId::SUM_OF_LEFT_LEAVES: solution = new SumOfLeftLeaves(); break;
         case SolutionsId::FIND_MODE: solution = new FindMode(); break;
         case SolutionsId::FIND_TILT: solution = new FindTilt(); break;
+        case SolutionsId::TREE_2_STR: solution = new Tree2Str(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
 	}
 
@@ -41,6 +43,25 @@ void BinaryTreeSolution(int pid) {
         solution->Benchmark();
         delete solution;
 	}
+}
+
+TreeNode *NewRandomTree(int n, int a, int b) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(a, b);
+    std::vector<std::string> s_tree(n);
+    int null = dis(gen);
+    for (int i = 0; i < n; ++i) {
+        int v = dis(gen);
+        if (v != null) {
+            s_tree[i] = std::to_string(v);
+        }
+        else {
+            s_tree[i] = "null";
+        }
+    }
+    TreeNode *root = NewTree(s_tree);
+    return root;
 }
 
 template <typename T>
@@ -1514,6 +1535,88 @@ int FindTilt::Dfs(TreeNode *root, int &res) {
     int sum_right = Dfs(root->right, res);
     res += std::abs(sum_left - sum_right);
     return root->val + sum_left + sum_right;
+}
+
+std::string Tree2Str::Title() {
+    return "606. 根据二叉树创建字符串\n";
+}
+
+std::string Tree2Str::Problem() {
+    return 
+        "你需要采用前序遍历的方式，将一个二叉树转换成一个由括号和整数组成的字符串。\n"
+        "空节点则用一对空括号 \"()\" 表示。而且你需要省略所有不影响字符串与原始二叉树之间的一对一映射关系的空括号对。\n";
+}
+
+std::string Tree2Str::Link() {
+    return "https://leetcode-cn.com/problems/construct-string-from-binary-tree/";
+}
+
+std::string Tree2Str::Solution() {
+    return "递归，时间：O(n)，空间：O(h)，h 为二叉树高度。\n";
+}
+
+void Tree2Str::Benchmark() {
+    Tree2Str solution;
+
+    int n = 1000;
+    int a = -1000, b = 1000;
+    TreeNode *root = NewRandomTree(n, a, b);
+
+    benchmark::RegisterBenchmark("BM_Tree2Str_Recursion", [](benchmark::State &state, Tree2Str solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution1(root);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_Tree2Str_Iteration", [](benchmark::State &state, Tree2Str solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution2(root);
+        }
+    }, solution, root);
+
+    //DeleteTree(root);
+}
+
+std::string Tree2Str::Solution1(TreeNode *root) {
+    if (root == nullptr) {
+        return "";
+    } else if (root->left == nullptr && root->right == nullptr) {
+        return std::to_string(root->val);
+    } else if (root->right == nullptr) {
+        return std::to_string(root->val) + "(" + Solution1(root->left) + ")";
+    } else {
+        return std::to_string(root->val) + "(" + Solution1(root->left) + ")(" + Solution1(root->right) + ")";
+    }
+}
+
+std::string Tree2Str::Solution2(TreeNode *root) {
+    if (root == nullptr) {
+        return "";
+    }
+    std::stack<TreeNode *> stk;
+    std::unordered_set<TreeNode *> visited;
+    std::string ans = "";
+    stk.emplace(root);
+    while (!stk.empty()) {
+        TreeNode *cur = stk.top();
+        if (visited.count(cur)) {
+            stk.pop();
+            ans += ")";
+        } else {
+            visited.insert(cur);
+            ans += "(" + std::to_string(cur->val);
+            if (cur->left == nullptr && cur->right != nullptr) {
+                ans += "()";
+            }
+            if (cur->right) {
+                stk.emplace(cur->right);
+            }
+            if (cur->left) {
+                stk.emplace(cur->left);
+            }
+        }
+    }
+    return ans.substr(1, ans.size() - 2);
 }
 
 } // namespace tree

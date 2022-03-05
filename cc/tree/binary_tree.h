@@ -19,6 +19,16 @@ struct TreeNode {
 };
 
 /**
+ * @brief 生成二叉树，随机节点，节点值域 [a,b]
+ * 
+ * @param n 节点数量
+ * @param a 节点值下限
+ * @param b 节点值上限
+ * @return TreeNode* 二叉树根节点
+ */
+TreeNode *NewRandomTree(int n, int a, int b);
+
+/**
  * @brief 递归，二叉树先(根)序遍历，根 -> 左 -> 右，递归遍历
  * 
  * @tparam T 二叉树结点值类型
@@ -618,6 +628,37 @@ private:
      * @return int 二叉树节点之和
      */
     int Dfs(TreeNode *root, int &res);
+};
+
+class Tree2Str : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 递归
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(h)
+     * @param root 二叉树根节点
+     * @return std::string 二叉树字符串
+     */
+    std::string Solution1(TreeNode *root);
+
+    /**
+     * @brief 迭代
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param root 二叉树根节点
+     * @return std::string 二叉树字符串
+     */
+    std::string Solution2(TreeNode *root);
 };
 
 } // namespace tree
