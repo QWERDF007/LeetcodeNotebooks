@@ -90,6 +90,22 @@ TEST(MathTest, AddDigitsTest) {
     EXPECT_EQ(solution.Solution3(nums[1]), results[1]);
 }
 
+TEST(MathTest, ConvertToBase7Test) {
+    ConvertToBase7 solution;
+
+    std::vector<int> nums{
+        100, -7, 0,
+    };
+
+    std::vector<std::string> results{
+        "202", "-10", "0",
+    };
+
+    EXPECT_EQ(solution.Solution1(nums[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(nums[1]), results[1]);
+    EXPECT_EQ(solution.Solution1(nums[2]), results[2]);
+}
+
 TEST(MathTest, ComplexNumberMultiplyTest) {
     ComplexNumberMultiply solution;
 
