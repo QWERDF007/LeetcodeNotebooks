@@ -19,6 +19,7 @@ void MathSolution(int pid) {
         case SolutionsId::MY_SQRT: solution = new MySqrt(); break;
         case SolutionsId::IS_HAPPY: solution = new IsHappy(); break;
         case SolutionsId::ADD_DIGITS: solution = new AddDigits(); break;
+        case SolutionsId::CONVERT_TO_BASE_7: solution = new ConvertToBase7(); break;
         case SolutionsId::COMPLEX_NUMBER_MULTIPLY: solution = new ComplexNumberMultiply(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
 	}
@@ -385,6 +386,62 @@ int AddDigits::Solution3(int num) {
 }
 
 
+std::string ConvertToBase7::Title() {
+    return "504. 七进制数\n";
+}
+
+std::string ConvertToBase7::Problem() {
+    return "给定一个整数 num，将其转化为 7 进制，并以字符串形式输出。\n";
+}
+
+std::string ConvertToBase7::Link() {
+    return "https://leetcode-cn.com/problems/base-7/";
+}
+
+std::string ConvertToBase7::Solution() {
+    return "迭代，时间：O(log |num|)，空间：O(1)。\n";
+}
+
+void ConvertToBase7::Benchmark() {
+    ConvertToBase7 solution;
+
+    int n = 10000;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(-1e7, 1e7);
+
+    int num = dis(gen);
+
+    benchmark::RegisterBenchmark("BM_ConvertToBase7_Iteration", [](benchmark::State &state, ConvertToBase7 solution, int num) {
+        for (auto _ : state) {
+            solution.Solution1(num);
+        }
+    }, solution, num);
+}
+
+std::string ConvertToBase7::Solution1(int num) {
+    if (num == 0) {
+        return "0";
+    }
+    std::string ans;
+    bool negative = false;
+    if (num < 0) {
+        negative = true;
+        num = abs(num);
+    }
+    while (num) {
+        ans.push_back(num % 7 + '0');
+        num /= 7;
+    }
+    if (negative) {
+        ans.push_back('-');
+    }
+    std::reverse(ans.begin(), ans.end());
+    return ans;
+}
+
+
+
 std::string ComplexNumberMultiply::Title() {
     return "537. 复数乘法\n";
 }
@@ -464,7 +521,6 @@ std::string ComplexNumberMultiply::Solution2(std::string num1, std::string num2)
     int imag2 = std::stoi(complex2[1]);
     return std::to_string(real1 * real2 - imag1 * imag2) + "+" + std::to_string(real1 * imag2 + real2 * imag1) + "i";
 }
-
 
 } // namespace math
 } // namespace leetcode

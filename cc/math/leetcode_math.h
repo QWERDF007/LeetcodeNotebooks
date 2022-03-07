@@ -199,6 +199,28 @@ public:
     int Solution3(int num);
 };
 
+class ConvertToBase7 : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 倒推+迭代
+     * 时间复杂度：O(log |num|)
+     * 空间复杂度：O(1)
+     * @param num 10进制数
+     * @return std::string 7进制字符串
+     */
+    std::string Solution1(int num);
+};
+
 
 class ComplexNumberMultiply : public LeetcodeSolution {
 public:
