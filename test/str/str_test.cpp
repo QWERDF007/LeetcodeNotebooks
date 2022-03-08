@@ -147,7 +147,29 @@ TEST(StrTest, SecondHighestTest) {
     EXPECT_EQ(solution.Solution3("ck077"), 0);
 }
 
+TEST(StrTest, PlatesBetweenCandlesTest) {
+    PlatesBetweenCandles solution;
+    std::vector<std::string> strs{
+        "**|**|***|",
+        "***|**|*****|**||**|*",
+    };
+    
+    std::vector<std::vector<std::vector<int>>> queries{
+        { {2,5},{5,9} },
+        { {1,17},{4,5},{14,17},{5,11},{15,16} },
+    };
 
+    std::vector<std::vector<int>> results{
+        { 2,3 },
+        { 9,0,0,0,0 },
+    };
+
+    EXPECT_EQ(solution.Solution1(strs[0], queries[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(strs[1], queries[1]), results[1]);
+
+    EXPECT_EQ(solution.Solution2(strs[0], queries[0]), results[0]);
+    EXPECT_EQ(solution.Solution2(strs[1], queries[1]), results[1]);
+}
 
 } // namespace test
 } // namespace leetcode
