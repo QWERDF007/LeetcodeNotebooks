@@ -23,6 +23,7 @@ void StrSolution(int pid) {
         case SolutionsId::MAX_NUMBER_OF_BALLONS: solution = new MaxNumberOfBallons(); break;
         case SolutionsId::MAX_POWER: solution = new MaxPower(); break;
         case SolutionsId::SECOND_HIGHEST: solution = new SecondHighest(); break;
+        case SolutionsId::PLATES_BETWEEN_CANDLES: solution = new PlatesBetweenCandles(); break;
         default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
     }
     if (solution != nullptr) {
@@ -708,6 +709,125 @@ int SecondHighest::Solution3(std::string s) {
     return -1;
 }
 
+
+std::string PlatesBetweenCandles::Title() {
+    return "2055. 蜡烛之间的盘子\n";
+}
+
+std::string PlatesBetweenCandles::Problem() {
+    return 
+        "给你一个长桌子，桌子上盘子和蜡烛排成一列。给你一个下标从 0 开始的字符串 s，它只包含字符 '*' 和 '|'，其中 '*' 表示一个盘子，'|' 表示一支蜡烛。\n"
+        "同时给你一个下标从 0 开始的二维整数数组 queries，其中 queries[i] = [lefti, righti] 表示子字符串 s[lefti...righti]（包含左右端点的字符）。\n"
+        "你需要找到子字符串中在两支蜡烛之间的盘子的数目 。如果一个盘子在子字符串中左边和右边都至少有一支蜡烛，那么这个盘子满足在两支蜡烛之间。\n"
+        "- 比方说，s = \"||**||**|*\"，查询 [3, 8]，表示的是子字符串 \"*||**|\" 。\n"
+        "  子字符串中在两支蜡烛之间的盘子数目为 2，子字符串中右边两个盘子在它们左边和右边都至少有一支蜡烛。\n"
+        "请你返回一个整数数组 answer，其中 answer[i] 是第 i 个查询的答案。\n";
+}
+
+std::string PlatesBetweenCandles::Link() {
+    return "https://leetcode-cn.com/problems/plates-between-candles/";
+}
+
+std::string PlatesBetweenCandles::Solution() {
+    return "前缀和，时间：O(n+q)，空间：O(n)，n 为字符串长度，q 为 queries 的长度。\n";
+}
+
+void PlatesBetweenCandles::Benchmark() {
+    PlatesBetweenCandles solution;
+
+    int n = 1e5;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(1, n);
+
+    std::string s;
+    for (int i = 0; i < n; ++i) {
+        int v = dis(gen);
+        if (v % 3 == 0) {
+            s.push_back('*');
+        } else {
+            s.push_back('|');
+        }
+    }
+
+    int m = 1e4;
+    std::vector<std::vector<int>> queries(m+1, std::vector<int>(2));
+    for (int i = 0; i <= m; ++i) {
+        int left = dis(gen);
+        int right = dis(gen);
+        while (right < left) {
+            right = dis(gen);
+        }
+        queries[i][0] = left;
+        queries[i][1] = right;
+    }
+
+    auto func_presum = [](benchmark::State &state, PlatesBetweenCandles solution, std::string s, std::vector<std::vector<int>> queries) {
+        for (auto _ : state) {
+            solution.Solution1(s, queries);
+        }
+    };
+    benchmark::RegisterBenchmark("BM_PlatesBetweenCandles_PreSum", func_presum, solution, s, queries);
+
+    auto func_runtime = [](benchmark::State &state, PlatesBetweenCandles solution, std::string s, std::vector<std::vector<int>> queries) {
+        for (auto _ : state) {
+            solution.Solution2(s, queries);
+        }
+    };
+    benchmark::RegisterBenchmark("BM_PlatesBetweenCandles_Runtime", func_runtime, solution, s, queries);
+}
+
+std::vector<int> PlatesBetweenCandles::Solution1(std::string s, std::vector<std::vector<int>> &queries) {
+    int n = s.length();
+    std::vector<int> presum(n);
+    for (int i = 0, sum = 0; i < n; ++i) {
+        if (s[i] == '*') {
+            ++sum;
+        }
+        presum[i] = sum;
+    }
+    std::vector<int> left(n), right(n);
+    for (int i = 0, l = -1, r = -1; i < n; ++i) {
+        if (s[i] == '|') {
+            l = i;
+        }
+        left[i] = l;
+        int j = n - 1 - i;
+        if (s[j] == '|') {
+            r = j;
+        }
+        right[j] = r;
+    }
+    std::vector<int> ans;
+    for (auto &query : queries) {
+        int x = right[query[0]]; // 区间内最左侧的蜡烛
+        int y = left[query[1]];  // 区间内最右侧的蜡烛
+        ans.emplace_back(x == -1 || y == -1 || x >= y ? 0 : presum[y] - presum[x]);
+    }
+    return ans;
+}
+
+std::vector<int> PlatesBetweenCandles::Solution2(std::string s, std::vector<std::vector<int>> &queries) {
+    std::vector<int> ans;
+    for (auto &query : queries) {
+        int start = query[0];
+        int end = query[1];
+        int count = 0;
+        while (start <= end && s[start] != '|') {
+            ++start;
+        }
+        while (start <= end && s[end] != '|') {
+            --end;
+        }
+        for (int i = start; i <= end; ++i) {
+            if (s[i] == '*') {
+                ++count;
+            }
+        }
+        ans.emplace_back(count);
+    }
+    return ans;
+}
 
 } // namespace str
 } // namespace leetcode 

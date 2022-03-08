@@ -250,6 +250,38 @@ public:
 };
 
 
+class PlatesBetweenCandles : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 前缀和
+     * 时间复杂度：O(n+q)
+     * 空间复杂度：O(n)
+     * @param s 蜡烛盘子字符串
+     * @param queries 查询端点
+     * @return std::vector<int> 查询端点中蜡烛的数量
+     */
+    std::vector<int> Solution1(std::string s, std::vector<std::vector<int>> &queries);
+
+    /**
+     * @brief 实时计算
+     * 时间复杂度：O(qm)
+     * 空间复杂度：O(1)
+     * @param s 蜡烛盘子字符串
+     * @param queries 查询端点
+     * @return std::vector<int> 查询端点中蜡烛的数量
+     */
+    std::vector<int> Solution2(std::string s, std::vector<std::vector<int>> &queries);
+};
 
 } // namespace str
 } // namespace leetcode 
