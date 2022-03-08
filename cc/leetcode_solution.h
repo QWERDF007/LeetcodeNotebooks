@@ -116,6 +116,7 @@ enum SolutionsId {
     SECOND_HIGHEST = 1796,
     MINIMUM_DIFFERENCE = 1984,
     MAXIMUM_DIFFERENCE = 2016,
+    PLATES_BETWEEN_CANDLES = 2055,
 };
     
 } // namespace leetcode
