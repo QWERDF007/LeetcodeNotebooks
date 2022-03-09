@@ -630,6 +630,112 @@ private:
     int Dfs(TreeNode *root, int &res);
 };
 
+class IsSubtree : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 深度优先搜索匹配
+     * 时间复杂度：O(nm)
+     * 空间复杂度：O(max(hn,hm))
+     * @param root 二叉树根节点
+     * @param subRoot 子树根节点
+     * @return true 
+     * @return false 
+     */
+    bool Solution1(TreeNode *root, TreeNode *subRoot);
+
+    /**
+     * @brief 先序遍历序列串匹配 (kmp)
+     * 时间复杂度：O(n+m)
+     * 空间复杂度：O(n+m)
+     * @param root 二叉树根节点
+     * @param subRoot 子树根节点
+     * @return true 
+     * @return false 
+     */
+    bool Solution2(TreeNode *root, TreeNode *subRoot);
+
+    /**
+     * @brief 树哈希
+     * 时间复杂度：O(arg pi(max(n,m)))
+     * 空间复杂度：O(arg pi(max(n,m)))
+     * @param root 二叉树根节点
+     * @param subRoot 子树根节点
+     * @return true 
+     * @return false 
+     */
+    bool Solution3(TreeNode *root, TreeNode *subRoot);
+
+private:
+    /**
+     * @brief 二叉树哈希结果结构
+     * 
+     */
+    struct Status {
+        int f, s; // f 为哈希值，s 为子树大小
+        Status(int f_ = 0, int s_ = 0) : f(f_), s(s_) {}
+    };
+
+    static constexpr int MAX_N = 1000 + 5;
+    static constexpr int MOD = int(1e9) + 7;
+
+    bool vis[MAX_N] = { 0 };
+    int p[MAX_N], tot;
+
+    /**
+     * @brief 判断两颗树是否相同
+     * 
+     * @param root 待比较的二叉树根节点
+     * @param subRoot 待比较的二叉树根节点
+     * @return true 
+     * @return false 
+     */
+    bool _IsSameTree(TreeNode *root, TreeNode *subRoot);
+    
+    /**
+     * @brief 先序遍历获取二叉树序列
+     * 
+     * @param root 二叉树根节点
+     * @param lnull 表示左节点空的值，不在二叉树的节点值范围
+     * @param rnull 表示右节点空的值，不在二叉树的节点值范围
+     * @param res 先序遍历的二叉树序列
+     */
+    void Inorder(TreeNode *root, int lnull, int rnull, std::vector<int> &res);
+
+    /**
+     * @brief 判断容器 sub 是否为 nums 的子序列
+     * 
+     * @param nums 完整序列
+     * @param sub 子序列
+     * @return true 
+     * @return false 
+     */
+    bool IsSubVector(std::vector<int> &nums, std::vector<int> &sub);
+
+    /**
+     * @brief 获取 MAX_N 个素数
+     * 
+     */
+    void GetPrime();
+
+    /**
+     * @brief 树哈希，对每个节点所表示的子树计算哈希
+     * 
+     * @param root 二叉树根节点
+     * @param hash 二叉树每个节点表示的子树的哈希值
+     */
+    void TreeHash(TreeNode *root, std::unordered_map<TreeNode *, Status> &hash);
+};
+
 class Tree2Str : public LeetcodeSolution {
 public:
     std::string Title() override;

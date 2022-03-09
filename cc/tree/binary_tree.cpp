@@ -28,6 +28,7 @@ void BinaryTreeSolution(int pid) {
         case SolutionsId::SUM_OF_LEFT_LEAVES: solution = new SumOfLeftLeaves(); break;
         case SolutionsId::FIND_MODE: solution = new FindMode(); break;
         case SolutionsId::FIND_TILT: solution = new FindTilt(); break;
+        case SolutionsId::IS_SUBTREE: solution = new IsSubtree(); break;
         case SolutionsId::TREE_2_STR: solution = new Tree2Str(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
 	}
@@ -1537,6 +1538,168 @@ int FindTilt::Dfs(TreeNode *root, int &res) {
     return root->val + sum_left + sum_right;
 }
 
+std::string IsSubtree::Title() {
+    return "572. 另一棵树的子树\n";
+}
+
+std::string IsSubtree::Problem() {
+    return 
+        "给你两棵二叉树 root 和 subRoot。检验 root 中是否包含和 subRoot 具有相同结构和节点值的子树。如果存在，返回 true；否则，返回 false。\n"
+        "二叉树 tree 的一棵子树包括 tree 的某个节点和这个节点的所有后代节点。tree 也可以看做它自身的一棵子树。\n";
+}
+
+std::string IsSubtree::Link() {
+    return "https://leetcode-cn.com/problems/subtree-of-another-tree/";
+}
+
+std::string IsSubtree::Solution() {
+    return "树哈希，时间：O(arg pi(max(n,m))，空间：O(arg pi(max(n,m))。arg pi(x) 表示有多少以内包含 x 个素数。\n";
+}
+
+void IsSubtree::Benchmark() {
+    IsSubtree solution;
+
+    TreeNode *root = NewRandomTree(2000, -1e4, 1e4);
+    TreeNode *subroot = NewRandomTree(1000, -1e4, 1e4);
+
+    benchmark::RegisterBenchmark("BM_IsSubtree_DfsCompare", [](benchmark::State &state, IsSubtree solution, TreeNode *root, TreeNode *subroot) {
+        for (auto _ : state) {
+            solution.Solution1(root, subroot);
+        }
+    }, solution, root, subroot);
+
+    benchmark::RegisterBenchmark("BM_IsSubtree_CompareSequence", [](benchmark::State &state, IsSubtree solution, TreeNode *root, TreeNode *subroot) {
+        for (auto _ : state) {
+            solution.Solution2(root, subroot);
+        }
+    }, solution, root, subroot);
+
+    benchmark::RegisterBenchmark("BM_IsSubtree_TreeHash", [](benchmark::State &state, IsSubtree solution, TreeNode *root, TreeNode *subroot) {
+        for (auto _ : state) {
+            solution.Solution3(root, subroot);
+        }
+    }, solution, root, subroot);
+}
+
+bool IsSubtree::Solution1(TreeNode *root, TreeNode *subRoot) {
+    if (root == nullptr) {
+        return false;
+    } else {
+        return _IsSameTree(root, subRoot) || Solution1(root->left, subRoot) || Solution1(root->right, subRoot);
+    }
+}
+
+bool IsSubtree::Solution2(TreeNode *root, TreeNode *subRoot) {
+    std::vector<int> root_inorder, subroot_inorder;
+    int lnull = INT_MIN, rnull = INT_MAX;
+    Inorder(root, lnull, rnull, root_inorder);
+    Inorder(subRoot, lnull, rnull, subroot_inorder);
+    return IsSubVector(root_inorder, subroot_inorder);
+}
+
+bool IsSubtree::Solution3(TreeNode *root, TreeNode *subRoot) {
+    if (root == nullptr) {
+        return false;
+    }
+    GetPrime();
+    std::unordered_map<TreeNode *, Status> root_hash, subroot_hash;
+    TreeHash(root, root_hash);
+    TreeHash(subRoot, subroot_hash);
+    int target = subroot_hash[subRoot].f;
+    for (const auto &[k, v] : root_hash) {
+        if (v.f == target) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool IsSubtree::_IsSameTree(TreeNode *root, TreeNode *subRoot) {
+    if (root == nullptr && subRoot == nullptr) {
+        return true;
+    } else if (root == nullptr || subRoot == nullptr || root->val != subRoot->val) {
+        return false;
+    } else {
+        return _IsSameTree(root->left, subRoot->left) && _IsSameTree(root->right, subRoot->right);
+    }
+}
+
+void IsSubtree::Inorder(TreeNode *root, int lnull, int rnull, std::vector<int> &res) {
+    if (root == nullptr) {
+        return;
+    }
+
+    res.emplace_back(root->val);
+    if (root->left) {
+        Inorder(root->left, lnull, rnull, res);
+    } else {
+        res.emplace_back(lnull);
+    }
+    if (root->right) {
+        Inorder(root->right, lnull, rnull, res);
+    } else {
+        res.emplace_back(rnull);
+    }
+}
+
+bool IsSubtree::IsSubVector(std::vector<int> &nums, std::vector<int> &sub) {
+    int n = nums.size(), m = sub.size();
+    std::vector<int> fail(m, -1);
+    for (int i = 1, j = -1; i < m; ++i) {
+        while (j != -1 && sub[i] != sub[j + 1]) {
+            j = fail[j];
+        }
+        if (sub[i] == sub[j + 1]) {
+            ++j;
+        }
+        fail[i] = j;
+    }
+    for (int i = 0, j = -1; i < n; ++i) {
+        while (j != -1 && nums[i] != sub[j + 1]) {
+            j = fail[j];
+        }
+        if (nums[i] == sub[j + 1]) {
+            ++j;
+        }
+        if (j == m - 1) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void IsSubtree::GetPrime() {
+    vis[0] = vis[1] = 1;
+    tot = 0;
+    for (int i = 2; i < MAX_N; ++i) {
+        if (!vis[i])
+            p[++tot] = i;
+        for (int j = 1; j <= tot && i * p[j] < MAX_N; ++j) {
+            vis[i * p[j]] = 1;
+            if (i % p[j] == 0)
+                break;
+        }
+    }
+}
+
+void IsSubtree::TreeHash(TreeNode *root, std::unordered_map<TreeNode *, Status> &hash) {
+    if (root == nullptr) {
+        return;
+    }
+    // 对子树进行哈希，h(root) = root.val + 31 * h(root.left) + 179 * h(root.right)
+    hash[root] = Status(root->val, 1);
+    if (root->left) {
+        TreeHash(root->left, hash);
+        hash[root].s += hash[root->left].s;
+        hash[root].f = (hash[root].f + (31LL * hash[root->left].f + p[hash[root->left].s]) % MOD) % MOD;
+    }
+    if (root->right) {
+        TreeHash(root->right, hash);
+        hash[root].s += hash[root->right].s;
+        hash[root].f = (hash[root].f + (179LL * hash[root->right].f + p[hash[root->right].s]) % MOD) % MOD;
+    }
+}
+
 std::string Tree2Str::Title() {
     return "606. 根据二叉树创建字符串\n";
 }
@@ -1618,6 +1781,7 @@ std::string Tree2Str::Solution2(TreeNode *root) {
     }
     return ans.substr(1, ans.size() - 2);
 }
+
 
 } // namespace tree
 } // namespace leetcode
