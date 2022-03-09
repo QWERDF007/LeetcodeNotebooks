@@ -1,9 +1,9 @@
-| :tiger:                                        | :cat:                                                      | :dog:                                              | :dragon:                       |
-| ---------------------------------------------- | ---------------------------------------------------------- | -------------------------------------------------- | ------------------------------ |
-| 144. [二叉树的前序遍历](#二叉树的前序遍历)     | 94.[二叉树的中序遍历](#二叉树的中序遍历)                   | 145. [二叉树的后序遍历](#二叉树的后序遍历)         | 100. [相同的树](#相同的树)     |
-| 110. [平衡二叉树](#平衡二叉树)                 | 111. [二叉树的最小深度](#二叉树的最小深度)                 | 112. [路径总和](#路径总和)                         | 226. [翻转二叉树](#翻转二叉树) |
-| 156. [上下翻转二叉树](#上下翻转二叉树)         | 235. [二叉搜索树的最近公共祖先](#二叉搜索树的最近公共祖先) | 257. [二叉树的所有路径](#二叉树的所有路径)         | 404. [左叶子之和](#左叶子之和) |
-| 501. [二叉搜索树中的众数](#二叉搜索树中的众数) | 563. [二叉树的坡度](#二叉树的坡度)                         | 606. [根据二叉树创建字符串](#根据二叉树创建字符串) |                                |
+| :tiger:                                        | :cat:                                                      | :dog:                                      | :dragon:                                           |
+| ---------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------ | -------------------------------------------------- |
+| 144. [二叉树的前序遍历](#二叉树的前序遍历)     | 94.[二叉树的中序遍历](#二叉树的中序遍历)                   | 145. [二叉树的后序遍历](#二叉树的后序遍历) | 100. [相同的树](#相同的树)                         |
+| 110. [平衡二叉树](#平衡二叉树)                 | 111. [二叉树的最小深度](#二叉树的最小深度)                 | 112. [路径总和](#路径总和)                 | 226. [翻转二叉树](#翻转二叉树)                     |
+| 156. [上下翻转二叉树](#上下翻转二叉树)         | 235. [二叉搜索树的最近公共祖先](#二叉搜索树的最近公共祖先) | 257. [二叉树的所有路径](#二叉树的所有路径) | 404. [左叶子之和](#左叶子之和)                     |
+| 501. [二叉搜索树中的众数](#二叉搜索树中的众数) | 563. [二叉树的坡度](#二叉树的坡度)                         | 572. [另一棵树的子树](#另一棵树的子树)     | 606. [根据二叉树创建字符串](#根据二叉树创建字符串) |
 
 
 
@@ -1290,6 +1290,194 @@ public:
         int right_sum = dfs(root->right, ans);
         ans += abs(left_sum - right_sum);
         return root->val + left_sum + right_sum;
+    }
+};
+```
+
+
+
+# 另一棵树的子树
+
+- [链接](https://leetcode-cn.com/problems/subtree-of-another-tree/)
+- [code]((../cc/tree/binary_tree.h))
+
+> 给你两棵二叉树 root 和 subRoot。检验 root 中是否包含和 subRoot 具有相同结构和节点值的子树。如果存在，返回 true；否则，返回 false。
+>
+> 二叉树 tree 的一棵子树包括 tree 的某个节点和这个节点的所有后代节点。tree 也可以看做它自身的一棵子树。
+
+## 深度优先搜索匹配
+
+遍历每个节点，判断以这个节点为根节点的子树是否和目标树相等。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(nm)$，n 为 root 的节点树，m 为 subRoot 的节点树，对于 root 的每个子树，都要和 subRoot 比较一次，比较一次时间 $O(m)$
+- 空间复杂度：$O(\max(h_n,h_m))$，h 为二叉树高度，递归调用空间
+
+```c++
+class Solution {
+public:
+    bool isSubtree(TreeNode* root, TreeNode* subRoot) {
+        if (root == nullptr) {
+            return false;
+        } else {
+            return isSameTree(root, subRoot) || isSubtree(root->left, subRoot) || isSubtree(root->right, subRoot);
+        }
+    }
+
+    bool isSameTree(TreeNode *root, TreeNode *subRoot) {
+        if (root == nullptr && subRoot == nullptr) {
+            return true;
+        } else if (root == nullptr || subRoot == nullptr || root->val != subRoot->val) {
+            return false;
+        } else {
+            return isSameTree(root->left, subRoot->left) && isSameTree(root->right, subRoot->right);
+        }
+    }
+};
+```
+
+## 先序遍历序列串匹配
+
+对两棵树深度优先搜索，获取对应的序列，然后看 root 所对应的序列中是否能匹配到 subRoot 所对应的序列。遍历获取序列，需要对左右节点为空的情况添加两个不在节点值范围的值。再使用暴力匹配或者其他匹配算法，例如 KMP。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n+m)$，先序遍历时间 $O(n+m)$，KMP 匹配时间 $O(n+m)$，暴力匹配时间则为 $O(nm)$
+- 空间复杂度：$O(n+m)$，存储 root 序列和 subRoot 序列所需空间
+
+```c++
+class Solution {
+public:
+    bool isSubtree(TreeNode* root, TreeNode* subRoot) {
+        vector<int> root_vec, subRoot_vec;
+        int lnull = INT_MIN, rnull = INT_MAX;
+        inorder(root, lnull, rnull, root_vec);
+        inorder(subRoot, lnull, rnull, subRoot_vec);
+        return kmp(root_vec, subRoot_vec);
+    }
+
+    void inorder(TreeNode *root, int lnull, int rnull, vector<int> &res) {
+        if (root == nullptr) {
+            return;
+        }
+        res.emplace_back(root->val);
+        if (root->left) {
+            inorder(root->left, lnull, rnull, res);
+        } else {
+            res.emplace_back(lnull);
+        }
+        if (root->right) {
+            inorder(root->right, lnull, rnull, res);
+        } else {
+            res.emplace_back(rnull);
+        }
+    }
+
+    bool kmp(vector<int> &nums, vector<int>& sub) {
+        int n = nums.size(), m = sub.size();
+        vector<int> fail(m, -1);
+        for (int i = 1, j = -1; i < m; ++i) {
+            while (j != -1 && sub[i] != sub[j + 1]) {
+                j = fail[j];
+            }
+            if (sub[i] == sub[j + 1]) {
+                ++j;
+            }
+            fail[i] = j;
+        }
+        for (int i = 0, j = -1; i < n; ++i) {
+            while (j != -1 && nums[i] != sub[j + 1]) {
+                j = fail[j];
+            }
+            if (nums[i] == sub[j + 1]) {
+                ++j;
+            }
+            if (j == m - 1) {
+                return true;
+            }
+        }
+        return false;
+    }
+};
+```
+
+## 树哈希
+
+考虑将每个子树都映射成一个唯一的数，如果 subRoot 对应的数和 root 中任意的一个子树对应的数相等，则 subRoot 是 root 的一棵子树。可以定义哈希函数：
+$$
+f_o = v_o + 31 \cdot f_l \cdot p(s_l) + 179 \cdot f_r \cdot p(s_r)
+$$
+$f_x$ 表示节点 x 的哈希值，$s_x$ 表示节点 x 对应子树大小，$v_x$ 表示节点 x 的 `val`，$p(n)$ 表示第 n 个素数，o 表示当前节点，l 和 r 分别表示左右孩子。上式表示为节点 o 的哈希值，等于这个节点的 `val` 加上 31 倍左子树的哈希值乘以第 $s_l$ 个素数，再加上 179 倍右子树的哈希值乘以第 $s_r$ 个素数。这里的 31 和 179 为左右子树的权值，可以为任意两个不同的值。
+
+详见[力扣题解](https://leetcode-cn.com/problems/subtree-of-another-tree/solution/ling-yi-ge-shu-de-zi-shu-by-leetcode-solution/)
+
+**复杂度分析：**
+
+- 时间复杂度：$O(\arg \pi (max(n,m)))$
+- 空间复杂度：$O(\arg \pi (max(n,m)))$
+
+```c++
+class Solution {
+public:
+    struct Status {
+        int f, s; // f 为哈希值，s 为子树大小
+        Status(int f_ = 0, int s_ = 0) : f(f_), s(s_) {}
+    };
+
+    static constexpr int MAX_N = 1000 + 5;
+    static constexpr int MOD = int(1e9) + 7;
+
+    bool vis[MAX_N] = { 0 };
+    int p[MAX_N], tot;
+
+    bool isSubtree(TreeNode* root, TreeNode* subRoot) {
+        if (root == nullptr) {
+            return false;
+        }
+        getPrime();
+        unordered_map<TreeNode *, Status> root_hash, subroot_hash;
+        treeHash(root, root_hash);
+        treeHash(subRoot, subroot_hash);
+        int target = subroot_hash[subRoot].f;
+        for (const auto &[k, v] : root_hash) {
+            if (v.f == target) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void treeHash(TreeNode *root, unordered_map<TreeNode *, Status> &hash) {
+        if (root == nullptr) {
+            return;
+        }
+        // 对树进行哈希，h(root) = root.val + 31 * h(root.left) + 179 * h(root.right)
+        hash[root] = Status(root->val, 1);
+        if (root->left) {
+            treeHash(root->left, hash);
+            hash[root].s += hash[root->left].s;
+            hash[root].f = (hash[root].f + (31LL * hash[root->left].f + p[hash[root->left].s]) % MOD) % MOD;
+        }
+        if (root->right) {
+            treeHash(root->right, hash);
+            hash[root].s += hash[root->right].s;
+            hash[root].f = (hash[root].f + (179LL * hash[root->right].f + p[hash[root->right].s]) % MOD) % MOD;
+        }
+    }
+
+    void getPrime() {
+        vis[0] = vis[1] = 1;
+        tot = 0;
+        for (int i = 2; i < MAX_N; ++i) {
+            if (!vis[i])
+                p[++tot] = i;
+            for (int j = 1; j <= tot && i * p[j] < MAX_N; ++j) {
+                vis[i * p[j]] = 1;
+                if (i % p[j] == 0)
+                    break;
+            }
+        }
     }
 };
 ```
