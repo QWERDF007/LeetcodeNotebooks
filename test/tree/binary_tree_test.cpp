@@ -542,6 +542,50 @@ TEST(BinaryTreeTest, FindTiltTest) {
     }
 }
 
+TEST(BinaryTreeTest, IsSubtreeTest) {
+    IsSubtree solution;
+
+    std::vector<std::vector<std::string>> s_trees1{
+        { "3","4","5","1","2" },
+        { "3","4","5","1","2","null","null","null","null","0" },
+        { "1","1" },
+        { "3","4","5","1","2" },
+    };
+
+    std::vector<std::vector<std::string>> s_trees2{
+        { "4","1","2" },
+        { "4","1","2" },
+        { "1" },
+        { "4","1","2","1" },
+    };
+
+    std::vector<TreeNode *> roots, subroots;
+    for (int i = 0; i < s_trees1.size(); ++i) {
+        roots.emplace_back(NewTree(s_trees1[i]));
+        subroots.emplace_back(NewTree(s_trees2[i]));
+    }
+
+    EXPECT_TRUE(solution.Solution1(roots[0], subroots[0]));
+    EXPECT_FALSE(solution.Solution1(roots[1], subroots[1]));
+    EXPECT_TRUE(solution.Solution1(roots[2], subroots[2]));
+    EXPECT_FALSE(solution.Solution1(roots[3], subroots[3]));
+
+    EXPECT_TRUE(solution.Solution2(roots[0], subroots[0]));
+    EXPECT_FALSE(solution.Solution2(roots[1], subroots[1]));
+    EXPECT_TRUE(solution.Solution2(roots[2], subroots[2]));
+    EXPECT_FALSE(solution.Solution2(roots[3], subroots[3]));
+
+    EXPECT_TRUE(solution.Solution3(roots[0], subroots[0]));
+    EXPECT_FALSE(solution.Solution3(roots[1], subroots[1]));
+    EXPECT_TRUE(solution.Solution3(roots[2], subroots[2]));
+    EXPECT_FALSE(solution.Solution3(roots[3], subroots[3]));
+
+    for (int i = 0; i < s_trees1.size(); ++i) {
+        DeleteTree(roots[i]);
+        DeleteTree(subroots[i]);
+    }
+}
+
 TEST(BinaryTreeTest, Tree2StrTest) {
     Tree2Str solution;
 
