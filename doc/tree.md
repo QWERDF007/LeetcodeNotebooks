@@ -1,24 +1,45 @@
-| :tiger:                                        | :cat:                                                      | :dog:                                      | :dragon:                                           |
-| ---------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------ | -------------------------------------------------- |
-| 144. [二叉树的前序遍历](#二叉树的前序遍历)     | 94.[二叉树的中序遍历](#二叉树的中序遍历)                   | 145. [二叉树的后序遍历](#二叉树的后序遍历) | 100. [相同的树](#相同的树)                         |
-| 110. [平衡二叉树](#平衡二叉树)                 | 111. [二叉树的最小深度](#二叉树的最小深度)                 | 112. [路径总和](#路径总和)                 | 226. [翻转二叉树](#翻转二叉树)                     |
-| 156. [上下翻转二叉树](#上下翻转二叉树)         | 235. [二叉搜索树的最近公共祖先](#二叉搜索树的最近公共祖先) | 257. [二叉树的所有路径](#二叉树的所有路径) | 404. [左叶子之和](#左叶子之和)                     |
-| 501. [二叉搜索树中的众数](#二叉搜索树中的众数) | 563. [二叉树的坡度](#二叉树的坡度)                         | 572. [另一棵树的子树](#另一棵树的子树)     | 606. [根据二叉树创建字符串](#根据二叉树创建字符串) |
+| :tiger:                                            | :cat:                                                      | :dog:                                      | :dragon:                                 |
+| -------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------ | ---------------------------------------- |
+| 144. [二叉树的前序遍历](#二叉树的前序遍历)         | 94.[二叉树的中序遍历](#二叉树的中序遍历)                   | 145. [二叉树的后序遍历](#二叉树的后序遍历) | 100. [相同的树](#相同的树)               |
+| 110. [平衡二叉树](#平衡二叉树)                     | 111. [二叉树的最小深度](#二叉树的最小深度)                 | 112. [路径总和](#路径总和)                 | 226. [翻转二叉树](#翻转二叉树)           |
+| 156. [上下翻转二叉树](#上下翻转二叉树)             | 235. [二叉搜索树的最近公共祖先](#二叉搜索树的最近公共祖先) | 257. [二叉树的所有路径](#二叉树的所有路径) | 404. [左叶子之和](#左叶子之和)           |
+| 501. [二叉搜索树中的众数](#二叉搜索树中的众数)     | 563. [二叉树的坡度](#二叉树的坡度)                         | 572. [另一棵树的子树](#另一棵树的子树)     | 589. [N叉树的前序遍历](#N叉树的前序遍历) |
+| 606. [根据二叉树创建字符串](#根据二叉树创建字符串) |                                                            |                                            |                                          |
 
 
+
+# 二叉树的定义
 
 ```c++
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
- *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
- * };
- */
+struct TreeNode {
+	int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode() : val(0), left(nullptr), right(nullptr) {}
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+};
+```
+
+# N叉树的定义
+
+```c++
+class Node {
+public:
+    int val;
+    vector<Node*> children;
+
+    Node() {}
+
+    Node(int _val) {
+        val = _val;
+    }
+
+    Node(int _val, vector<Node*> _children) {
+        val = _val;
+        children = _children;
+    }
+};
 ```
 
 # 二叉树的前序遍历
@@ -1478,6 +1499,127 @@ public:
                     break;
             }
         }
+    }
+};
+```
+
+
+
+# N叉树的前序遍历
+
+- [链接](https://leetcode-cn.com/problems/n-ary-tree-preorder-traversal/)
+- [code]((../cc/tree/binary_tree.h))
+
+> 给定一个 n 叉树的根节点 root，返回其节点值的前序遍历。
+>
+> n 叉树在输入中按层序遍历进行序列化表示，每组子节点由空值 null 分隔（请参见示例）。
+
+## 递归
+
+N 叉树的前序遍历递归与二叉树的前序遍历递归思路一样，先访问根节点，再访问子节点即可。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，遍历全部节点时间
+- 空间复杂度：$O(h)$，h 为 n 叉树高度
+
+```c++
+class Solution {
+public:
+    vector<int> preorder(Node* root) {
+        vector<int> ans;
+        preorder(root, ans);
+        return ans;
+    }
+
+    void preorder(Node* root, vector<int> &nums) {
+        if (root == nullptr) {
+            return;
+        }
+        nums.emplace_back(root->val);
+        for (Node *child : root->children) {
+            preorder(child, nums);
+        }
+    }
+};
+```
+
+## 迭代
+
+可以用堆栈模拟递归调用，但是从子节点返回父节点时，需要跳过已经访问过的子节点，访问未访问过的子节点，可以使用哈希表记录当前节点已经访问过的子节点。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，遍历全部节点时间
+- 空间复杂度：$O(n)$，堆栈模拟递归调用空间 $O(n)$，存储已访问过的子节点 $O(n)$
+
+```c++
+class Solution {
+public:
+    vector<int> preorder(Node* root) {
+        vector<int> ans;
+        if (root == nullptr) {
+            return ans;
+        }
+        unordered_map<Node *, int> cnt;
+        stack<Node *> stk;
+        Node *cur = root;
+        while (!stk.empty() || cur) {
+            while (cur) {
+                ans.emplace_back(cur->val);
+                stk.emplace(cur);
+                if (cur->children.size() > 0) {
+                    cnt[cur] = 0;
+                    cur = cur->children[0]; // 访问第一个孩子
+                } else {
+                    cur = nullptr;
+                }
+            }
+            cur = stk.top();
+            int index = (cnt.count(cur) ? cnt[cur] : -1) + 1; // 访问下一个孩子
+            if (index < cur->children.size()) {
+                cnt[cur] = index;
+                cur = cur->children[index];
+            } else {
+                stk.pop();
+                cnt.erase(cur);
+                cur = nullptr;
+            }
+        }
+        return ans;
+    }
+};
+```
+
+## 迭代优化
+
+利用栈先进后出的特性，从右向左依次将子节点入栈，这样出栈时即可保证从左往右遍历每棵子树，还可以避免记录每个节点的子节点访问数量。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，遍历全部节点时间
+- 空间复杂度：$O(n)$，堆栈模拟递归调用空间
+
+```c++
+class Solution {
+public:
+    vector<int> preorder(Node* root) {
+        vector<int> ans;
+        if (root == nullptr) {
+            return ans;
+        }
+        stack<Node *> stk;
+        stk.emplace(root); 
+        while (!stk.empty()){
+            Node *cur = stk.top();
+            stk.pop();
+            ans.emplace_back(cur->val);
+            // 从右往左将子节点入栈，每层的最左的子节点会在堆栈顶部
+            for (auto it = cur->children.rbegin(); it != cur->children.rend(); ++it) {
+                stk.emplace(*it);
+            }
+        }
+        return ans;
     }
 };
 ```
