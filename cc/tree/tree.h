@@ -18,15 +18,24 @@ struct TreeNode {
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
-/**
- * @brief 生成二叉树，随机节点，节点值域 [a,b]
- * 
- * @param n 节点数量
- * @param a 节点值下限
- * @param b 节点值上限
- * @return TreeNode* 二叉树根节点
- */
-TreeNode *NewRandomTree(int n, int a, int b);
+
+class Node {
+public:
+    int val;
+    std::vector<Node *> children;
+
+    Node() {}
+
+    Node(int _val) {
+        val = _val;
+    }
+
+    Node(int _val, std::vector<Node *> _children) {
+        val = _val;
+        children = _children;
+    }
+};
+
 
 /**
  * @brief 递归，二叉树先(根)序遍历，根 -> 左 -> 右，递归遍历
@@ -74,14 +83,49 @@ int TreeHeight(TreeNode *root);
  * @param tree 二叉树字符串数组
  * @return TreeNode* 二叉树根结点
  */
-TreeNode *NewTree(std::vector<std::string> &tree);
+TreeNode *NewBinaryTree(std::vector<std::string> &tree);
+
+/**
+ * @brief 生成二叉树，随机节点，节点值域 [a,b]
+ *
+ * @param n 节点数量
+ * @param a 节点值下限
+ * @param b 节点值上限
+ * @return TreeNode* 二叉树根节点
+ */
+TreeNode *NewRandomBinaryTree(int n, int a, int b);
 
 /**
  * @brief 递归，后序遍历方式释放二叉树，左 -> 右 -> 根
  * 
  * @param root 二叉树根结点
  */
-void DeleteTree(TreeNode *root);
+void DeleteBinaryTree(TreeNode *root);
+
+/**
+ * @brief 从字符串数组层序生成 n 叉树，"null" 隔开一组子节点，数组中只包含字符串数字和null
+ * 
+ * @param tree n叉树层序字符串数组
+ * @return Node* n叉树根节点
+ */
+Node *NewNAryTree(std::vector<std::string> &tree);
+
+/**
+ * @brief 递归，后序遍历方式释放 n 叉树，子节点 -> 根
+ * 
+ * @param root n 叉树根节点
+ */
+void DeleteNAryTree(Node *root);
+
+/**
+ * @brief 生产 n 叉树，随机节点，节点值域 [a,b]
+ * 
+ * @param n 节点数量
+ * @param a 节点值下限
+ * @param b 节点值上限
+ * @return Node* n 叉树根节点
+ */
+Node *NewRandomNAryTree(int n, int a, int b);
 
 class PreorderTraversal : public LeetcodeSolution {
 public:
@@ -734,6 +778,55 @@ private:
      * @param hash 二叉树每个节点表示的子树的哈希值
      */
     void TreeHash(TreeNode *root, std::unordered_map<TreeNode *, Status> &hash);
+};
+
+class Preorder : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 递归
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(h)
+     * @param root n叉树根节点
+     * @return std::vector<int> 先序遍历结果
+     */
+    std::vector<int> Solution1(Node *root);
+
+    /**
+     * @brief 迭代
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param root n叉树根节点
+     * @return std::vector<int> 先序遍历结果
+     */
+    std::vector<int> Solution2(Node *root);
+
+    /**
+     * @brief 迭代优化
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param root n叉树根节点
+     * @return std::vector<int> 先序遍历结果
+     */
+    std::vector<int> Solution3(Node *root);
+
+private:
+    /**
+     * @brief n 叉树先序遍历递归
+     * 
+     * @param root n叉树根节点
+     * @param res 先序遍历结果
+     */
+    void PreorderTraversal(Node *root, std::vector<int> &res);
 };
 
 class Tree2Str : public LeetcodeSolution {

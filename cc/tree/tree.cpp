@@ -29,6 +29,7 @@ void TreeSolution(int pid) {
         case SolutionsId::FIND_MODE: solution = new FindMode(); break;
         case SolutionsId::FIND_TILT: solution = new FindTilt(); break;
         case SolutionsId::IS_SUBTREE: solution = new IsSubtree(); break;
+        case SolutionsId::PREORDER: solution = new Preorder(); break;
         case SolutionsId::TREE_2_STR: solution = new Tree2Str(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
 	}
@@ -46,24 +47,6 @@ void TreeSolution(int pid) {
 	}
 }
 
-TreeNode *NewRandomTree(int n, int a, int b) {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(a, b);
-    std::vector<std::string> s_tree(n);
-    int null = dis(gen);
-    for (int i = 0; i < n; ++i) {
-        int v = dis(gen);
-        if (v != null) {
-            s_tree[i] = std::to_string(v);
-        }
-        else {
-            s_tree[i] = "null";
-        }
-    }
-    TreeNode *root = NewTree(s_tree);
-    return root;
-}
 
 template <typename T>
 void PreOrderTraversal(TreeNode *root, std::vector<T> &res) {
@@ -123,7 +106,7 @@ int TreeHeight(TreeNode *root) {
     }
 }
 
-TreeNode *NewTree(std::vector<std::string> &tree) {
+TreeNode *NewBinaryTree(std::vector<std::string> &tree) {
     int n = tree.size();
     if (n == 0) {
         return nullptr;
@@ -149,13 +132,85 @@ TreeNode *NewTree(std::vector<std::string> &tree) {
     return root;
 }
 
-void DeleteTree(TreeNode *root) {
+
+TreeNode *NewRandomBinaryTree(int n, int a, int b) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(a, b);
+    std::vector<std::string> s_tree(n);
+    int null = dis(gen);
+    for (int i = 0; i < n; ++i) {
+        int v = dis(gen);
+        if (v != null) {
+            s_tree[i] = std::to_string(v);
+        }
+        else {
+            s_tree[i] = "null";
+        }
+    }
+    TreeNode *root = NewBinaryTree(s_tree);
+    return root;
+}
+
+
+void DeleteBinaryTree(TreeNode *root) {
     if (root == nullptr) {
         return;
     }
-    DeleteTree(root->left);
-    DeleteTree(root->right);
+    DeleteBinaryTree(root->left);
+    DeleteBinaryTree(root->right);
     delete root;
+}
+
+Node *NewNAryTree(std::vector<std::string> &tree) {
+    int n = tree.size();
+    if (n == 0) {
+        return nullptr;
+    }
+    Node *root = new Node(std::stoi(tree[0])), *cur = root;
+    std::queue<Node *> q;
+    int i = 1;
+    while (i < n) {
+        if (!q.empty() && tree[i] == "null") { // 处理下一组子节点
+            cur = q.front();
+            q.pop();
+        } else if (tree[i] != "null") { // 当前节点添加新子节点
+            Node *child = new Node(std::stoi(tree[i]));
+            cur->children.emplace_back(child);
+            q.emplace(child);
+        }
+        ++i;
+    }
+    return root;
+}
+
+void DeleteNAryTree(Node *root) {
+    if (root == nullptr) {
+        return;
+    }
+    for (Node *child : root->children) {
+        DeleteNAryTree(child);
+    }
+    delete root;
+}
+
+Node *NewRandomNAryTree(int n, int a, int b) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(a, b);
+    std::vector<std::string> s_tree(n);
+    int null = dis(gen);
+    for (int i = 0; i < n; ++i) {
+        int v = dis(gen);
+        if (v != null) {
+            s_tree[i] = std::to_string(v);
+        }
+        else {
+            s_tree[i] = "null";
+        }
+    }
+    Node *root = NewNAryTree(s_tree);
+    return root;
 }
 
 
@@ -193,7 +248,7 @@ void PreorderTraversal::Benchmark() {
             str_tree[i] = "null";
         }
     }
-    TreeNode *root = NewTree(str_tree);
+    TreeNode *root = NewBinaryTree(str_tree);
 
     benchmark::RegisterBenchmark("BM_PreorderTraversal_Recursion", [](benchmark::State &state, PreorderTraversal solution, TreeNode *root) {
         for (auto _ : state) {
@@ -212,7 +267,7 @@ void PreorderTraversal::Benchmark() {
             solution.Solution3(root);
         }
     }, solution, root);
-    //DeleteTree(root);
+    //DeleteBinaryTree(root);
 }
 
 std::vector<int> PreorderTraversal::Solution1(TreeNode *root) {
@@ -301,7 +356,7 @@ void InorderTraversal::Benchmark() {
             str_tree[i] = "null";
         }
     }
-    TreeNode *root = NewTree(str_tree);
+    TreeNode *root = NewBinaryTree(str_tree);
 
     benchmark::RegisterBenchmark("BM_InorderTraversal_Recursion", [](benchmark::State &state, InorderTraversal solution, TreeNode *root) {
         for (auto _ : state) {
@@ -320,7 +375,7 @@ void InorderTraversal::Benchmark() {
             solution.Solution3(root);
         }
     }, solution, root);
-    //DeleteTree(root);
+    //DeleteBinaryTree(root);
 }
 
 std::vector<int> InorderTraversal::Solution1(TreeNode *root) {
@@ -414,7 +469,7 @@ void PostorderTraversal::Benchmark() {
             str_tree[i] = "null";
         }
     }
-    TreeNode *root = NewTree(str_tree);
+    TreeNode *root = NewBinaryTree(str_tree);
 
     benchmark::RegisterBenchmark("BM_PostorderTraversal_Recursion", [](benchmark::State &state, PostorderTraversal solution, TreeNode *root) {
         for (auto _ : state) {
@@ -433,7 +488,7 @@ void PostorderTraversal::Benchmark() {
             solution.Solution3(root);
         }
     }, solution, root);
-    //DeleteTree(root);
+    //DeleteBinaryTree(root);
 }
 
 std::vector<int> PostorderTraversal::Solution1(TreeNode *root) {
@@ -551,8 +606,8 @@ void IsSameTree::Benchmark() {
         "0","1","2","3","4","5","6","7","8","9",
     };
 
-    TreeNode *p = NewTree(sp);
-    TreeNode *q = NewTree(sq);
+    TreeNode *p = NewBinaryTree(sp);
+    TreeNode *q = NewBinaryTree(sq);
     
     benchmark::RegisterBenchmark("BM_IsSameTree_DFS", [](benchmark::State &state, IsSameTree solution, TreeNode *p, TreeNode *q) {
         for (auto _ : state) {
@@ -567,8 +622,8 @@ void IsSameTree::Benchmark() {
     }, solution, p, q);
 
 
-    //DeleteTree(p);
-    //DeleteTree(q);
+    //DeleteBinaryTree(p);
+    //DeleteBinaryTree(q);
 }
 
 bool IsSameTree::Solution1(TreeNode *p, TreeNode *q) {
@@ -646,7 +701,7 @@ void IsBalanced::Benchmark() {
             str_tree[i] = "null";
         }
     }
-    TreeNode *root = NewTree(str_tree);
+    TreeNode *root = NewBinaryTree(str_tree);
 
     benchmark::RegisterBenchmark("BM_IsBalanced_TopToDown", [](benchmark::State &state, IsBalanced solution, TreeNode *root) {
         for (auto _ : state) {
@@ -660,7 +715,7 @@ void IsBalanced::Benchmark() {
         }
     }, solution, root);
 
-    //DeleteTree(root);
+    //DeleteBinaryTree(root);
 }
 
 bool IsBalanced::Solution1(TreeNode *root) {
@@ -728,7 +783,7 @@ void MinDepth::Benchmark() {
         }
     }
 
-    TreeNode *root = NewTree(str_tree);
+    TreeNode *root = NewBinaryTree(str_tree);
 
     benchmark::RegisterBenchmark("BM_MinDepth_DFS", [](benchmark::State &state, MinDepth solution, TreeNode *root) {
         for (auto _ : state) {
@@ -742,7 +797,7 @@ void MinDepth::Benchmark() {
         }
     }, solution, root);
 
-    //DeleteTree(root);
+    //DeleteBinaryTree(root);
 }
 
 int MinDepth::Solution1(TreeNode *root) {
@@ -825,7 +880,7 @@ void HasPathSum::Benchmark() {
         }
     }
 
-    TreeNode *root = NewTree(s_tree);
+    TreeNode *root = NewBinaryTree(s_tree);
 
     benchmark::RegisterBenchmark("BM_HasPathSum_DFS", [](benchmark::State &state, HasPathSum solution, TreeNode *root, int target) {
         for (auto _ : state) {
@@ -844,7 +899,7 @@ void HasPathSum::Benchmark() {
             solution.Solution3(root, target);
         }
     }, solution, root, target);
-    //DeleteTree(root);
+    //DeleteBinaryTree(root);
 }
 
 bool HasPathSum::Solution1(TreeNode *root, int targetSum) {
@@ -938,9 +993,9 @@ void UpsideDownBinaryTree::Benchmark() {
     
     benchmark::RegisterBenchmark("BM_UpsideDownBinaryTree_Simulate", [](benchmark::State &state, UpsideDownBinaryTree solution, std::vector<std::string> s_tree) {
         for (auto _ : state) {
-            TreeNode *root = NewTree(s_tree);
+            TreeNode *root = NewBinaryTree(s_tree);
             root = solution.Solution1(root);
-            DeleteTree(root);
+            DeleteBinaryTree(root);
         }
     }, solution, s_tree);
 }
@@ -1000,7 +1055,7 @@ void InvertTree::Benchmark() {
         }
     }
 
-    TreeNode *root = NewTree(s_tree);
+    TreeNode *root = NewBinaryTree(s_tree);
 
     benchmark::RegisterBenchmark("BM_InvertTree_DFS", [](benchmark::State &state, InvertTree solution, TreeNode *root) {
         for (auto _ : state) {
@@ -1014,7 +1069,7 @@ void InvertTree::Benchmark() {
         }
     }, solution, root);
 
-    //DeleteTree(root);
+    //DeleteBinaryTree(root);
 }
 
 TreeNode *InvertTree::Solution1(TreeNode *root) {
@@ -1080,7 +1135,7 @@ void LowestCommonAncestor::Benchmark() {
         "null","null","null","37","null","null","5","null","15","null","null","19","null","null","null","null",
         "null","40","null","null","null","null","null","null","39","null","38",
     };
-    TreeNode *root = NewTree(s_tree);
+    TreeNode *root = NewBinaryTree(s_tree);
     TreeNode *p = new TreeNode(1);
     TreeNode *q = new TreeNode(23);
 
@@ -1098,7 +1153,7 @@ void LowestCommonAncestor::Benchmark() {
     };
     benchmark::RegisterBenchmark("BM_LowestCommonAncestor_Traversal", func2, solution, root, p, q);
 
-    //DeleteTree(root);
+    //DeleteBinaryTree(root);
     //delete p;
     //delete q;
 }
@@ -1182,7 +1237,7 @@ void BinaryTreePaths::Benchmark() {
         }
     }
 
-    TreeNode *root = NewTree(s_tree);
+    TreeNode *root = NewBinaryTree(s_tree);
 
     benchmark::RegisterBenchmark("BM_BinaryTreePaths_DFS", [](benchmark::State &state, BinaryTreePaths solution, TreeNode *root) {
         for (auto _ : state) {
@@ -1196,7 +1251,7 @@ void BinaryTreePaths::Benchmark() {
         }
     }, solution, root);
 
-    //DeleteTree(root);
+    //DeleteBinaryTree(root);
 }
 
 std::vector<std::string> BinaryTreePaths::Solution1(TreeNode *root) {
@@ -1284,7 +1339,7 @@ void SumOfLeftLeaves::Benchmark() {
             s_tree[i] = "null";
         }
     }
-    TreeNode *root = NewTree(s_tree);
+    TreeNode *root = NewBinaryTree(s_tree);
 
     benchmark::RegisterBenchmark("BM_SumOfLeftLeaves_DFS", [](benchmark::State &state, SumOfLeftLeaves solution, TreeNode *root) {
         for (auto _ : state) {
@@ -1298,7 +1353,7 @@ void SumOfLeftLeaves::Benchmark() {
         }
     }, solution, root);
 
-    // DeleteTree(root);
+    // DeleteBinaryTree(root);
 }
 
 int SumOfLeftLeaves::Solution1(TreeNode *root) {
@@ -1377,7 +1432,7 @@ void FindMode::Benchmark() {
         "null","13","17","null","null","22","null","14","null","null","21","24"
     };
 
-    TreeNode *root = NewTree(s_tree);
+    TreeNode *root = NewBinaryTree(s_tree);
 
     benchmark::RegisterBenchmark("BM_FindMode_HashMap", [](benchmark::State &state, FindMode solution, TreeNode *root) {
         for (auto _ : state) {
@@ -1397,7 +1452,7 @@ void FindMode::Benchmark() {
         }
     }, solution, root);
 
-    //DeleteTree(root);
+    //DeleteBinaryTree(root);
 }
 
 std::vector<int> FindMode::Solution1(TreeNode *root) {
@@ -1511,7 +1566,7 @@ void FindTilt::Benchmark() {
             s_tree[i] = "null";
         }
     }
-    TreeNode *root = NewTree(s_tree);
+    TreeNode *root = NewBinaryTree(s_tree);
 
     benchmark::RegisterBenchmark("BM_FindTilt_DFS", [](benchmark::State &state, FindTilt solution, TreeNode *root) {
         for (auto _ : state) {
@@ -1519,7 +1574,7 @@ void FindTilt::Benchmark() {
         }
     }, solution, root);
 
-    //DeleteTree(root);
+    //DeleteBinaryTree(root);
 }
 
 int FindTilt::Solution1(TreeNode *root) {
@@ -1559,8 +1614,8 @@ std::string IsSubtree::Solution() {
 void IsSubtree::Benchmark() {
     IsSubtree solution;
 
-    TreeNode *root = NewRandomTree(2000, -1e4, 1e4);
-    TreeNode *subroot = NewRandomTree(1000, -1e4, 1e4);
+    TreeNode *root = NewRandomBinaryTree(2000, -1e4, 1e4);
+    TreeNode *subroot = NewRandomBinaryTree(1000, -1e4, 1e4);
 
     benchmark::RegisterBenchmark("BM_IsSubtree_DfsCompare", [](benchmark::State &state, IsSubtree solution, TreeNode *root, TreeNode *subroot) {
         for (auto _ : state) {
@@ -1700,6 +1755,121 @@ void IsSubtree::TreeHash(TreeNode *root, std::unordered_map<TreeNode *, Status> 
     }
 }
 
+
+std::string Preorder::Title() {
+    return "589. N叉树的前序遍历\n";
+}
+
+std::string Preorder::Problem() {
+    return 
+        "给定一个 n 叉树的根节点 root，返回其节点值的前序遍历。\n"
+        "n 叉树在输入中按层序遍历进行序列化表示，每组子节点由空值 null 分隔（请参见示例）。\n";
+}
+
+std::string Preorder::Link() {
+    return "https://leetcode-cn.com/problems/n-ary-tree-preorder-traversal/";
+}
+
+std::string Preorder::Solution() {
+    return "递归，时间：O(n)，空间：O(h)，h 为 n 叉树高度。\n";
+}
+
+void Preorder::Benchmark() {
+    Preorder solution;
+
+    Node *root = NewRandomNAryTree(1e4, 0, 1e4);
+
+    benchmark::RegisterBenchmark("BM_Preorder_Recursion", [](benchmark::State &state, Preorder solution, Node *root) {
+        for (auto _ : state) {
+            solution.Solution1(root);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_Preorder_Iteration", [](benchmark::State &state, Preorder solution, Node *root) {
+        for (auto _ : state) {
+            solution.Solution2(root);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_Preorder_RIteration", [](benchmark::State &state, Preorder solution, Node *root) {
+        for (auto _ : state) {
+            solution.Solution3(root);
+        }
+    }, solution, root);
+
+    //DeleteNAryTree(root);
+}
+
+std::vector<int> Preorder::Solution1(Node *root) {
+    std::vector<int> ans;
+    PreorderTraversal(root, ans);
+    return ans;
+}
+
+std::vector<int> Preorder::Solution2(Node *root) {
+    std::vector<int> ans;
+    if (root == nullptr) {
+        return ans;
+    }
+    std::unordered_map<Node *, int> cnt;
+    std::stack<Node *> stk;
+    Node *cur = root;
+    while (!stk.empty() || cur) {
+        while (cur) {
+            ans.emplace_back(cur->val);
+            stk.emplace(cur);
+            if (cur->children.size() > 0) {
+                cnt[cur] = 0;
+                cur = cur->children[0]; // 访问第一个孩子
+            } else {
+                cur = nullptr;
+            }
+        }
+        cur = stk.top();
+        int index = (cnt.count(cur) ? cnt[cur] : -1) + 1; // 访问下一个孩子
+        if (index < cur->children.size()) {
+            cnt[cur] = index;
+            cur = cur->children[index];
+        } else {
+            stk.pop();
+            cnt.erase(cur);
+            cur = nullptr;
+        }
+    }
+    return ans;
+}
+
+std::vector<int> Preorder::Solution3(Node *root) {
+    std::vector<int> ans;
+    if (root == nullptr) {
+        return ans;
+    }
+
+    std::stack<Node *> stk;
+    stk.emplace(root); 
+    while (!stk.empty()){
+        Node *cur = stk.top();
+        stk.pop();
+        ans.emplace_back(cur->val);
+        // 从右往左将子节点入栈，每层的最左的子节点会在堆栈顶部
+        for (auto it = cur->children.rbegin(); it != cur->children.rend(); ++it) {
+            stk.emplace(*it);
+        }
+    }
+    return ans;
+}
+
+void Preorder::PreorderTraversal(Node *root, std::vector<int> &res) {
+    if (root == nullptr) {
+        return;
+    }
+    res.emplace_back(root->val);
+    for (Node *child : root->children) {
+        PreorderTraversal(child, res);
+    }
+}
+
+
 std::string Tree2Str::Title() {
     return "606. 根据二叉树创建字符串\n";
 }
@@ -1723,7 +1893,7 @@ void Tree2Str::Benchmark() {
 
     int n = 1000;
     int a = -1000, b = 1000;
-    TreeNode *root = NewRandomTree(n, a, b);
+    TreeNode *root = NewRandomBinaryTree(n, a, b);
 
     benchmark::RegisterBenchmark("BM_Tree2Str_Recursion", [](benchmark::State &state, Tree2Str solution, TreeNode *root) {
         for (auto _ : state) {
@@ -1737,7 +1907,7 @@ void Tree2Str::Benchmark() {
         }
     }, solution, root);
 
-    //DeleteTree(root);
+    //DeleteBinaryTree(root);
 }
 
 std::string Tree2Str::Solution1(TreeNode *root) {
