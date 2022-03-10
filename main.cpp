@@ -11,7 +11,7 @@
 #include "math/leetcode_math.h"
 #include "bitwise_operation/bitwise_operation.h"
 #include "greedy_algorithm/greedy_algorithm.h"
-#include "tree/binary_tree.h"
+#include "tree/tree.h"
 #include "dynamic_programming/dynamic_programming.h"
 #include "graph/graph.h"
 #include "two_pointers/two_pointers.h"

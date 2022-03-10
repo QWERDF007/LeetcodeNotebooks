@@ -1,6 +1,6 @@
 ﻿#include <algorithm>
 #include <gtest/gtest.h>
-#include "tree/binary_tree.h"
+#include "tree/tree.h"
 
 namespace leetcode {
 namespace test {

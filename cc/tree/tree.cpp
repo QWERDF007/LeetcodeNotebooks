@@ -6,7 +6,7 @@
 #include <unordered_set>
 #include <benchmark/benchmark.h>
 
-#include "binary_tree.h"
+#include "tree.h"
 
 namespace leetcode {
 namespace tree {
