@@ -7,7 +7,7 @@
 namespace leetcode {
 namespace tree {
 
-void BinaryTreeSolution(int pid);
+void TreeSolution(int pid);
 
 struct TreeNode {
     int val;

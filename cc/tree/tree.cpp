@@ -11,7 +11,7 @@
 namespace leetcode {
 namespace tree {
 
-void BinaryTreeSolution(int pid) {
+void TreeSolution(int pid) {
     LeetcodeSolution *solution = nullptr;
 	switch (pid) {
         case SolutionsId::PREORDER_TRAVERSAL: solution = new PreorderTraversal(); break;
