@@ -26,7 +26,7 @@ TEST(BinaryTreeTest, PreorderTraversalTest) {
 
     std::vector<TreeNode *> roots;
     for (auto &str_tree : s_trees) {
-        TreeNode *root = NewTree(str_tree);
+        TreeNode *root = NewBinaryTree(str_tree);
         roots.emplace_back(root);
     }
 
@@ -46,7 +46,7 @@ TEST(BinaryTreeTest, PreorderTraversalTest) {
     EXPECT_EQ(solution.Solution3(roots[3]), results[3]);
 
     for (auto root : roots) {
-        DeleteTree(root);
+        DeleteBinaryTree(root);
     }
 }
 
@@ -67,7 +67,7 @@ TEST(BinaryTreeTest, InorderTraversalTest) {
 
     std::vector<TreeNode *> roots;
     for (auto &str_tree : s_trees) {
-        TreeNode *root = NewTree(str_tree);
+        TreeNode *root = NewBinaryTree(str_tree);
         roots.emplace_back(root);
     }
 
@@ -87,7 +87,7 @@ TEST(BinaryTreeTest, InorderTraversalTest) {
     EXPECT_EQ(solution.Solution3(roots[3]), results[3]);
 
     for (auto root : roots) {
-        DeleteTree(root);
+        DeleteBinaryTree(root);
     }
 }
 
@@ -112,7 +112,7 @@ TEST(BinaryTreeTest, PostorderTraversalTest) {
 
     std::vector<TreeNode *> roots;
     for (auto &str_tree : s_trees) {
-        TreeNode *root = NewTree(str_tree);
+        TreeNode *root = NewBinaryTree(str_tree);
         roots.emplace_back(root);
     }
 
@@ -132,7 +132,7 @@ TEST(BinaryTreeTest, PostorderTraversalTest) {
     EXPECT_EQ(solution.Solution3(roots[3]), results[3]);
 
     for (auto root : roots) {
-        DeleteTree(root);
+        DeleteBinaryTree(root);
     }
 }
 
@@ -154,11 +154,11 @@ TEST(BinaryTreeTest, IsSameTreeTest) {
     std::vector<TreeNode *> p, q;
 
     for (auto &s : sp) {
-        TreeNode *root = NewTree(s);
+        TreeNode *root = NewBinaryTree(s);
         p.emplace_back(root);
     }
     for (auto &s : sq) {
-        TreeNode *root = NewTree(s);
+        TreeNode *root = NewBinaryTree(s);
         q.emplace_back(root);
     }
 
@@ -171,10 +171,10 @@ TEST(BinaryTreeTest, IsSameTreeTest) {
     EXPECT_FALSE(solution.Solution2(p[2], q[2]));
 
     for (auto root : p) {
-        DeleteTree(root);
+        DeleteBinaryTree(root);
     }
     for (auto root : q) {
-        DeleteTree(root);
+        DeleteBinaryTree(root);
     }
 }
 
@@ -189,7 +189,7 @@ TEST(BinaryTreeTest, IsBalancedTest) {
 
     std::vector<TreeNode *> roots;
     for (auto &s : s_trees) {
-        roots.emplace_back(NewTree(s));
+        roots.emplace_back(NewBinaryTree(s));
     }
 
     EXPECT_TRUE(solution.Solution1(roots[0]));
@@ -201,7 +201,7 @@ TEST(BinaryTreeTest, IsBalancedTest) {
     EXPECT_TRUE(solution.Solution2(roots[2]));
 
     for (auto root : roots) {
-        DeleteTree(root);
+        DeleteBinaryTree(root);
     }
 }
 
@@ -214,7 +214,7 @@ TEST(BinaryTreeTest, MinDepthTest) {
     };
     std::vector<TreeNode *> roots;
     for (auto &s : s_trees) {
-        roots.emplace_back(NewTree(s));
+        roots.emplace_back(NewBinaryTree(s));
     }
 
     EXPECT_EQ(solution.Solution1(roots[0]), 2);
@@ -224,7 +224,7 @@ TEST(BinaryTreeTest, MinDepthTest) {
     EXPECT_EQ(solution.Solution2(roots[1]), 5);
 
     for (auto root : roots) {
-        DeleteTree(root);
+        DeleteBinaryTree(root);
     }
 }
 
@@ -237,7 +237,7 @@ TEST(BinaryTreeTest, HasPathSumTest) {
     };
     std::vector<TreeNode *> roots;
     for (auto &s : s_trees) {
-        roots.emplace_back(NewTree(s));
+        roots.emplace_back(NewBinaryTree(s));
     }
 
     EXPECT_TRUE(solution.Solution1(roots[0], 22));
@@ -253,7 +253,7 @@ TEST(BinaryTreeTest, HasPathSumTest) {
     EXPECT_FALSE(solution.Solution3(roots[2], 0));
 
     for (TreeNode *root : roots) {
-        DeleteTree(root);
+        DeleteBinaryTree(root);
     }
 }
 
@@ -277,8 +277,8 @@ TEST(BinaryTreeTest, UpsideDownBinaryTreeTest) {
 
     std::vector<TreeNode *> roots0, roots1;
     for (int i = 0; i < sp.size(); ++i) {
-        roots0.emplace_back(NewTree(sp[i]));
-        roots1.emplace_back(NewTree(sq[i]));
+        roots0.emplace_back(NewBinaryTree(sp[i]));
+        roots1.emplace_back(NewBinaryTree(sq[i]));
     }
 
     for (int i = 0; i < sp.size(); ++i) {
@@ -291,8 +291,8 @@ TEST(BinaryTreeTest, UpsideDownBinaryTreeTest) {
     
 
     for (int i = 0; i < sp.size(); ++i) {
-        DeleteTree(roots0[i]);
-        DeleteTree(roots1[i]);
+        DeleteBinaryTree(roots0[i]);
+        DeleteBinaryTree(roots1[i]);
     }
 }
 
@@ -314,9 +314,9 @@ TEST(BinaryTreeTest, InvertTreeTest) {
 
     std::vector<TreeNode *> roots1, roots2, roots3;
     for (int i = 0; i < sp.size(); ++i) {
-        roots1.emplace_back(NewTree(sp[i]));
-        roots2.emplace_back(NewTree(sp[i]));
-        roots3.emplace_back(NewTree(sq[i]));
+        roots1.emplace_back(NewBinaryTree(sp[i]));
+        roots2.emplace_back(NewBinaryTree(sp[i]));
+        roots3.emplace_back(NewBinaryTree(sq[i]));
     }
 
     EXPECT_TRUE(judge.Solution1(solution.Solution1(roots1[0]), roots3[0]));
@@ -328,9 +328,9 @@ TEST(BinaryTreeTest, InvertTreeTest) {
     EXPECT_TRUE(judge.Solution1(solution.Solution2(roots2[2]), roots3[2]));
 
     for (int i = 0; i < sp.size(); ++i) {
-        DeleteTree(roots1[i]);
-        DeleteTree(roots2[i]);
-        DeleteTree(roots3[i]);
+        DeleteBinaryTree(roots1[i]);
+        DeleteBinaryTree(roots2[i]);
+        DeleteBinaryTree(roots3[i]);
     }
 }
 
@@ -363,7 +363,7 @@ TEST(BinaryTreeTest, LowestCommonAncestorTest) {
 
     std::vector<TreeNode *> roots, p_nodes, q_nodes;
     for (auto &s_tree : s_trees) {
-        roots.emplace_back(NewTree(s_tree));
+        roots.emplace_back(NewBinaryTree(s_tree));
     }
     for (int v : p) {
         p_nodes.emplace_back(new TreeNode(v));
@@ -383,7 +383,7 @@ TEST(BinaryTreeTest, LowestCommonAncestorTest) {
     EXPECT_EQ(solution.Solution2(roots[3], p_nodes[3], q_nodes[3])->val, results[3]);
 
     for (TreeNode *root : roots) {
-        DeleteTree(root);
+        DeleteBinaryTree(root);
     }
     for (TreeNode *node : p_nodes) {
         delete node;
@@ -417,7 +417,7 @@ TEST(BinaryTreeTest, BinaryTreePathsTest) {
 
     std::vector<TreeNode *> roots;
     for (auto &s_tree : s_trees) {
-        roots.emplace_back(NewTree(s_tree));
+        roots.emplace_back(NewBinaryTree(s_tree));
     }
 
     EXPECT_EQ(solution.Solution1(roots[0]), results1[0]);
@@ -429,7 +429,7 @@ TEST(BinaryTreeTest, BinaryTreePathsTest) {
     EXPECT_EQ(solution.Solution2(roots[2]), results2[2]);
 
     for (TreeNode *root : roots) {
-        DeleteTree(root);
+        DeleteBinaryTree(root);
     }
 }
 
@@ -447,7 +447,7 @@ TEST(BinaryTreeTest, SumOfLeftLeavesTest) {
     std::vector<TreeNode *> roots;
 
     for (auto &s_tree : s_trees) {
-        roots.emplace_back(NewTree(s_tree));
+        roots.emplace_back(NewBinaryTree(s_tree));
     }
 
     EXPECT_EQ(solution.Solution1(roots[0]), results[0]);
@@ -456,7 +456,7 @@ TEST(BinaryTreeTest, SumOfLeftLeavesTest) {
     EXPECT_EQ(solution.Solution2(roots[1]), results[1]);
 
     for (TreeNode *root : roots) {
-        DeleteTree(root);
+        DeleteBinaryTree(root);
     }
 }
 
@@ -476,7 +476,7 @@ TEST(BinaryTreeTest, FindModeTest) {
 
     std::vector<TreeNode *> roots;
     for (auto &s_tree : s_trees) {
-        roots.emplace_back(NewTree(s_tree));
+        roots.emplace_back(NewBinaryTree(s_tree));
     }
     
     std::vector<std::vector<int>> solution1_ans, solution2_ans, solution3_ans;
@@ -511,7 +511,7 @@ TEST(BinaryTreeTest, FindModeTest) {
     EXPECT_EQ(solution3_ans[2], results[2]);
 
     for (TreeNode *root : roots) {
-        DeleteTree(root);
+        DeleteBinaryTree(root);
     }
 }
 
@@ -530,7 +530,7 @@ TEST(BinaryTreeTest, FindTiltTest) {
 
     std::vector<TreeNode *> roots;
     for (auto &s_tree : s_trees) {
-        roots.emplace_back(NewTree(s_tree));
+        roots.emplace_back(NewBinaryTree(s_tree));
     }
 
     EXPECT_EQ(solution.Solution1(roots[0]), results[0]);
@@ -538,7 +538,7 @@ TEST(BinaryTreeTest, FindTiltTest) {
     EXPECT_EQ(solution.Solution1(roots[2]), results[2]);
 
     for (TreeNode *root : roots) {
-        DeleteTree(root);
+        DeleteBinaryTree(root);
     }
 }
 
@@ -561,8 +561,8 @@ TEST(BinaryTreeTest, IsSubtreeTest) {
 
     std::vector<TreeNode *> roots, subroots;
     for (int i = 0; i < s_trees1.size(); ++i) {
-        roots.emplace_back(NewTree(s_trees1[i]));
-        subroots.emplace_back(NewTree(s_trees2[i]));
+        roots.emplace_back(NewBinaryTree(s_trees1[i]));
+        subroots.emplace_back(NewBinaryTree(s_trees2[i]));
     }
 
     EXPECT_TRUE(solution.Solution1(roots[0], subroots[0]));
@@ -581,8 +581,8 @@ TEST(BinaryTreeTest, IsSubtreeTest) {
     EXPECT_FALSE(solution.Solution3(roots[3], subroots[3]));
 
     for (int i = 0; i < s_trees1.size(); ++i) {
-        DeleteTree(roots[i]);
-        DeleteTree(subroots[i]);
+        DeleteBinaryTree(roots[i]);
+        DeleteBinaryTree(subroots[i]);
     }
 }
 
@@ -601,7 +601,7 @@ TEST(BinaryTreeTest, Tree2StrTest) {
 
     std::vector<TreeNode *> roots;
     for (auto &s_tree : s_trees) {
-        roots.emplace_back(NewTree(s_tree));
+        roots.emplace_back(NewBinaryTree(s_tree));
     }
 
     EXPECT_EQ(solution.Solution1(roots[0]), results[0]);
@@ -611,7 +611,38 @@ TEST(BinaryTreeTest, Tree2StrTest) {
     EXPECT_EQ(solution.Solution2(roots[1]), results[1]);
 
     for (TreeNode *root : roots) {
-        DeleteTree(root);
+        DeleteBinaryTree(root);
+    }
+}
+
+TEST(NAryTreeTest, PreorderTest) {
+    Preorder solution;
+
+    std::vector<std::vector<std::string>> s_trees{
+        { "1","null","3","2","4","null","5","6" },
+        { "1","null","2","3","4","5","null","null","6","7","null","8","null","9","10","null","null","11","null","12","null","13","null","null","14" },
+    };
+
+    std::vector<std::vector<int>> results{
+        { 1,3,5,6,2,4 },
+        { 1,2,3,6,7,11,14,4,8,12,5,9,13,10 },
+    };
+    std::vector<Node *> roots;
+    for (auto &s_tree : s_trees) {
+        roots.emplace_back(NewNAryTree(s_tree));
+    }
+
+    EXPECT_EQ(solution.Solution1(roots[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(roots[1]), results[1]);
+
+    EXPECT_EQ(solution.Solution2(roots[0]), results[0]);
+    EXPECT_EQ(solution.Solution2(roots[1]), results[1]);
+
+    EXPECT_EQ(solution.Solution3(roots[0]), results[0]);
+    EXPECT_EQ(solution.Solution3(roots[1]), results[1]);
+
+    for (Node *root : roots) {
+        DeleteNAryTree(root);
     }
 }
 
