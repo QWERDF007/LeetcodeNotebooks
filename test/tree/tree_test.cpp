@@ -646,5 +646,33 @@ TEST(NAryTreeTest, PreorderTest) {
     }
 }
 
+TEST(BinaryTreeTest, AverageOfLevelsTest) {
+    AverageOfLevels solution;
+    std::vector<std::vector<std::string>> s_trees{
+        { "3","9","20","null","null","15","7" },
+        { "3","9","20","15","7" },
+    };
+
+    std::vector<std::vector<double>> results{
+        { 3.00000,14.50000,11.00000 },
+        { 3.00000,14.50000,11.00000 },
+    };
+
+    std::vector<TreeNode *> roots;
+    for (auto &s_tree : s_trees) {
+        roots.emplace_back(NewBinaryTree(s_tree));
+    }
+
+    EXPECT_EQ(solution.Solution1(roots[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(roots[1]), results[1]);
+
+    EXPECT_EQ(solution.Solution2(roots[0]), results[0]);
+    EXPECT_EQ(solution.Solution2(roots[1]), results[1]);
+
+    for (TreeNode *root : roots) {
+        DeleteBinaryTree(root);
+    }
+}
+
 } // namespace test
 } // namespace leetcode
