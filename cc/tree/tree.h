@@ -860,5 +860,49 @@ public:
     std::string Solution2(TreeNode *root);
 };
 
+
+class AverageOfLevels : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 深度优先搜索 (DFS)
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(h)
+     * @param root 二叉树根节点
+     * @return std::vector<double> 二叉树层平均值
+     */
+    std::vector<double> Solution1(TreeNode *root);
+
+    /**
+     * @brief 广度优先搜索 (BFS)
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param root 二叉树根节点
+     * @return std::vector<double> 二叉树层平均值
+     */
+    std::vector<double> Solution2(TreeNode *root);
+
+private:
+
+    /**
+     * @brief 深度优先搜索计算层节点数和节点值之和
+     * 
+     * @param root 二叉树根节点
+     * @param level 层
+     * @param counts 每层的节点数
+     * @param sums 每层的节点值之和
+     */
+    void Dfs(TreeNode *root, int level, std::vector<int> &counts, std::vector<double> &sums);
+};
+
 } // namespace tree
 } // namespace leetcode

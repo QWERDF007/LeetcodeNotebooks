@@ -32,6 +32,7 @@ void TreeSolution(int pid) {
         case SolutionsId::IS_SUBTREE: solution = new IsSubtree(); break;
         case SolutionsId::PREORDER: solution = new Preorder(); break;
         case SolutionsId::TREE_2_STR: solution = new Tree2Str(); break;
+        case SolutionsId::AVERAGE_OF_LEVELS: solution = new AverageOfLevels(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
 	}
 
@@ -1951,6 +1952,100 @@ std::string Tree2Str::Solution2(TreeNode *root) {
         }
     }
     return ans.substr(1, ans.size() - 2);
+}
+
+
+std::string AverageOfLevels::Title() {
+    return "637. 二叉树的层平均值\n";
+}
+
+std::string AverageOfLevels::Problem() {
+    return "给定一个非空二叉树的根节点 root, 以数组的形式返回每一层节点的平均值。与实际答案相差 10-5 以内的答案可以被接受。\n";
+}
+
+std::string AverageOfLevels::Link() {
+    return "https://leetcode-cn.com/problems/average-of-levels-in-binary-tree/";
+}
+
+std::string AverageOfLevels::Solution() {
+    return "DFS，时间：O(n)，空间：O(h)，h 为二叉树高度。\n";
+}
+
+void AverageOfLevels::Benchmark() {
+    AverageOfLevels solution;
+    TreeNode *root = NewRandomBinaryTree(1e4, INT_MIN, INT_MAX);
+
+    benchmark::RegisterBenchmark("BM_AverageOfLevels_DFS", [](benchmark::State &state, AverageOfLevels solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution1(root);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_AverageOfLevels_BFS", [](benchmark::State &state, AverageOfLevels solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution2(root);
+        }
+    }, solution, root);
+
+    //DeleteBinaryTree(root);
+}
+
+std::vector<double> AverageOfLevels::Solution1(TreeNode *root) {
+    std::vector<double> ans, sums;
+    std::vector<int> counts;
+    Dfs(root, 0, counts, sums);
+    int n = counts.size();
+    for (int i = 0; i < n; ++i) {
+        ans.emplace_back(sums[i] / counts[i]);
+    }
+    return ans;
+}
+
+std::vector<double> AverageOfLevels::Solution2(TreeNode *root) {
+    std::vector<double> ans;
+    if (root == nullptr) {
+        return ans;
+    }
+    std::queue<TreeNode *> q;
+    q.emplace(root);
+    while (!q.empty()) {
+        int n = q.size();
+        double sum = 0;
+        for (int i = 0; i < n; ++i) {
+            TreeNode *cur = q.front();
+            q.pop();
+            sum += cur->val;
+            if (cur->left) {
+                q.emplace(cur->left);
+            }
+            if (cur->right) {
+                q.emplace(cur->right);
+            }
+        }
+        ans.emplace_back(sum / n);
+    }
+    return ans;
+}
+
+void AverageOfLevels::Dfs(TreeNode *root, int level, std::vector<int> &counts, std::vector<double> &sums) {
+    if (root == nullptr) {
+        return;
+    }
+
+    if (level < counts.size()) {
+        ++counts[level];
+    }
+    else {
+        counts.emplace_back(1);
+    }
+    if (level < sums.size()) {
+        sums[level] += root->val;
+    }
+    else {
+        sums.emplace_back(root->val);
+    }
+    Dfs(root->left, level + 1, counts, sums);
+    Dfs(root->right, level + 1, counts, sums);
 }
 
 
