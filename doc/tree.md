@@ -4,7 +4,7 @@
 | 110. [平衡二叉树](#平衡二叉树)                     | 111. [二叉树的最小深度](#二叉树的最小深度)                 | 112. [路径总和](#路径总和)                 | 226. [翻转二叉树](#翻转二叉树)           |
 | 156. [上下翻转二叉树](#上下翻转二叉树)             | 235. [二叉搜索树的最近公共祖先](#二叉搜索树的最近公共祖先) | 257. [二叉树的所有路径](#二叉树的所有路径) | 404. [左叶子之和](#左叶子之和)           |
 | 501. [二叉搜索树中的众数](#二叉搜索树中的众数)     | 563. [二叉树的坡度](#二叉树的坡度)                         | 572. [另一棵树的子树](#另一棵树的子树)     | 589. [N叉树的前序遍历](#N叉树的前序遍历) |
-| 606. [根据二叉树创建字符串](#根据二叉树创建字符串) |                                                            |                                            |                                          |
+| 606. [根据二叉树创建字符串](#根据二叉树创建字符串) | 637. [二叉树的层平均值](#二叉树的层平均值)                 |                                            |                                          |
 
 
 
@@ -1706,6 +1706,97 @@ public:
             }
         }
         return ans.substr(1, ans.size() - 2);
+    }
+};
+```
+
+
+
+# 二叉树的层平均值
+
+- [链接](https://leetcode-cn.com/problems/average-of-levels-in-binary-tree/)
+- [code]((../cc/tree/binary_tree.h))
+
+> 给定一个非空二叉树的根节点 root, 以数组的形式返回每一层节点的平均值。与实际答案相差 10-5 以内的答案可以被接受。
+
+## 深度优先搜索
+
+利用深度优先搜索计算每层的平均值，需要记录两个每层的节点数量和节点之和。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，n 为节点数，需要遍历全部节点
+- 空间复杂度：$O(h)$，h 为二叉树高度，存储每层节点数量和节点之和的空间 $O(h)$，递归调用堆栈空间 $O(h)$
+
+```c++
+class Solution {
+public:
+    vector<double> averageOfLevels(TreeNode* root) {
+        vector<double> ans, sums;
+        vector<int> counts;
+        dfs(root, 0, counts, sums);
+        for (int i = 0; i < counts.size(); ++i) {
+            ans.emplace_back(sums[i] / counts[i]);
+        }
+        return ans;
+    }
+
+    void dfs(TreeNode *root, int level, vector<int> &counts, vector<double> &sums) {
+        if (root == nullptr) {
+            return;
+        }
+        if (level < counts.size()) {
+            ++counts[level];
+        } else {
+            counts.emplace_back(1);
+        }
+        if (level < sums.size()) {
+            sums[level] += root->val;
+        } else {
+            sums.emplace_back(root->val);
+        }
+        dfs(root->left, level + 1, counts, sums);
+        dfs(root->right, level + 1, counts, sums);
+    }
+};
+```
+
+## 广度优先搜索
+
+使用广度优先搜索计算每层的平均值，利用队列访问每一层的全部节点，计算每层的节点的平均值。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，需要遍历全部节点
+- 空间复杂度：$O(n)$，队列存储节点空间
+
+```c++
+class Solution {
+public:
+    vector<double> averageOfLevels(TreeNode* root) {
+        vector<double> ans;
+        if (root == nullptr) {
+            ans;
+        }
+        queue<TreeNode *> q;
+        q.emplace(root);
+        while (!q.empty()) {
+            int n = q.size();
+            double sum = 0;
+            for (int i = 0; i < n; ++i) {
+                TreeNode *cur = q.front();
+                q.pop();
+                sum += cur->val;
+                if (cur->left) {
+                    q.emplace(cur->left);
+                }
+                if (cur->right) {
+                    q.emplace(cur->right);
+                }
+            }
+            ans.emplace_back(sum / n);
+        }
+        return ans;
     }
 };
 ```
