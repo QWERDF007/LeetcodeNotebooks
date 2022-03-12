@@ -9,6 +9,10 @@ namespace tree {
 
 void TreeSolution(int pid);
 
+/**
+ * @brief 二叉树数据结构
+ * 
+ */
 struct TreeNode {
     int val;
     TreeNode *left;
@@ -18,7 +22,10 @@ struct TreeNode {
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
-
+/**
+ * @brief n 叉树数据结构
+ * 
+ */
 class Node {
 public:
     int val;
@@ -127,6 +134,10 @@ void DeleteNAryTree(Node *root);
  */
 Node *NewRandomNAryTree(int n, int a, int b);
 
+/**
+ * @brief 144. 二叉树的前序遍历
+ * 
+ */
 class PreorderTraversal : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -151,7 +162,7 @@ public:
     /**
      * @brief 迭代前序遍历，模拟递归
      * 时间复杂度：O(n)
-     * 空间复杂度：O(n)
+     * 空间复杂度：O(h)
      * @param root 二叉树根节点
      * @return std::vector<int> 前序遍历结果
      */
@@ -167,6 +178,10 @@ public:
     std::vector<int> Solution3(TreeNode *root);
 };
 
+/**
+ * @brief 94. 二叉树的中序遍历
+ * 
+ */
 class InorderTraversal : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -191,7 +206,7 @@ public:
     /**
      * @brief 迭代中序遍历，stack 模拟递归
      * 时间复杂度：O(n)
-     * 空间复杂度：O(1)
+     * 空间复杂度：O(h)
      * @param root 二叉树根节点
      * @return std::vector<int> 中序遍历结果
      */
@@ -207,6 +222,10 @@ public:
     std::vector<int> Solution3(TreeNode *root);
 };
 
+/**
+ * @brief 145. 二叉树的后序遍历
+ * 
+ */
 class PostorderTraversal : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -231,7 +250,7 @@ public:
     /**
      * @brief 迭代后序遍历
      * 时间复杂度：O(n)
-     * 空间复杂度：O(n)
+     * 空间复杂度：O(h)
      * @param root 二叉树根节点
      * @return std::vector<int> 后序遍历结果
      */
@@ -250,6 +269,10 @@ private:
     void AddPath(TreeNode *root, std::vector<int> &res);
 };
 
+/**
+ * @brief 100. 相同的树
+ * 
+ */
 class IsSameTree : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -285,6 +308,10 @@ public:
     bool Solution2(TreeNode *p, TreeNode *q);
 };
 
+/**
+ * @brief 110. 平衡二叉树
+ * 
+ */
 class IsBalanced : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -321,6 +348,10 @@ private:
     int Height(TreeNode *root);
 };
 
+/**
+ * @brief 111. 二叉树的最小深度
+ * 
+ */
 class MinDepth : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -352,28 +383,10 @@ public:
     int Solution2(TreeNode *root);
 };
 
-class UpsideDownBinaryTree : public LeetcodeSolution {
-public:
-    std::string Title() override;
-
-    std::string Problem() override;
-
-    std::string Link() override;
-
-    std::string Solution() override;
-
-    void Benchmark() override;
-
-    /**
-     * @brief 层序遍历
-     * 时间复杂度：O(h)
-     * 空间复杂度：O(1)
-     * @param root 二叉树根节点
-     * @return TreeNode* 翻转后的二叉树根节点
-     */
-    TreeNode *Solution1(TreeNode *root);
-};
-
+/**
+ * @brief 112. 路径总和
+ * 
+ */
 class HasPathSum : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -420,6 +433,36 @@ public:
     bool Solution3(TreeNode *root, int targetSum);
 };
 
+/**
+ * @brief 156. 上下翻转二叉树
+ * 
+ */
+class UpsideDownBinaryTree : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 层序遍历
+     * 时间复杂度：O(h)
+     * 空间复杂度：O(1)
+     * @param root 二叉树根节点
+     * @return TreeNode* 翻转后的二叉树根节点
+     */
+    TreeNode *Solution1(TreeNode *root);
+};
+
+/**
+ * @brief 226. 翻转二叉树
+ * 
+ */
 class InvertTree : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -451,7 +494,10 @@ public:
     TreeNode *Solution2(TreeNode *root);
 };
 
-
+/**
+ * @brief 235. 二叉搜索树的最近公共祖先
+ * 
+ */
 class LowestCommonAncestor : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -497,6 +543,10 @@ private:
     std::vector<TreeNode *> GetPath(TreeNode *root, TreeNode *target);
 };
 
+/**
+ * @brief 257. 二叉树的所有路径
+ * 
+ */
 class BinaryTreePaths : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -538,6 +588,10 @@ private:
     void TreePaths(TreeNode *root, std::vector<std::string> &paths, std::string path);
 };
 
+/**
+ * @brief 404. 左叶子之和
+ * 
+ */
 class SumOfLeftLeaves : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -579,6 +633,10 @@ private:
     bool IsLeafNode(TreeNode *node);
 };
 
+/**
+ * @brief 501. 二叉搜索树中的众数
+ * 
+ */
 class FindMode : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -612,7 +670,7 @@ public:
     /**
      * @brief 迭代
      * 时间复杂度：O(n)
-     * 空间复杂度：O(n)
+     * 空间复杂度：O(h)
      * @param root 二叉搜索树根节点
      * @return std::vector<int> 众数
      */
@@ -642,6 +700,10 @@ private:
     void Update(int num, int &count, int &max_count, int &base, std::vector<int> &ans);
 };
 
+/**
+ * @brief 563. 二叉树的坡度
+ * 
+ */
 class FindTilt : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -674,6 +736,10 @@ private:
     int Dfs(TreeNode *root, int &res);
 };
 
+/**
+ * @brief 572. 另一棵树的子树
+ * 
+ */
 class IsSubtree : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -780,6 +846,10 @@ private:
     void TreeHash(TreeNode *root, std::unordered_map<TreeNode *, Status> &hash);
 };
 
+/**
+ * @brief 589. N叉树的前序遍历
+ * 
+ */
 class Preorder : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -804,7 +874,7 @@ public:
     /**
      * @brief 迭代
      * 时间复杂度：O(n)
-     * 空间复杂度：O(n)
+     * 空间复杂度：O(h)
      * @param root n叉树根节点
      * @return std::vector<int> 先序遍历结果
      */
@@ -813,7 +883,7 @@ public:
     /**
      * @brief 迭代优化
      * 时间复杂度：O(n)
-     * 空间复杂度：O(n)
+     * 空间复杂度：O(h)
      * @param root n叉树根节点
      * @return std::vector<int> 先序遍历结果
      */
@@ -827,6 +897,68 @@ private:
      * @param res 先序遍历结果
      */
     void PreorderTraversal(Node *root, std::vector<int> &res);
+};
+
+/**
+ * @brief 590. N叉树的后序遍历
+ * 
+ */
+class Postorder : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 递归
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(h)
+     * @param root n叉树根节点
+     * @return std::vector<int> 后序遍历结果
+     */
+    std::vector<int> Solution1(Node *root);
+
+    /**
+     * @brief 迭代
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(h)
+     * @param root n叉树根节点
+     * @return std::vector<int> 后序遍历结果
+     */
+    std::vector<int> Solution2(Node *root);
+
+    /**
+     * @brief 迭代优化
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(h)
+     * @param root n叉树根节点
+     * @return std::vector<int> 后序遍历结果
+     */
+    std::vector<int> Solution3(Node *root);
+
+    /**
+     * @brief 伪先序遍历反转
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(h)
+     * @param root n叉树根节点
+     * @return std::vector<int> 后序遍历结果
+     */
+    std::vector<int> Solution4(Node *root);
+
+private:
+    /**
+     * @brief n 叉树后序遍历递归
+     * 
+     * @param root n叉树根节点
+     * @param res 后序遍历结果
+     */
+    void PostorderTraversal(Node *root, std::vector<int> &res);
 };
 
 class Tree2Str : public LeetcodeSolution {
@@ -853,7 +985,7 @@ public:
     /**
      * @brief 迭代
      * 时间复杂度：O(n)
-     * 空间复杂度：O(n)
+     * 空间复杂度：O(h)
      * @param root 二叉树根节点
      * @return std::string 二叉树字符串
      */

@@ -31,6 +31,7 @@ void TreeSolution(int pid) {
         case SolutionsId::FIND_TILT: solution = new FindTilt(); break;
         case SolutionsId::IS_SUBTREE: solution = new IsSubtree(); break;
         case SolutionsId::PREORDER: solution = new Preorder(); break;
+        case SolutionsId::POSTORDER: solution = new Postorder(); break;
         case SolutionsId::TREE_2_STR: solution = new Tree2Str(); break;
         case SolutionsId::AVERAGE_OF_LEVELS: solution = new AverageOfLevels(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
@@ -1853,7 +1854,7 @@ std::vector<int> Preorder::Solution3(Node *root) {
         Node *cur = stk.top();
         stk.pop();
         ans.emplace_back(cur->val);
-        // 从右往左将子节点入栈，每层的最左的子节点会在堆栈顶部
+        // 从右往左将子节点入栈，每组子节点的最左的子节点会在堆栈顶部
         for (auto it = cur->children.rbegin(); it != cur->children.rend(); ++it) {
             stk.emplace(*it);
         }
@@ -1869,6 +1870,151 @@ void Preorder::PreorderTraversal(Node *root, std::vector<int> &res) {
     for (Node *child : root->children) {
         PreorderTraversal(child, res);
     }
+}
+
+
+
+std::string Postorder::Title() {
+    return "590. N叉树的后序遍历\n";
+}
+
+std::string Postorder::Problem() {
+    return 
+        "给定一个 n 叉树的根节点 root ，返回其节点值的后序遍历。\n"
+        "n 叉树在输入中按层序遍历进行序列化表示，每组子节点由空值 null 分隔（请参见示例）。\n";
+}
+
+std::string Postorder::Link() {
+    return "https://leetcode-cn.com/problems/n-ary-tree-postorder-traversal/";
+}
+
+std::string Postorder::Solution() {
+    return "递归，时间：O(n)，空间：O(h)，h 为 n 叉树高度。\n";
+}
+
+void Postorder::Benchmark() {
+    Postorder solution;
+
+    Node *root = NewRandomNAryTree(1e4, 0, 1e4);
+
+    benchmark::RegisterBenchmark("BM_Postorder_Recursion", [](benchmark::State &state, Postorder solution, Node *root) {
+        for (auto _ : state) {
+            solution.Solution1(root);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_Postorder_Iteration", [](benchmark::State &state, Postorder solution, Node *root) {
+        for (auto _ : state) {
+            solution.Solution2(root);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_Postorder_RIteration", [](benchmark::State &state, Postorder solution, Node *root) {
+        for (auto _ : state) {
+            solution.Solution3(root);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_Postorder_PreorderReverse", [](benchmark::State &state, Postorder solution, Node *root) {
+        for (auto _ : state) {
+            solution.Solution4(root);
+        }
+    }, solution, root);
+
+    //DeleteNAryTree(root);
+}
+
+std::vector<int> Postorder::Solution1(Node *root) {
+    std::vector<int> ans;
+    PostorderTraversal(root, ans);
+    return ans;
+}
+
+std::vector<int> Postorder::Solution2(Node *root) {
+    std::vector<int> ans;
+    if (root == nullptr) {
+        return ans;
+    }
+    std::stack<Node *> stk;
+    std::unordered_map<Node *, int> cnt;
+    Node *cur = root;
+    while (cur || !stk.empty()) {
+        while (cur) {
+            stk.emplace(cur);
+            if (cur->children.size() > 0) { // 访问第一个子节点
+                cnt[cur] = 0;
+                cur = cur->children[0];
+            } else {
+                cur = nullptr;
+            }
+        }
+        cur = stk.top();
+        int index = (cnt.count(cur) ? cnt[cur] : -1) + 1;
+        if (index < cur->children.size()) { // 访问下一个子节点
+            cnt[cur] = index;
+            cur = cur->children[index];
+        } else {
+            ans.emplace_back(cur->val);
+            stk.pop();
+            cnt.erase(cur);
+            cur = nullptr;
+        }
+    }
+    return ans;
+}
+
+std::vector<int> Postorder::Solution3(Node *root) {
+    std::vector<int> ans;
+    if (root == nullptr) {
+        return ans;
+    }
+    std::stack<Node *> stk;
+    std::unordered_set<Node *> visited;
+    stk.emplace(root);
+    while (!stk.empty()) {
+        Node *cur = stk.top();
+        // 当前节点是叶子节点或已经访问过其子节点
+        if (cur->children.size() == 0 || visited.count(cur)) {
+            ans.emplace_back(cur->val);
+            stk.pop();
+        } else {
+            // 反向，从右向左将子节点入栈，出栈时栈顶为最左的子节点
+            for (auto it = cur->children.rbegin(); it != cur->children.rend(); ++it) {
+                stk.emplace(*it);
+            }
+            visited.emplace(cur);
+        }
+    }
+    return ans;
+}
+
+std::vector<int> Postorder::Solution4(Node *root) {
+    std::vector<int> ans;
+    if (root == nullptr) {
+        return ans;
+    }
+    std::stack<Node *> stk;
+    stk.emplace(root);
+    while (!stk.empty()) {
+        Node *cur = stk.top();
+        stk.pop();
+        ans.emplace_back(cur->val);
+        for (Node *child : cur->children) {
+            stk.emplace(child);
+        }
+    }
+    std::reverse(ans.begin(), ans.end());
+    return ans;
+}
+
+void Postorder::PostorderTraversal(Node *root, std::vector<int> &res) {
+    if (root == nullptr) {
+        return;
+    }
+    for (Node *child : root->children) {
+        PostorderTraversal(child, res);
+    }
+    res.emplace_back(root->val);
 }
 
 
@@ -2047,6 +2193,7 @@ void AverageOfLevels::Dfs(TreeNode *root, int level, std::vector<int> &counts, s
     Dfs(root->left, level + 1, counts, sums);
     Dfs(root->right, level + 1, counts, sums);
 }
+
 
 
 } // namespace tree
