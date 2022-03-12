@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
             exit(EXIT_SUCCESS);
         }
         
-        if (opts.count("list")) {
+        if (opts["list"].as<bool>()) {
             int total = 0;
             std::map<ProblemType, std::vector<SolutionsId>> counts;
             for (auto &[pid, type] : kPidToType) {
@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
                 if (finded != kTypeToStr.end()) {
                     std::cout << finded->second << " (" << pids.size() << "):\n";
                     for (auto pid : pids) {
-                        std::cout << static_cast<int>(pid) << " ";
+                        std::cout << pid << " ";
                     }
                     std::cout << std::endl << std::endl;
                 }
@@ -76,9 +76,7 @@ int main(int argc, char* argv[]) {
             exit(EXIT_SUCCESS);
         }
 
-
-
-        if (opts.count("all")) {
+        if (opts["all"].as<bool>()) {
             int total = 0;
             for (auto &[pid, type] : kPidToType) {
                 run(type, pid);
