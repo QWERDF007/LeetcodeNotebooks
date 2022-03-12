@@ -103,6 +103,7 @@ enum SolutionsId {
     FIND_TILT = 563,
     IS_SUBTREE = 572,
     PREORDER = 589,
+    POSTORDER = 590,
     TREE_2_STR = 606,
     AVERAGE_OF_LEVELS = 637,
     KNIGHT_PROBABILITY = 688,
