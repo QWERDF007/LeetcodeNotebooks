@@ -586,35 +586,6 @@ TEST(BinaryTreeTest, IsSubtreeTest) {
     }
 }
 
-TEST(BinaryTreeTest, Tree2StrTest) {
-    Tree2Str solution;
-
-    std::vector<std::vector<std::string>> s_trees{
-        { "1","2","3","4" },
-        { "1","2","3","null","4" },
-    };
-
-    std::vector<std::string> results{
-        "1(2(4))(3)",
-        "1(2()(4))(3)",
-    };
-
-    std::vector<TreeNode *> roots;
-    for (auto &s_tree : s_trees) {
-        roots.emplace_back(NewBinaryTree(s_tree));
-    }
-
-    EXPECT_EQ(solution.Solution1(roots[0]), results[0]);
-    EXPECT_EQ(solution.Solution1(roots[1]), results[1]);
-
-    EXPECT_EQ(solution.Solution2(roots[0]), results[0]);
-    EXPECT_EQ(solution.Solution2(roots[1]), results[1]);
-
-    for (TreeNode *root : roots) {
-        DeleteBinaryTree(root);
-    }
-}
-
 TEST(NAryTreeTest, PreorderTest) {
     Preorder solution;
 
@@ -645,6 +616,71 @@ TEST(NAryTreeTest, PreorderTest) {
         DeleteNAryTree(root);
     }
 }
+
+TEST(NAryTreeTest, PostorderTest) {
+    Postorder solution;
+
+    std::vector<std::vector<std::string>> s_trees{
+        { "1","null","3","2","4","null","5","6" },
+        { "1","null","2","3","4","5","null","null","6","7","null","8","null","9","10","null","null","11","null","12","null","13","null","null","14" },
+    };
+
+    std::vector<Node *> roots;
+    for (auto &s_tree : s_trees) {
+        roots.emplace_back(NewNAryTree(s_tree));
+    }
+
+    std::vector<std::vector<int>> results{
+        { 5,6,3,2,4,1 },
+        { 2,6,14,11,7,3,12,8,4,13,9,10,5,1 },
+    };
+
+    EXPECT_EQ(solution.Solution1(roots[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(roots[1]), results[1]);
+
+    EXPECT_EQ(solution.Solution2(roots[0]), results[0]);
+    EXPECT_EQ(solution.Solution2(roots[1]), results[1]);
+
+    EXPECT_EQ(solution.Solution3(roots[0]), results[0]);
+    EXPECT_EQ(solution.Solution3(roots[1]), results[1]);
+
+    EXPECT_EQ(solution.Solution4(roots[0]), results[0]);
+    EXPECT_EQ(solution.Solution4(roots[1]), results[1]);
+
+    for (Node *root : roots) {
+        DeleteNAryTree(root);
+    }
+}
+
+TEST(BinaryTreeTest, Tree2StrTest) {
+    Tree2Str solution;
+
+    std::vector<std::vector<std::string>> s_trees{
+        { "1","2","3","4" },
+        { "1","2","3","null","4" },
+    };
+
+    std::vector<std::string> results{
+        "1(2(4))(3)",
+        "1(2()(4))(3)",
+    };
+
+    std::vector<TreeNode *> roots;
+    for (auto &s_tree : s_trees) {
+        roots.emplace_back(NewBinaryTree(s_tree));
+    }
+
+    EXPECT_EQ(solution.Solution1(roots[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(roots[1]), results[1]);
+
+    EXPECT_EQ(solution.Solution2(roots[0]), results[0]);
+    EXPECT_EQ(solution.Solution2(roots[1]), results[1]);
+
+    for (TreeNode *root : roots) {
+        DeleteBinaryTree(root);
+    }
+}
+
 
 TEST(BinaryTreeTest, AverageOfLevelsTest) {
     AverageOfLevels solution;
