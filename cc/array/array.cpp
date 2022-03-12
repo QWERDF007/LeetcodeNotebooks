@@ -17,7 +17,7 @@
 namespace leetcode {
 namespace array{
 
-void ArraySolution(int pid) {
+void ArraySolution(SolutionsId pid) {
     LeetcodeSolution* solution = nullptr;
     switch (pid) {
         case SolutionsId::TWO_SUM: solution = new TwoSum(); break;
@@ -153,13 +153,13 @@ void RemoveDuplicates::Benchmark() {
         }
     }
 
-    benchmark::RegisterBenchmark("BM_TwoSum_BruteForceSearch", [](benchmark::State& state, RemoveDuplicates solution, std::vector<int> nums) {
+    benchmark::RegisterBenchmark("BM_RemoveDuplicates_BruteForceSearch", [](benchmark::State& state, RemoveDuplicates solution, std::vector<int> nums) {
         for (auto _ : state) {
             solution.Solution1(nums);
         }
     }, solution, nums);
 
-    benchmark::RegisterBenchmark("BM_TwoSum_TwoPointers", [](benchmark::State& state, RemoveDuplicates solution, std::vector<int> nums) {
+    benchmark::RegisterBenchmark("BM_RemoveDuplicates_TwoPointers", [](benchmark::State& state, RemoveDuplicates solution, std::vector<int> nums) {
         for (auto _ : state) {
             solution.Solution2(nums);
         }
@@ -550,13 +550,13 @@ void Intersect::Benchmark() {
         nums2[i] = dis(gen);
     }
 
-    benchmark::RegisterBenchmark("BM_Intersection_HashTable", [](benchmark::State& state, Intersect solution, std::vector<int> nums1, std::vector<int> nums2) {
+    benchmark::RegisterBenchmark("BM_Intersect_HashTable", [](benchmark::State& state, Intersect solution, std::vector<int> nums1, std::vector<int> nums2) {
         for (auto _ : state) {
             solution.Solution1(nums1, nums2);
         }
     }, solution, nums1, nums2);
 
-    benchmark::RegisterBenchmark("BM_Intersection_SortTwoPointers", [](benchmark::State& state, Intersect solution, std::vector<int> nums1, std::vector<int> nums2) {
+    benchmark::RegisterBenchmark("BM_Intersect_SortTwoPointers", [](benchmark::State& state, Intersect solution, std::vector<int> nums1, std::vector<int> nums2) {
         for (auto _ : state) {
             solution.Solution2(nums1, nums2);
         }

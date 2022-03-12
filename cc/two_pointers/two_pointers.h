@@ -6,7 +6,7 @@
 namespace leetcode {
 namespace tp {
 
-void TwoPointersSolution(int pid);
+void TwoPointersSolution(SolutionsId pid);
 
 class PushDominoes : public LeetcodeSolution {
 public:

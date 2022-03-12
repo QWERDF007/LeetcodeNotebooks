@@ -13,7 +13,7 @@ namespace array{
  *
  * @param pid 数组题目id
  */
-void ArraySolution(int pid);
+void ArraySolution(SolutionsId pid);
 
 
 class TwoSum : public LeetcodeSolution {

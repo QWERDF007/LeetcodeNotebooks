@@ -7,7 +7,7 @@
 namespace leetcode {
 namespace graph {
 
-void GraphSolution(int pid) {
+void GraphSolution(SolutionsId pid) {
     LeetcodeSolution *solution = nullptr;
     switch (pid) {
         case SolutionsId::FIND_CENTER: solution = new FindCenter(); break;

@@ -8,7 +8,7 @@
 namespace leetcode {
 namespace greedy {
 
-void GreedyAlgorithmSolution(int pid) {
+void GreedyAlgorithmSolution(SolutionsId pid) {
     LeetcodeSolution *solution = nullptr;
     switch (pid) {
         case SolutionsId::FIND_CONTENT_CHILDREN: solution = new FindContentChildren(); break;

@@ -9,7 +9,7 @@
 namespace leetcode {
 namespace linkedlist {
 
-void LinkedListSolution(int pid) {
+void LinkedListSolution(SolutionsId pid) {
 	LeetcodeSolution* solution = nullptr;
 	switch (pid) {
 		case SolutionsId::ADD_TWO_NUMBERS: solution = new AddTwoNumbers(); break;

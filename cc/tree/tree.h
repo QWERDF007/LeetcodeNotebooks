@@ -7,7 +7,7 @@
 namespace leetcode {
 namespace tree {
 
-void TreeSolution(int pid);
+void TreeSolution(SolutionsId pid);
 
 /**
  * @brief 二叉树数据结构

@@ -6,9 +6,9 @@
 namespace leetcode {
 namespace dp {
 
-void DynamicProgrammingSolution(int pid) {
+void DynamicProgrammingSolution(SolutionsId pid) {
     LeetcodeSolution *solution = nullptr;
-    switch (pid) {
+    switch (SolutionsId(pid)) {
         case SolutionsId::KNIGHT_PROBABILITY: solution = new KnightProbability(); break;
         default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
     }

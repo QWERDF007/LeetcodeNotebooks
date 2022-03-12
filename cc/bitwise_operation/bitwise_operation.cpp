@@ -5,7 +5,7 @@
 namespace leetcode {
 namespace bit {
 
-void BitwiseOperationSolution(int pid) {
+void BitwiseOperationSolution(SolutionsId pid) {
     LeetcodeSolution *solution = nullptr;
     switch (pid) {
         case SolutionsId::HAMMING_WEIGHT: solution = new HammingWeight(); break;

@@ -14,7 +14,7 @@ namespace str {
  *
  * @param pid 字符串题目id
  */
-void StrSolution(int pid);
+void StrSolution(SolutionsId pid);
 
 
 class RomanToInt : public LeetcodeSolution {

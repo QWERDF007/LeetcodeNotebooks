@@ -7,7 +7,7 @@
 namespace leetcode {
 namespace graph {
 
-void GraphSolution(int pid);
+void GraphSolution(SolutionsId pid);
 
 class FindCenter : public LeetcodeSolution {
 public:

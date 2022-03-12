@@ -6,7 +6,7 @@
 namespace leetcode {
 namespace dp {
 
-void DynamicProgrammingSolution(int pid);
+void DynamicProgrammingSolution(SolutionsId pid);
 
 class KnightProbability : public LeetcodeSolution {
 public:

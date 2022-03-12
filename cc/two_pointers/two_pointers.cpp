@@ -7,7 +7,7 @@
 namespace leetcode {
 namespace tp {
 
-void TwoPointersSolution(int pid) {
+void TwoPointersSolution(SolutionsId pid) {
     LeetcodeSolution *solution = nullptr;
     switch (pid) {
         case SolutionsId::PUSH_DOMINOES: solution = new PushDominoes(); break;

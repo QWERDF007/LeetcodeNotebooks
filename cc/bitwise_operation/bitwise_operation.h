@@ -6,7 +6,7 @@
 namespace leetcode {
 namespace bit {
 
-void BitwiseOperationSolution(int pid);
+void BitwiseOperationSolution(SolutionsId pid);
 
 class HammingWeight : public LeetcodeSolution {
 public:

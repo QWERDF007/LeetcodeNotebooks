@@ -12,7 +12,7 @@ namespace leetcode {
 namespace str {
 
 
-void StrSolution(int pid) {
+void StrSolution(SolutionsId pid) {
     LeetcodeSolution *solution = nullptr;
     switch (pid) {
         case SolutionsId::ROMAN_TO_INT: solution = new RomanToInt(); break;

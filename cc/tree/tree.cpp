@@ -12,7 +12,7 @@
 namespace leetcode {
 namespace tree {
 
-void TreeSolution(int pid) {
+void TreeSolution(SolutionsId pid) {
     LeetcodeSolution *solution = nullptr;
 	switch (pid) {
         case SolutionsId::PREORDER_TRAVERSAL: solution = new PreorderTraversal(); break;

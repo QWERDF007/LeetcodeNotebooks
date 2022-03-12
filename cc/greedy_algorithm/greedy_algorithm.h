@@ -6,7 +6,7 @@
 namespace leetcode {
 namespace greedy {
 
-void GreedyAlgorithmSolution(int pid);
+void GreedyAlgorithmSolution(SolutionsId pid);
 
 class FindContentChildren : public LeetcodeSolution {
 public:

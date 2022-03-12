@@ -6,7 +6,7 @@
 namespace leetcode {
 namespace linkedlist {
 
-void LinkedListSolution(int pid);
+void LinkedListSolution(SolutionsId pid);
 
 struct ListNode {
     int val;

@@ -6,7 +6,7 @@
 namespace leetcode {
 namespace math {
 
-void MathSolution(int pid);
+void MathSolution(SolutionsId pid);
 
 class IsPalindrome : public LeetcodeSolution {
 public:

@@ -12,7 +12,7 @@
 namespace leetcode {
 namespace math {
 
-void MathSolution(int pid) {
+void MathSolution(SolutionsId pid) {
     LeetcodeSolution *solution = nullptr;
 	switch (pid) {
         case SolutionsId::IS_PALINDROME: solution = new IsPalindrome(); break;
