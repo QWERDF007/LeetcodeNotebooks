@@ -1,10 +1,11 @@
-| :tiger:                                        | :cat:                                                      | :dog:                                              | :dragon:                                   |
-| ---------------------------------------------- | ---------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------ |
-| 144. [二叉树的前序遍历](#二叉树的前序遍历)     | 94.[二叉树的中序遍历](#二叉树的中序遍历)                   | 145. [二叉树的后序遍历](#二叉树的后序遍历)         | 100. [相同的树](#相同的树)                 |
-| 110. [平衡二叉树](#平衡二叉树)                 | 111. [二叉树的最小深度](#二叉树的最小深度)                 | 112. [路径总和](#路径总和)                         | 226. [翻转二叉树](#翻转二叉树)             |
-| 156. [上下翻转二叉树](#上下翻转二叉树)         | 235. [二叉搜索树的最近公共祖先](#二叉搜索树的最近公共祖先) | 257. [二叉树的所有路径](#二叉树的所有路径)         | 404. [左叶子之和](#左叶子之和)             |
-| 501. [二叉搜索树中的众数](#二叉搜索树中的众数) | 563. [二叉树的坡度](#二叉树的坡度)                         | 572. [另一棵树的子树](#另一棵树的子树)             | 589. [N叉树的前序遍历](#N叉树的前序遍历)   |
-| 590. [N叉树的后序遍历](#N叉树的后序遍历)       |                                                            | 606. [根据二叉树创建字符串](#根据二叉树创建字符串) | 637. [二叉树的层平均值](#二叉树的层平均值) |
+| :tiger:                                                | :cat:                                                      | :dog:                                              | :dragon:                                   |
+| ------------------------------------------------------ | ---------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------ |
+| 144. [二叉树的前序遍历](#二叉树的前序遍历)             | 94.[二叉树的中序遍历](#二叉树的中序遍历)                   | 145. [二叉树的后序遍历](#二叉树的后序遍历)         | 100. [相同的树](#相同的树)                 |
+| 110. [平衡二叉树](#平衡二叉树)                         | 111. [二叉树的最小深度](#二叉树的最小深度)                 | 112. [路径总和](#路径总和)                         | 226. [翻转二叉树](#翻转二叉树)             |
+| 156. [上下翻转二叉树](#上下翻转二叉树)                 | 235. [二叉搜索树的最近公共祖先](#二叉搜索树的最近公共祖先) | 257. [二叉树的所有路径](#二叉树的所有路径)         | 404. [左叶子之和](#左叶子之和)             |
+| 501. [二叉搜索树中的众数](#二叉搜索树中的众数)         | 563. [二叉树的坡度](#二叉树的坡度)                         | 572. [另一棵树的子树](#另一棵树的子树)             | 589. [N叉树的前序遍历](#N叉树的前序遍历)   |
+| 590. [N叉树的后序遍历](#N叉树的后序遍历)               |                                                            | 606. [根据二叉树创建字符串](#根据二叉树创建字符串) | 637. [二叉树的层平均值](#二叉树的层平均值) |
+| 653. [两数之和 IV - 输入 BST](#两数之和 IV - 输入 BST) |                                                            |                                                    |                                            |
 
 
 
@@ -1958,6 +1959,123 @@ public:
             ans.emplace_back(sum / n);
         }
         return ans;
+    }
+};
+```
+
+
+
+# 两数之和 IV - 输入 BST
+
+- [链接](https://leetcode-cn.com/problems/two-sum-iv-input-is-a-bst/)
+- [code]((../cc/tree/binary_tree.h))
+
+> 给定一个二叉搜索树 root 和一个目标结果 k，如果 BST 中存在两个元素且它们的和等于给定的目标结果，则返回 true。
+
+## 深度优先搜索+哈希集合
+
+使用深度优先搜索遍历整棵树，找出所有可能的组合，利用哈希集合存储节点值，遍历到一个节点时，在集合中查找是否存在 `k - num` 的值，如果存在则返回 `true`，否则将 `num` 加入到集合中，如果遍历完整棵树，都没找到满足的组合，则返回 `false`。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，遍历全部节点时间 $O(n)$，哈希集合查找操作时间 $O(1)$
+- 空间复杂度：$O(n)$，递归调用空间 $O(h)$，哈希集合空间 $O(n)$
+
+```c++
+class Solution {
+public:
+    bool findTarget(TreeNode* root, int k) {
+        unordered_set<int> set;
+        return find(root, k, set);
+    }
+
+    bool find(TreeNode *root, int k, unordered_set<int> &set) {
+        if (root == nullptr) {
+            return false;
+        }
+        if (set.count(k - root->val)) {
+            return true;
+        }
+        set.insert(root->val);
+        return find(root->left, k, set) || find(root->right, k, set);
+    }
+};
+```
+
+## 广度优先搜索+哈希集合
+
+可以使用广度优先搜索遍历节点，其他与深度优先搜索一致，查找哈希集合中是否存在 `k - num` 的值。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，遍历全部节点时间 $O(n)$，哈希集合查找操作时间 $O(1)$
+- 空间复杂度：$O(n)$，队列存储节点空间 $O(n)$，哈希集合空间 $O(n)$
+
+```c++
+class Solution {
+public:
+    bool findTarget(TreeNode* root, int k) {
+        if (root == nullptr) {
+            return false;
+        }
+        unordered_set<int> set;
+        queue<TreeNode *> q;
+        q.emplace(root);
+        while (!q.empty()) {
+            TreeNode *cur = q.front();
+            q.pop();
+            if (set.count(k - cur->val)) {
+                return true;
+            }
+            set.emplace(cur->val);
+            if (cur->left) {
+                q.emplace(cur->left);
+            }
+            if (cur->right) {
+                q.emplace(cur->right);
+            }
+        }
+        return false;
+    }
+};
+```
+
+## 中序遍历+双指针
+
+利用 BST 的中序遍历得到有序序列 `nums`，再通过双指针 `left` 和 `right` 分别从头部和尾部检索是否存在 `nums[left] + nums[right] == k` 的组合，如果存在则返回 `true`，否则返回 `false`。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，中序遍历时间 $O(n)$，双指针检索时间 $O(n)$
+- 空间复杂度：$O(n)$，存储遍历得到的有序序列空间
+
+```c++
+class Solution {
+public:
+    bool findTarget(TreeNode* root, int k) {
+        vector<int> nums;
+        inorder(root, nums);
+        int left = 0, right = nums.size() - 1;
+        while (left < right) {
+            int sum = nums[left] + nums[right];
+            if (sum == k) {
+                return true;
+            } else if (sum < k) {
+                ++left;
+            } else {
+                --right;
+            }
+        }
+        return false;
+    }
+
+    void inorder(TreeNode *root, vector<int> &res) {
+        if (root == nullptr) {
+            return;
+        }
+        inorder(root->left, res);
+        res.emplace_back(root->val);
+        inorder(root->right, res);
     }
 };
 ```
