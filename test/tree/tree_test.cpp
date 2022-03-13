@@ -710,5 +710,43 @@ TEST(BinaryTreeTest, AverageOfLevelsTest) {
     }
 }
 
+TEST(BinaryTreeTest, FindTargetTest) {
+    FindTarget solution;
+    std::vector<std::vector<std::string>> s_trees{
+        { "5","3","6","2","4","null","7" },
+        { "5","3","6","2","4","null","7" },
+        { "2","null","3" },
+        { "1" },
+    };
+
+    std::vector<int> targets{
+        9, 28, 6, 2
+    };
+
+    std::vector<TreeNode *> roots;
+    for (auto &s_tree : s_trees) {
+        roots.emplace_back(NewBinaryTree(s_tree));
+    }
+
+    EXPECT_TRUE(solution.Solution1(roots[0], targets[0]));
+    EXPECT_FALSE(solution.Solution1(roots[1], targets[1]));
+    EXPECT_FALSE(solution.Solution1(roots[2], targets[2]));
+    EXPECT_FALSE(solution.Solution1(roots[3], targets[3]));
+
+    EXPECT_TRUE(solution.Solution2(roots[0], targets[0]));
+    EXPECT_FALSE(solution.Solution2(roots[1], targets[1]));
+    EXPECT_FALSE(solution.Solution2(roots[2], targets[2]));
+    EXPECT_FALSE(solution.Solution2(roots[3], targets[3]));
+
+    EXPECT_TRUE(solution.Solution3(roots[0], targets[0]));
+    EXPECT_FALSE(solution.Solution3(roots[1], targets[1]));
+    EXPECT_FALSE(solution.Solution3(roots[2], targets[2]));
+    EXPECT_FALSE(solution.Solution3(roots[3], targets[3]));
+
+    for (TreeNode *root : roots) {
+        DeleteBinaryTree(root);
+    }
+}
+
 } // namespace test
 } // namespace leetcode
