@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <string>
+#include <unordered_set>
+#include <unordered_map>
 #include "leetcode_solution.h"
 
 namespace leetcode {
@@ -961,6 +963,10 @@ private:
     void PostorderTraversal(Node *root, std::vector<int> &res);
 };
 
+/**
+ * @brief 606. 根据二叉树创建字符串
+ * 
+ */
 class Tree2Str : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -992,7 +998,10 @@ public:
     std::string Solution2(TreeNode *root);
 };
 
-
+/**
+ * @brief 637. 二叉树的层平均值
+ * 
+ */
 class AverageOfLevels : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -1034,6 +1043,68 @@ private:
      * @param sums 每层的节点值之和
      */
     void Dfs(TreeNode *root, int level, std::vector<int> &counts, std::vector<double> &sums);
+};
+
+/**
+ * @brief 653. 两数之和 IV - 输入 BST
+ * 
+ */
+class FindTarget : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief DFS+哈希集合
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param root 二叉搜索树根节点
+     * @param k 目标和
+     * @return true 
+     * @return false 
+     */
+    bool Solution1(TreeNode *root, int k);
+
+    /**
+     * @brief BFS+哈希集合
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param root 二叉搜索树根节点
+     * @param k 目标和
+     * @return true 
+     * @return false 
+     */
+    bool Solution2(TreeNode *root, int k);
+
+    /**
+     * @brief 中序遍历+双指针
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param root 二叉搜索树根节点
+     * @param k 目标和
+     * @return true 
+     * @return false 
+     */
+    bool Solution3(TreeNode *root, int k);
+
+private:
+    /**
+     * @brief 深度优先搜索寻找是否存在目标和为 k 的组合
+     * 
+     * @param root 二叉搜索树根节点
+     * @param k 目标和
+     * @param set 哈希集合
+     * @return true 
+     * @return false 
+     */
+    bool Find(TreeNode *root, int k, std::unordered_set<int> &set);
 };
 
 } // namespace tree

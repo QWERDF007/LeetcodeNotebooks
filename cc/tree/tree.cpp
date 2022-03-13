@@ -3,8 +3,6 @@
 #include <random>
 #include <climits>
 #include <iostream>
-#include <unordered_map>
-#include <unordered_set>
 #include <benchmark/benchmark.h>
 
 #include "tree.h"
@@ -34,6 +32,7 @@ void TreeSolution(SolutionsId pid) {
         case SolutionsId::POSTORDER: solution = new Postorder(); break;
         case SolutionsId::TREE_2_STR: solution = new Tree2Str(); break;
         case SolutionsId::AVERAGE_OF_LEVELS: solution = new AverageOfLevels(); break;
+        case SolutionsId::FIND_TARGET: solution = new FindTarget(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
 	}
 
@@ -2195,6 +2194,122 @@ void AverageOfLevels::Dfs(TreeNode *root, int level, std::vector<int> &counts, s
 }
 
 
+
+std::string FindTarget::Title() {
+    return "653. 两数之和 IV - 输入 BST\n";
+}
+
+std::string FindTarget::Problem() {
+    return "给定一个二叉搜索树 root 和一个目标结果 k，如果 BST 中存在两个元素且它们的和等于给定的目标结果，则返回 true。\n";
+}
+
+std::string FindTarget::Link() {
+    return "https://leetcode-cn.com/problems/two-sum-iv-input-is-a-bst/";
+}
+
+std::string FindTarget::Solution() {
+    return "中序遍历+双指针，时间：O(n)，空间：O(n)。\n";
+}
+
+void FindTarget::Benchmark() {
+    FindTarget solution;
+
+    int k = 6903;
+    std::vector<std::string> s_tree{
+        "5223","1005","5333","888","5160","5272","null","246","948","2264","5197","null","5295","27","856",
+        "null","null","1930","3238","5171","null","null","null","2","216","503","null","1265","2253","2358",
+        "3644","null","null","null","null","147","null","441","579","1073","1382","2038","null","2297","2506",
+        "3598","4013","null","null","419","null","null","717","null","1204","null","1476","1946","2166","null",
+        "null","2409","2845","3504","null","3794","4119","328","null","651","731","1096","null","null","1881",
+        "null","null","2062","null","null","null","2615","2971","3357","null","3723","3846","4057","4995","null",
+        "null","null","null","null","764","null","1139","1627","null","null","null","2519","2787","2908","3089",
+        "3307","3456","3666","null","null","3902","4027","null","4215","5108","null","null","null","null","1530",
+        "1726","null","null","2633","null","null","null","3024","3180","null","3336","null","null","null","null",
+        "null","3939","null","null","4160","4846","5031","null","null","1575","null","1798","null","2686","null",
+        "3035","3137","null","null","null","null","null","null","4203","4376","4963","null","5065","null","null",
+        "null","null","null","null","null","null","null","null","null","null","4318","4662","4864","null","null",
+        "null","null","null","4631","4803","null","4899","4458","null","4761","null","null","null","null","4568",
+        "null","null","4532"
+    };
+    TreeNode *root = NewBinaryTree(s_tree);
+
+    benchmark::RegisterBenchmark("BM_FindTarget_DfsHashSet", [](benchmark::State &state, FindTarget solution, TreeNode *root, int k) {
+        for (auto _ : state) {
+            solution.Solution1(root, k);
+        }
+    }, solution, root, k);
+
+    benchmark::RegisterBenchmark("BM_FindTarget_BfsHashSet", [](benchmark::State &state, FindTarget solution, TreeNode *root, int k) {
+        for (auto _ : state) {
+            solution.Solution2(root, k);
+        }
+    }, solution, root, k);
+
+    benchmark::RegisterBenchmark("BM_FindTarget_InorderTwoPointers", [](benchmark::State &state, FindTarget solution, TreeNode *root, int k) {
+        for (auto _ : state) {
+            solution.Solution3(root, k);
+        }
+    }, solution, root, k);
+
+    //DeleteBinaryTree(root);
+}
+
+bool FindTarget::Solution1(TreeNode *root, int k) {
+    std::unordered_set<int> set;
+    return Find(root, k, set);
+}
+
+bool FindTarget::Solution2(TreeNode *root, int k) {
+    if (root == nullptr) {
+        return false;
+    }
+    std::unordered_set<int> set;
+    std::queue<TreeNode *> q;
+    q.emplace(root);
+    while (!q.empty()) {
+        TreeNode *cur = q.front();
+        q.pop();
+        if (set.count(k - cur->val)) {
+            return true;
+        }
+        set.emplace(cur->val);
+        if (cur->left) {
+            q.emplace(cur->left);
+        }
+        if (cur->right) {
+            q.emplace(cur->right);
+        }
+    }
+    return false;
+}
+
+bool FindTarget::Solution3(TreeNode *root, int k) {
+    std::vector<int> nums;
+    InOrderTraversal(root, nums);
+    int left = 0, right = nums.size() - 1;
+    while (left < right) {
+        int sum = nums[left] + nums[right];
+        if (sum == k) {
+            return true;
+        } else if (sum < k) {
+            ++left;
+        } else {
+            --right;
+        }
+    }
+    return false;
+}
+
+bool FindTarget::Find(TreeNode *root, int k, std::unordered_set<int> &set) {
+    if (root == nullptr) {
+        return false;
+    }
+    if (set.count(k - root->val)) {
+        return true;
+    }
+    set.emplace(root->val);
+    return Find(root->left, k, set) || Find(root->right, k, set);
+}
 
 } // namespace tree
 } // namespace leetcode
