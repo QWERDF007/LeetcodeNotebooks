@@ -1,0 +1,1 @@
+build.bat --build --config Release --parallel --update --cmake_extra_defines gtest_force_shared_crt=ON --test
