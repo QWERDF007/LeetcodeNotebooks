@@ -50,7 +50,6 @@ int main(int argc, char* argv[]) {
         }
         
         if (opts["list"].as<bool>()) {
-            int total = 0;
             std::map<ProblemType, std::vector<SolutionsId>> counts;
             for (auto &[pid, type] : kPidToType) {
                 if (counts.count(type)) {
@@ -59,10 +58,8 @@ int main(int argc, char* argv[]) {
                 else {
                     counts[type] = std::vector<SolutionsId>{ pid };
                 }
-                ++total;
             }
-
-            std::cout << "total: " << total << std::endl << std::endl;
+            
             for (auto &[type, pids] : counts) {
                 auto finded = kTypeToStr.find(type);
                 if (finded != kTypeToStr.end()) {
@@ -73,16 +70,16 @@ int main(int argc, char* argv[]) {
                     std::cout << std::endl << std::endl;
                 }
             }
+
+            std::cout << "total: " << kPidToType.size() << std::endl << std::endl;
             exit(EXIT_SUCCESS);
         }
 
         if (opts["all"].as<bool>()) {
-            int total = 0;
             for (auto &[pid, type] : kPidToType) {
                 run(type, pid);
-                ++total;
             }
-            std::cout << total << " finished leetcode problems!\n\n";
+            std::cout << kPidToType.size() << " finished leetcode problems!\n\n";
         } else {
             ProblemType type = ProblemType(-1);
             SolutionsId pid = SolutionsId(-1);
