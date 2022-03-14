@@ -1,9 +1,9 @@
-| :tiger:                                 | :cat:                               | :dog:                                   | :dragon:                                            |
-| --------------------------------------- | ----------------------------------- | --------------------------------------- | --------------------------------------------------- |
-| 13. [罗马数字转整数](#罗马数字转整数)   | 67. [二进制求和](#二进制求和)       | 168. [Excel表列名称](#Excel表列名称)    | 409. [最长回文串](#最长回文串)                      |
-|                                         | 1002. [查找共用字符](#查找共用字符) | 1189. [气球的最大数量](#气球的最大数量) |                                                     |
-|                                         |                                     | 1446. [连续字符](#连续字符)             | 1796. [字符串中第二大的数字](#字符串中第二大的数字) |
-| 2055. [蜡烛之间的盘子](#蜡烛之间的盘子) |                                     |                                         |                                                     |
+| :tiger:                                                | :cat:                               | :dog:                                   | :dragon:                                            |
+| ------------------------------------------------------ | ----------------------------------- | --------------------------------------- | --------------------------------------------------- |
+| 13. [罗马数字转整数](#罗马数字转整数)                  | 67. [二进制求和](#二进制求和)       | 168. [Excel表列名称](#Excel表列名称)    | 409. [最长回文串](#最长回文串)                      |
+| 599. [两个列表的最小索引总和](#两个列表的最小索引总和) | 1002. [查找共用字符](#查找共用字符) | 1189. [气球的最大数量](#气球的最大数量) |                                                     |
+|                                                        |                                     | 1446. [连续字符](#连续字符)             | 1796. [字符串中第二大的数字](#字符串中第二大的数字) |
+| 2055. [蜡烛之间的盘子](#蜡烛之间的盘子)                |                                     |                                         |                                                     |
 
 
 
@@ -447,6 +447,100 @@ public:
             cnt += p.second / 2 * 2;
         }
         return cnt < s.size() ? cnt + 1 : cnt;
+    }
+};
+```
+
+
+
+# 两个列表的最小索引总和
+
+- [链接](https://leetcode-cn.com/problems/minimum-index-sum-of-two-lists/)
+- [code](../cc/str/str.h)
+
+> 假设 Andy 和 Doris 想在晚餐时选择一家餐厅，并且他们都有一个表示最喜爱餐厅的列表，每个餐厅的名字用字符串表示。
+>
+> 你需要帮助他们用最少的索引和找出他们共同喜爱的餐厅。如果答案不止一个，则输出所有答案并且不考虑顺序。你可以假设答案总是存在。
+
+## 暴力搜索
+
+对于 list1 中每个元素寻找 list2 中是否存在相同元素，判断两者的索引和是否最小，有三种情况：
+
+- 如果索引和比当前最小的索引和小，则更新索引和，将结果清空，添加当前元素到结果中
+- 如果索引和等于当前最小的索引和，则添加元素到结果中
+- 如果索引和大于当前最小的索引和，则不满足条件
+
+**复杂度分析：**
+
+- 时间复杂度：$O(nm)$，n 和 m 分别为 list1 和 list2 的长度，对于 list1 中每个元素都要遍历一遍 list2
+- 空间复杂度：$O(1)$
+
+```c++
+class Solution {
+public:
+    vector<string> findRestaurant(vector<string>& list1, vector<string>& list2) {
+        vector<string> ans;
+        int n = list1.size(), m = list2.size();
+        int min_sum = INT_MAX;
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                if (list1[i] == list2[j]) {
+                    int sum = i + j;
+                    if (sum == min_sum) {
+                        ans.emplace_back(list1[i]);
+                    } else if (sum < min_sum) {
+                        min_sum = sum;
+                        if (!ans.empty()) {
+                            ans.clear();
+                        }
+                        ans.emplace_back(list1[i]);
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+};
+```
+
+## 哈希表
+
+先遍历 list1，将其元素和索引作为键值对添加到哈希表中，再遍历 list2，查找元素是否存在哈希表中。可以对较小的 list 建立哈希表，以优化空间。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n+m)$，构建哈希表时间 $O(\min(n,m))$，遍历另一列表时间 $O(\max(n,m))$，哈希表查找操作时间 $O(1)$
+- 空间复杂度：$O(\min(n,m))$，对较小的列表构建哈希表所需空间
+
+```c++
+class Solution {
+public:
+    vector<string> findRestaurant(vector<string>& list1, vector<string>& list2) {
+        if (list1.size() > list2.size()) {
+            return findRestaurant(list2, list1);
+        }
+        int n = list1.size(), m = list2.size();
+        unordered_map<string, int> map;
+        int min_sum = INT_MAX;
+        for (int i = 0; i < n; ++i) {
+            map[list1[i]] = i;
+        }
+        vector<string> ans;
+        for (int j = 0; j < m; ++j) {
+            if (map.count(list2[j])) {
+                int sum = map[list2[j]] + j;
+                if (sum < min_sum) {
+                    min_sum = sum;
+                    if (!ans.empty()) {
+                        ans.clear();
+                    }
+                    ans.emplace_back(list2[j]);
+                } else if (sum == min_sum) {
+                    ans.emplace_back(list2[j]);
+                }
+            }
+        }
+        return ans;
     }
 };
 ```
