@@ -1,4 +1,5 @@
 ﻿#include <gtest/gtest.h>
+#include <algorithm>
 #include "str/str.h"
 
 namespace leetcode {
@@ -93,6 +94,46 @@ TEST(StrTest, LongestPalindromeTest) {
     EXPECT_EQ(solution.Solution2("abccccdd"), 7);
     EXPECT_EQ(solution.Solution2("a"), 1);
     EXPECT_EQ(solution.Solution2("bb"), 2);
+}
+
+TEST(StrTest, FindRestaurantTest) {
+    FindRestaurant solution;
+    
+    std::vector<std::vector<std::string>> list1{
+        { "Shogun","Tapioca Express","Burger King","KFC" },
+        { "Shogun","Tapioca Express","Burger King","KFC" },
+        { "Shogun","Burger King","Tapioca Express","KFC" },
+    };
+
+    std::vector<std::vector<std::string>> list2{
+        { "Piatti","The Grill at Torrey Pines","Hungry Hunter Steakhouse","Shogun" },
+        { "KFC","Shogun","Burger King" },
+        { "Burger King","Shogun","KFC" },
+    };
+
+    std::vector<std::vector<std::string>> results{
+        { "Shogun" },
+        { "Shogun" },
+        { "Burger King","Shogun" },
+    };
+
+    std::vector<std::vector<std::string>> s1_ans, s2_ans;
+    for (int i = 0; i < list1.size(); ++i) {
+        s1_ans.emplace_back(solution.Solution1(list1[i], list2[i]));
+        s2_ans.emplace_back(solution.Solution2(list1[i], list2[i]));
+    }
+    for (int i = 0; i < list1.size(); ++i) {
+        std::sort(s1_ans[i].begin(), s1_ans[i].end());
+        std::sort(s2_ans[i].begin(), s2_ans[i].end());
+    }
+
+    EXPECT_EQ(s1_ans[0], results[0]);
+    EXPECT_EQ(s1_ans[1], results[1]);
+    EXPECT_EQ(s1_ans[2], results[2]);
+
+    EXPECT_EQ(s2_ans[0], results[0]);
+    EXPECT_EQ(s2_ans[1], results[1]);
+    EXPECT_EQ(s2_ans[2], results[2]);
 }
 
 TEST(StrTest, CommonCharsTest) {
