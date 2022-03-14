@@ -19,6 +19,7 @@ void StrSolution(SolutionsId pid) {
         case SolutionsId::ADD_BINARY: solution = new AddBinary(); break;
         case SolutionsId::CONVERT_TO_TITLE: solution = new ConvertToTitle(); break;
         case SolutionsId::LONGEST_PALINDROME: solution = new LongestPalindrome(); break;
+        case SolutionsId::FIND_RESTAURANT: solution = new FindRestaurant(); break;
         case SolutionsId::COMMON_CHARS: solution = new CommonChars(); break;
         case SolutionsId::MAX_NUMBER_OF_BALLONS: solution = new MaxNumberOfBallons(); break;
         case SolutionsId::MAX_POWER: solution = new MaxPower(); break;
@@ -438,6 +439,111 @@ int LongestPalindrome::Solution2(std::string s) {
     return cnt < s.size() ? cnt + 1 : cnt;
 }
 
+
+std::string FindRestaurant::Title() {
+    return "599. 两个列表的最小索引总和\n";
+}
+
+std::string FindRestaurant::Problem() {
+    return 
+        "假设 Andy 和 Doris 想在晚餐时选择一家餐厅，并且他们都有一个表示最喜爱餐厅的列表，每个餐厅的名字用字符串表示。\n"
+        "你需要帮助他们用最少的索引和找出他们共同喜爱的餐厅。如果答案不止一个，则输出所有答案并且不考虑顺序。你可以假设答案总是存在。\n";
+}
+
+std::string FindRestaurant::Link() {
+    return "https://leetcode-cn.com/problems/minimum-index-sum-of-two-lists/";
+}
+
+std::string FindRestaurant::Solution() {
+    return "哈希表，时间：O(n+m)，空间：O(min(n,m))。\n";
+}
+
+void FindRestaurant::Benchmark() {
+    FindRestaurant solution;
+
+    std::vector<std::string> list1{
+        "eecba","dcddd","cceac","adbde","bbbdd","baaed","abdcc","cedbe","aedcd","ddeec","aceda","cddcc","dbbdb","babca","abcbc",
+        "bcddd","acbbb","edcee","abcdc","dbeeb","bebdb","eeedc","bdede","aeeea","cecec","bdcbb","caeda","cbdcd","ddcbe","bbdbd",
+        "acccb","eecdd","abbee","ebbde","beead","ebaae","dadbc","cabdc","cbcda","aeedb","ceead","dbbee","ebdac","beadb","ceabe",
+        "ddbad","adcbc","eaadb","dcbdd","badcd","edebd","KFC"
+    };
+
+    std::vector<std::string> list2{
+        "dcddd","cceac","aaecb","bcbea","deecd","adbde","bbbdd","aedcd","aedda","eacbd","dbbdb","babca","abcbc","bcddd","cbedb",
+        "edcee","abcdc","beacc","cdceb","bebdb","deadb","cecec","bdcbb","bbedc","bbdbd","acccb","edbee","eecdd","accad","cceea",
+        "ebaae","cbbbd","cabdc","cbcda","ceedb","ceead","beadb","baccd","aaaab","caeca","eddab","edebd","bccec","KFC"
+    };
+
+    auto brute_func = [](benchmark::State &state, FindRestaurant solution, std::vector<std::string> list1, std::vector<std::string> list2) {
+        for (auto _ : state) {
+            solution.Solution1(list1, list2);
+        }
+    };
+    benchmark::RegisterBenchmark("BM_FindRestaurant_BruteForceSearch", brute_func, solution, list1, list2);
+
+    auto hashmap_func = [](benchmark::State &state, FindRestaurant solution, std::vector<std::string> list1, std::vector<std::string> list2) {
+        for (auto _ : state) {
+            solution.Solution2(list1, list2);
+        }
+    };
+    benchmark::RegisterBenchmark("BM_FindRestaurant_HashMap", hashmap_func, solution, list1, list2);
+}
+
+std::vector<std::string> FindRestaurant::Solution1(std::vector<std::string> &list1, std::vector<std::string> &list2) {
+    std::vector<std::string> ans;
+    int n = list1.size(), m = list2.size();
+    int min_sum = INT_MAX;
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            if (list1[i] == list2[j]) {
+                int sum = i + j;
+                if (sum == min_sum) {
+                    ans.emplace_back(list1[i]);
+                } else if (sum < min_sum) {
+                    min_sum = sum;
+                    if (!ans.empty()) {
+                        ans.clear();
+                    }
+                    ans.emplace_back(list1[i]);
+                }
+            }
+        }
+    }
+    return ans;
+}
+
+std::vector<std::string> FindRestaurant::Solution2(std::vector<std::string> &list1, std::vector<std::string> &list2) {
+    if (list1.size() > list2.size()) {
+        return Solution2(list2, list1);
+    }
+
+    int n = list1.size(), m = list2.size();
+    int min_sum = INT_MAX;
+    std::unordered_map<std::string, int> map;
+    for (int i = 0; i < n; ++i) {
+        map.emplace(list1[i], i);
+    }
+
+    std::vector<std::string> ans;
+    for (int j = 0; j < m; ++j) {
+        if (map.count(list2[j])) {
+            int sum = map[list2[j]] + j;
+            if (sum < min_sum) {
+                min_sum = sum;
+                if (!ans.empty()) {
+                    ans.clear();
+                }
+                ans.emplace_back(list2[j]);
+            } else if (sum == min_sum) {
+                ans.emplace_back(list2[j]);
+            }
+        }
+    }
+
+    return ans;
+}
+
+
 std::string CommonChars::Title() {
     return "1002. 查找共用字符\n";
 }
@@ -828,6 +934,7 @@ std::vector<int> PlatesBetweenCandles::Solution2(std::string s, std::vector<std:
     }
     return ans;
 }
+
 
 } // namespace str
 } // namespace leetcode 

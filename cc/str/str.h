@@ -143,6 +143,43 @@ public:
     int Solution2(std::string s);
 };
 
+/**
+ * @brief 599. 两个列表的最小索引总和
+ * 
+ */
+class FindRestaurant : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+    
+    /**
+     * @brief 暴力搜索
+     * 时间复杂度：O(nm)
+     * 空间复杂度：O(1)
+     * @param list1 餐厅列表
+     * @param list2 餐厅列表
+     * @return std::vector<std::string> 共同喜爱的餐厅
+     */
+    std::vector<std::string> Solution1(std::vector<std::string> &list1, std::vector<std::string> &list2);
+
+    /**
+     * @brief 哈希表
+     * 时间复杂度：O(n+m)
+     * 空间复杂度：O(min(n,m))
+     * @param list1 餐厅列表
+     * @param list2 餐厅列表
+     * @return std::vector<std::string> 共同喜爱的餐厅
+     */
+    std::vector<std::string> Solution2(std::vector<std::string> &list1, std::vector<std::string> &list2);
+};
+
 class CommonChars : public LeetcodeSolution {
 public:
     std::string Title() override;
