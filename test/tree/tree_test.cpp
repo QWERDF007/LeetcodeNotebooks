@@ -748,5 +748,49 @@ TEST(BinaryTreeTest, FindTargetTest) {
     }
 }
 
+TEST(BinaryTreeTest, FindSecondMinimumValueTest) {
+    FindSecondMinimumValue solution;
+
+    std::vector<std::vector<std::string>> s_trees{
+        { "2","2","5","null","null","5","7" },
+        { "2","2","2 "},
+        { "5","8","5" },
+        { "1","1","3","1","1","3","4","3","1","1","1","3","8","4","8","3","3","1","6","2","1" },
+        { "2","2","2147483647" },
+        
+    };
+
+    std::vector<int> results{
+        5, -1, 8, 2, 2147483647,
+    };
+
+    std::vector<TreeNode *> roots;
+    for (auto &s_tree : s_trees) {
+        roots.emplace_back(NewBinaryTree(s_tree));
+    }
+
+    EXPECT_EQ(solution.Solution1(roots[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(roots[1]), results[1]);
+    EXPECT_EQ(solution.Solution1(roots[2]), results[2]);
+    EXPECT_EQ(solution.Solution1(roots[3]), results[3]);
+    EXPECT_EQ(solution.Solution1(roots[4]), results[4]);
+
+    EXPECT_EQ(solution.Solution2(roots[0]), results[0]);
+    EXPECT_EQ(solution.Solution2(roots[1]), results[1]);
+    EXPECT_EQ(solution.Solution2(roots[2]), results[2]);
+    EXPECT_EQ(solution.Solution2(roots[3]), results[3]);
+    EXPECT_EQ(solution.Solution2(roots[4]), results[4]);
+
+    EXPECT_EQ(solution.Solution3(roots[0]), results[0]);
+    EXPECT_EQ(solution.Solution3(roots[1]), results[1]);
+    EXPECT_EQ(solution.Solution3(roots[2]), results[2]);
+    EXPECT_EQ(solution.Solution3(roots[3]), results[3]);
+    EXPECT_EQ(solution.Solution3(roots[4]), results[4]);
+
+    for (TreeNode *root : roots) {
+        DeleteBinaryTree(root);
+    }
+}
+
 } // namespace test
 } // namespace leetcode
