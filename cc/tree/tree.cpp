@@ -3,6 +3,7 @@
 #include <random>
 #include <climits>
 #include <iostream>
+#include <functional>
 #include <benchmark/benchmark.h>
 
 #include "tree.h"
@@ -33,6 +34,7 @@ void TreeSolution(SolutionsId pid) {
         case SolutionsId::TREE_2_STR: solution = new Tree2Str(); break;
         case SolutionsId::AVERAGE_OF_LEVELS: solution = new AverageOfLevels(); break;
         case SolutionsId::FIND_TARGET: solution = new FindTarget(); break;
+        case SolutionsId::FIND_SECOND_MINIMUM_VALUE: solution = new FindSecondMinimumValue(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
 	}
 
@@ -2310,6 +2312,90 @@ bool FindTarget::Find(TreeNode *root, int k, std::unordered_set<int> &set) {
     set.emplace(root->val);
     return Find(root->left, k, set) || Find(root->right, k, set);
 }
+
+std::string FindSecondMinimumValue::Title() {
+    return "671. 二叉树中第二小的节点\n";
+}
+
+std::string FindSecondMinimumValue::Problem() {
+    return 
+        "给定一个非空特殊的二叉树，每个节点都是正数，并且每个节点的子节点数量只能为 2 或 0。\n"
+        "如果一个节点有两个子节点的话，那么该节点的值等于两个子节点中较小的一个。\n"
+        "更正式地说，即 root.val = min(root.left.val, root.right.val) 总成立。\n"
+        "给出这样的一个二叉树，你需要输出所有节点中的第二小的值。\n"
+        "如果第二小的值不存在的话，输出 -1。\n";
+}
+
+std::string FindSecondMinimumValue::Link() {
+    return "https://leetcode-cn.com/problems/second-minimum-node-in-a-binary-tree/";
+}
+
+std::string FindSecondMinimumValue::Solution() {
+    return std::string();
+}
+
+void FindSecondMinimumValue::Benchmark() {
+}
+
+int FindSecondMinimumValue::Solution1(TreeNode *root) {
+    int ans = -1;
+    if (root == nullptr) {
+        return ans;
+    }
+    int minimum = root->val;
+    std::function<void(TreeNode*)> dfs = [&](TreeNode *root) {
+        if (root == nullptr) {
+            return;
+        }
+        if (ans != -1 && root->val >= ans) {
+            return;
+        }
+        if (root->val > minimum) {
+            ans = root->val;
+        }
+        dfs(root->left);
+        dfs(root->right);
+    };
+    dfs(root);
+    return ans;
+}
+
+int FindSecondMinimumValue::Solution2(TreeNode *root) {
+    int ans = -1;
+    if (root == nullptr) {
+        return ans;
+    }
+    int minimum = root->val;
+    std::queue<TreeNode *> q;
+    q.emplace(root);
+    while (!q.empty()) {
+        TreeNode *cur = q.front();
+        q.pop();
+        if (ans == -1 || (ans != -1 && cur->val < ans)) {
+            if (cur->val > minimum) {
+                ans = cur->val;
+            }
+            if (cur->left) {
+                q.emplace(cur->left);
+            }
+            if (cur->right) {
+                q.emplace(cur->right);
+            }
+        }
+    }
+    return ans;
+}
+
+int FindSecondMinimumValue::Solution3(TreeNode *root) {
+    if (root == nullptr || root->left == nullptr || root->right == nullptr) {
+        return -1;
+    }
+    int left = root->val == root->left->val ? Solution3(root->left) : root->left->val;
+    int right = root->val == root->right->val ? Solution3(root->right) : root->right->val;
+    int ans = std::min(left, right);
+    return ans > 0 ? ans : std::max(left, right);
+}
+
 
 } // namespace tree
 } // namespace leetcode

@@ -1107,5 +1107,49 @@ private:
     bool Find(TreeNode *root, int k, std::unordered_set<int> &set);
 };
 
+/**
+ * @brief 671. 二叉树中第二小的节点
+ * 
+ */
+class FindSecondMinimumValue : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 深度优先搜索
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(h)
+     * @param root 二叉树根节点
+     * @return int 第二小的节点
+     */
+    int Solution1(TreeNode *root);
+
+    /**
+     * @brief 广度优先搜索
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param root 二叉树根节点
+     * @return int 第二小的节点
+     */
+    int Solution2(TreeNode *root);
+
+    /**
+     * @brief 深度优先搜索+剪枝
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(h)
+     * @param root 二叉树根节点
+     * @return int 第二小的节点
+     */
+    int Solution3(TreeNode *root);
+};
+
 } // namespace tree
 } // namespace leetcode
