@@ -2331,10 +2331,37 @@ std::string FindSecondMinimumValue::Link() {
 }
 
 std::string FindSecondMinimumValue::Solution() {
-    return std::string();
+    return "DFS+剪枝，时间：O(n)，空间：O(h)。\n";
 }
 
 void FindSecondMinimumValue::Benchmark() {
+    FindSecondMinimumValue solution;
+
+    std::vector<std::string> s_tree{
+        "1","1","3","1","1","3","4","3","1","1","1","3","8","4","8","3","3","1","6","2","1"
+    };
+
+    TreeNode *root = NewBinaryTree(s_tree);
+
+    benchmark::RegisterBenchmark("BM_FindSecondMinimumValue_DFS", [](benchmark::State &state, FindSecondMinimumValue solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution1(root);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_FindSecondMinimumValue_BFS", [](benchmark::State &state, FindSecondMinimumValue solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution2(root);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_FindSecondMinimumValue_DfsPrune", [](benchmark::State &state, FindSecondMinimumValue solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution3(root);
+        }
+    }, solution, root);
+
+    //DeleteBinaryTree(root);
 }
 
 int FindSecondMinimumValue::Solution1(TreeNode *root) {
