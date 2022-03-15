@@ -5,7 +5,7 @@
 | 156. [上下翻转二叉树](#上下翻转二叉树)                 | 235. [二叉搜索树的最近公共祖先](#二叉搜索树的最近公共祖先) | 257. [二叉树的所有路径](#二叉树的所有路径)         | 404. [左叶子之和](#左叶子之和)             |
 | 501. [二叉搜索树中的众数](#二叉搜索树中的众数)         | 563. [二叉树的坡度](#二叉树的坡度)                         | 572. [另一棵树的子树](#另一棵树的子树)             | 589. [N叉树的前序遍历](#N叉树的前序遍历)   |
 | 590. [N叉树的后序遍历](#N叉树的后序遍历)               |                                                            | 606. [根据二叉树创建字符串](#根据二叉树创建字符串) | 637. [二叉树的层平均值](#二叉树的层平均值) |
-| 653. [两数之和 IV - 输入 BST](#两数之和 IV - 输入 BST) |                                                            |                                                    |                                            |
+| 653. [两数之和 IV - 输入 BST](#两数之和 IV - 输入 BST) | 671. [二叉树中第二小的节点](#二叉树中第二小的节点)         |                                                    |                                            |
 
 
 
@@ -2078,5 +2078,123 @@ public:
         inorder(root->right, res);
     }
 };
+```
+
+
+
+## 二叉树中第二小的节点
+
+- [链接](https://leetcode-cn.com/problems/second-minimum-node-in-a-binary-tree/)
+- [code]((../cc/tree/binary_tree.h))
+
+> 给定一个非空特殊的二叉树，每个节点都是正数，并且每个节点的子节点数量只能为 2 或 0。
+>
+> 如果一个节点有两个子节点的话，那么该节点的值等于两个子节点中较小的一个。
+>
+> 更正式地说，即 root.val = min(root.left.val, root.right.val) 总成立。
+>
+> 给出这样的一个二叉树，你需要输出所有节点中的第二小的值。
+>
+> 如果第二小的值不存在的话，输出 -1。
+
+## 深度优先搜索
+
+根据题意可知，root 节点值是二叉树的节点中最小的值，遍历二叉树找到比 root 大的，在遍历左右子树时，遇到当前节点值比结果大的，则不继续遍历了，因为当前节点的左右子树都比它大。结果的初值设为 -1，如果当前节点值比最小值大，则更新结果；如果结果不为 -1，并且当前节点比结果大，则结束遍历。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，最差可能需要遍历全部节点
+- 空间复杂度：$O(h)$，h 为二叉树高度，递归调用空间 $O(h)$
+
+```c++
+class Solution {
+public:
+    int findSecondMinimumValue(TreeNode* root) {
+        int ans = -1;
+        if (root == nullptr) {
+            return ans;
+        }
+        int minimum = root->val;
+        function<void(TreeNode*)> dfs = [&](TreeNode *root) {
+            if (root == nullptr) {
+                return;
+            }
+            if (ans != -1 && root->val >= ans) {
+                return;
+            }
+            if (root->val > minimum) {
+                ans = root->val;
+            }
+            dfs(root->left);
+            dfs(root->right);
+        };
+        dfs(root);
+        return ans;
+    }
+};  
+```
+
+## 广度优先搜索
+
+ 可以使用广度优先搜索遍历节点。设结果初值为 -1，遍历到当前节点时，若结果为 -1，则判断是否大于最小值，如果是则更新结果，接着判断是否将左右子节点加入队列；若结果不为 -1，则当前节点比结果小才更新结果，判断是否添加左右子节点到队列中。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，最差情况下遍历全部节点
+- 空间复杂度：$O(n)$，队列存储节点所需空间
+
+```c++
+class Solution {
+public:
+    int findSecondMinimumValue(TreeNode* root) {
+        int ans = -1;
+        if (root == nullptr) {
+            return ans;
+        }
+        int minimum = root->val;
+        queue<TreeNode *> q;
+        q.emplace(root);
+        while (!q.empty()) {
+            TreeNode *cur = q.front();
+            q.pop();
+            if (ans == -1 || (ans != -1 && cur->val < ans)) {
+                if (cur->val > minimum) {
+                    ans = cur->val;
+                }
+                if (cur->left) {
+                    q.emplace(cur->left);
+                }
+                if (cur->right) {
+                    q.emplace(cur->right);
+                }
+            }
+        }
+        return ans;
+    }
+};  
+```
+
+## 深度优先搜索+剪枝
+
+可以对二叉树进行剪枝，遍历二叉树的左右子树，寻找次小的值。具体做法是，若当前左子节点的值等于当前节点的值，则继续遍历左子树；若不等，则将左子节点的值记录为 `left`；若当前右子节点的值等于当前节点的值，则继续遍历右子树；若不等，则将右子节点的值记录为 `right`；则 `left` 和 `right` 中较小的值就是二叉树中第二小的值。需要注意的是，若在子树中没找到次小值，返回 -1，此时不能以 `min(left,right)` 作为答案，需要返回有效值 `max(left,right)`，否则整棵树都是 -1。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，最差情况下需要遍历全部节点
+- 空间复杂度：$O(h)$，h 为二叉树高度，递归调用空间
+
+```c++
+class Solution {
+public:
+    int findSecondMinimumValue(TreeNode* root) {
+        if (root == nullptr || root->left == nullptr || root->right == nullptr) {
+            return -1;
+        }
+        int left = root->val == root->left->val ? findSecondMinimumValue(root->left) : root->left->val;
+        int right = root->val == root->right->val ? findSecondMinimumValue(root->right) : root->right->val;
+        int ans = min(left, right);
+        return ans > 0 ? ans : max(left, right);
+    }
+};  
 ```
 
