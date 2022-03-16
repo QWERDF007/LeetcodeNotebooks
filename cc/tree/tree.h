@@ -272,6 +272,42 @@ private:
 };
 
 /**
+ * @brief 95. 不同的二叉搜索树 II
+ *
+ */
+class GenerateTrees : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 回溯
+     * 时间复杂度：O(nGn)
+     * 空间复杂度：O(nGn)
+     * @param n 
+     * @return std::vector<TreeNode *> 由 n 生成的所有二叉搜索树
+     */
+    std::vector<TreeNode *> Solution1(int n);
+
+private:
+    /**
+     * @brief 生成 [start, end] 中所有可行的二叉搜索树
+     * 
+     * @param start 
+     * @param end 
+     * @return std::vector<TreeNode *> 所有的二叉搜索树
+     */
+    std::vector<TreeNode *> GenTrees(int start, int end);
+};
+
+/**
  * @brief 100. 相同的树
  * 
  */

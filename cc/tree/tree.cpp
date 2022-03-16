@@ -17,6 +17,7 @@ void TreeSolution(SolutionsId pid) {
         case SolutionsId::PREORDER_TRAVERSAL: solution = new PreorderTraversal(); break;
         case SolutionsId::INORDER_TRAVERSAL: solution = new InorderTraversal(); break;
         case SolutionsId::POSTORDER_TRAVERSAL: solution = new PostorderTraversal(); break;
+        case SolutionsId::GENERATE_TREES: solution = new GenerateTrees(); break;
         case SolutionsId::IS_SAME_TREE: solution = new IsSameTree(); break;
         case SolutionsId::IS_BALANCED: solution = new IsBalanced(); break;
         case SolutionsId::MIN_DEPTH: solution = new MinDepth(); break;
@@ -562,6 +563,63 @@ void PostorderTraversal::AddPath(TreeNode *root, std::vector<int> &res) {
         root = root->right;
     }
     std::reverse(res.end() - count, res.end());
+}
+
+
+
+std::string GenerateTrees::Title() {
+    return "95. 不同的二叉搜索树 II\n";
+}
+
+std::string GenerateTrees::Problem() {
+    return "给你一个整数 n，请你生成并返回所有由 n 个节点组成且节点值从 1 到 n 互不相同的不同二叉搜索树。可以按任意顺序返回答案。\n";
+}
+
+std::string GenerateTrees::Link() {
+    return "https://leetcode-cn.com/problems/unique-binary-search-trees-ii/";
+}
+
+std::string GenerateTrees::Solution() {
+    return "回溯，时间：O(nGn)，空间：O(nGn)，Gn 是生成 n 个卡特兰数所需时间空间，O(4^n/n^{3/2})";
+}
+
+void GenerateTrees::Benchmark() {
+    GenerateTrees solution;
+    int n = 10;
+    benchmark::RegisterBenchmark("BM_GenerateTrees_TraceBack", [](benchmark::State &state, GenerateTrees solution, int n) {
+        for (auto _ : state) {
+            solution.Solution1(n);
+        }
+    }, solution, n);
+}
+
+std::vector<TreeNode *> GenerateTrees::Solution1(int n) {
+    if (n <= 0) {
+        return {};
+    }
+    return GenTrees(1, n);
+}
+
+std::vector<TreeNode *> GenerateTrees::GenTrees(int start, int end) {
+    if (start > end) {
+        return { nullptr };
+    }
+    std::vector<TreeNode *> all_trees;
+    for (int i = start; i <= end; ++i) {
+        // 生成左子树和右子树
+        std::vector<TreeNode *> left_trees = GenTrees(start, i - 1);
+        std::vector<TreeNode *> right_trees = GenTrees(i + 1, end);
+        // 从左和右子树中分别选一棵，拼接到根节点上形成二叉搜索树
+        for (TreeNode *left : left_trees) {
+            for (TreeNode *right : right_trees) {
+                TreeNode *cur = new TreeNode(i);
+                cur->left = left;
+                cur->right = right;
+                all_trees.emplace_back(cur);
+            }
+        }
+    }
+    return all_trees;
 }
 
 
@@ -2422,6 +2480,7 @@ int FindSecondMinimumValue::Solution3(TreeNode *root) {
     int ans = std::min(left, right);
     return ans > 0 ? ans : std::max(left, right);
 }
+
 
 
 } // namespace tree
