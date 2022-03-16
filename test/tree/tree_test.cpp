@@ -136,6 +136,41 @@ TEST(BinaryTreeTest, PostorderTraversalTest) {
     }
 }
 
+TEST(BinaryTreeTest, GenerateTreesTest) {
+    GenerateTrees solution;
+    IsSameTree judge;
+
+    int n = 3;
+
+    std::vector<std::vector<std::string>> s_trees{
+        {"1","null","2","null","3"},{"1","null","3","2"},{"2","1","3"},{"3","1","null","null","2"},{"3","2","null","1"},
+    };
+
+    std::vector<TreeNode *> results;
+    for (auto &s_tree : s_trees) {
+        results.emplace_back(NewBinaryTree(s_tree));
+    }
+
+    std::vector<TreeNode *> trees = solution.Solution1(n);
+    for (TreeNode *tree : trees) {
+        bool is_same = false;
+        for (TreeNode *res : results) {
+            is_same = judge.Solution1(tree, res);
+            if (is_same) {
+                break;
+            }
+        }
+        EXPECT_TRUE(is_same);
+    }
+
+    for (TreeNode *root : results) {
+        DeleteBinaryTree(root);
+    }
+    for (TreeNode *root : trees) {
+        DeleteBinaryTree(root);
+    }
+}
+
 TEST(BinaryTreeTest, IsSameTreeTest) {
     IsSameTree solution;
 
