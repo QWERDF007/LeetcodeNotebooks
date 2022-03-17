@@ -112,6 +112,7 @@ public:
     std::string Solution2(int columnNumber);
 };
 
+
 class LongestPalindrome : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -178,6 +179,42 @@ public:
      * @return std::vector<std::string> 共同喜爱的餐厅
      */
     std::vector<std::string> Solution2(std::vector<std::string> &list1, std::vector<std::string> &list2);
+};
+
+
+/**
+ * @brief 720. 词典中最长的单词
+ * 
+ */
+class LongestWord : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 排序+哈希集合
+     * 时间复杂度：O(nm logn)
+     * 空间复杂度：O(nm)
+     * @param words 字符串数组
+     * @return std::string 词典中最长的单词
+     */
+    std::string Solution1(std::vector<std::string> &words);
+
+    /**
+     * @brief 字典树
+     * 时间复杂度：O(nm)
+     * 空间复杂度：O(nm)
+     * @param words 字符串数组
+     * @return std::string 词典中最长的单词
+     */
+    std::string Solution2(std::vector<std::string> &words);
 };
 
 class CommonChars : public LeetcodeSolution {

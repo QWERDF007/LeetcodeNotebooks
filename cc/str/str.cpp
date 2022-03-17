@@ -3,6 +3,7 @@
 #include <iostream>
 #include <functional>
 #include <random>
+#include <unordered_set>
 #include <benchmark/benchmark.h>
 
 #include "str.h"
@@ -20,6 +21,7 @@ void StrSolution(SolutionsId pid) {
         case SolutionsId::CONVERT_TO_TITLE: solution = new ConvertToTitle(); break;
         case SolutionsId::LONGEST_PALINDROME: solution = new LongestPalindrome(); break;
         case SolutionsId::FIND_RESTAURANT: solution = new FindRestaurant(); break;
+        case SolutionsId::LONGEST_WORD: solution = new LongestWord(); break;
         case SolutionsId::COMMON_CHARS: solution = new CommonChars(); break;
         case SolutionsId::MAX_NUMBER_OF_BALLONS: solution = new MaxNumberOfBallons(); break;
         case SolutionsId::MAX_POWER: solution = new MaxPower(); break;
@@ -544,6 +546,84 @@ std::vector<std::string> FindRestaurant::Solution2(std::vector<std::string> &lis
 }
 
 
+std::string LongestWord::Title() {
+    return "720. 词典中最长的单词\n";
+}
+
+std::string LongestWord::Problem() {
+    return 
+        "给出一个字符串数组 words 组成的一本英语词典。返回 words 中最长的一个单词，该单词是由 words 词典中其他单词逐步添加一个字母组成。\n"
+        "若其中有多个可行的答案，则返回答案中字典序最小的单词。若无答案，则返回空字符串。\n";
+}
+
+std::string LongestWord::Link() {
+    return "https://leetcode-cn.com/problems/longest-word-in-dictionary/";
+}
+
+std::string LongestWord::Solution() {
+    return "字典树，时间：O(nm)，空间：O(nm)，n 为数组长度，m 为字符串平均长度。\n";
+}
+
+void LongestWord::Benchmark() {
+    LongestWord solution;
+
+    int n = 1000;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(97, 122);
+    std::vector<std::string> words;
+    for (int i = 0; i < 1000; ++i) {
+        int v = dis(gen);
+        int len = v % 30;
+        std::string word = "";
+        for (int j = 0; j < len; ++j) {
+            word += static_cast<char>(dis(gen));
+        }
+        words.emplace_back(word);
+    }
+
+    benchmark::RegisterBenchmark("BM_LongestWord_SortHashSet", [](benchmark::State &state, LongestWord solution, std::vector<std::string> words) {
+        for (auto _ : state) {
+            solution.Solution1(words);
+        }
+    }, solution, words);
+
+    benchmark::RegisterBenchmark("BM_LongestWord_Trie", [](benchmark::State &state, LongestWord solution, std::vector<std::string> words) {
+        for (auto _ : state) {
+            solution.Solution2(words);
+        }
+    }, solution, words);
+}
+
+
+std::string LongestWord::Solution1(std::vector<std::string> &words) {
+    // 对数字按长度升序、字典序降序排序
+    std::sort(words.begin(), words.end(), [](const std::string &a, const std::string &b) {
+        if (a.size() != b.size()) {
+            return a.size() < b.size();
+        } else {
+            return a > b;
+        }
+    });
+    std::string longest = "";
+    std::unordered_set<std::string> set;
+    set.emplace("");
+    for (auto &word : words) {
+        // 对排序后的数组，检查前缀是否在 set 中
+        if (set.count(word.substr(0, word.size() - 1))) {
+            longest = word;
+            set.emplace(word);
+        }
+    }
+    return longest;
+}
+
+std::string LongestWord::Solution2(std::vector<std::string> &words) {
+    return "字典树，TODO。\n";
+}
+
+
+
 std::string CommonChars::Title() {
     return "1002. 查找共用字符\n";
 }
@@ -934,6 +1014,7 @@ std::vector<int> PlatesBetweenCandles::Solution2(std::string s, std::vector<std:
     }
     return ans;
 }
+
 
 
 } // namespace str
