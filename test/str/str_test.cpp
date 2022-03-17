@@ -136,6 +136,21 @@ TEST(StrTest, FindRestaurantTest) {
     EXPECT_EQ(s2_ans[2], results[2]);
 }
 
+TEST(StrTest, LongestWordTest) {
+    LongestWord solution;
+    std::vector<std::vector<std::string>> words{
+        { "w","wo","wor","worl","world" },
+        { "a","banana","app","appl","ap","apply","apple" },
+    };
+    
+    std::vector<std::string> results{
+        "world", "apple",
+    };
+
+    EXPECT_EQ(solution.Solution1(words[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(words[1]), results[1]);
+}
+
 TEST(StrTest, CommonCharsTest) {
     CommonChars solution;
 
