@@ -1,9 +1,12 @@
-| :tiger:                                                | :cat:                                      | :dog:                                | :dragon:                                            |
-| ------------------------------------------------------ | ------------------------------------------ | ------------------------------------ | --------------------------------------------------- |
-| 13. [罗马数字转整数](#罗马数字转整数)                  | 67. [二进制求和](#二进制求和)              | 168. [Excel表列名称](#Excel表列名称) | 409. [最长回文串](#最长回文串)                      |
-| 599. [两个列表的最小索引总和](#两个列表的最小索引总和) | 720. [词典中最长的单词](#词典中最长的单词) |                                      |                                                     |
-| 1002. [查找共用字符](#查找共用字符)                    | 1189. [气球的最大数量](#气球的最大数量)    | 1446. [连续字符](#连续字符)          | 1796. [字符串中第二大的数字](#字符串中第二大的数字) |
-| 2055. [蜡烛之间的盘子](#蜡烛之间的盘子)                |                                            |                                      |                                                     |
+| :tiger:                                 | :cat:                                   | :dog:                                                  | :dragon:                                            |
+| --------------------------------------- | --------------------------------------- | ------------------------------------------------------ | --------------------------------------------------- |
+| 13. [罗马数字转整数](#罗马数字转整数)   | 67. [二进制求和](#二进制求和)           | 168. [Excel表列名称](#Excel表列名称)                   | 208. [实现 Trie (前缀树)](#实现 Trie (前缀树))      |
+|                                         |                                         |                                                        |                                                     |
+|                                         |                                         |                                                        |                                                     |
+| 409. [最长回文串](#最长回文串)          |                                         | 599. [两个列表的最小索引总和](#两个列表的最小索引总和) | 720. [词典中最长的单词](#词典中最长的单词)          |
+| 1002. [查找共用字符](#查找共用字符)     | 1189. [气球的最大数量](#气球的最大数量) | 1446. [连续字符](#连续字符)                            | 1796. [字符串中第二大的数字](#字符串中第二大的数字) |
+| 2055. [蜡烛之间的盘子](#蜡烛之间的盘子) |                                         |                                                        |                                                     |
+|                                         |                                         |                                                        |                                                     |
 
 
 
@@ -380,10 +383,83 @@ public:
 };
 ```
 
+
+
+# 实现 Trie (前缀树)
+
+- [链接](https://leetcode-cn.com/problems/implement-trie-prefix-tree/)
+- [code](../cc/str/str.h)
+
+> Trie（发音类似 "try"）或者说前缀树是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。这一数据结构有相当多的应用情景，例如自动补完和拼写检查。
+>
+> 请你实现 Trie 类：
+>
+> - Trie() 初始化前缀树对象。
+> - void insert(String word) 向前缀树中插入字符串 word。
+> - boolean search(String word) 如果字符串 word 在前缀树中，返回 true（即，在检索之前已经插入）；否则，返回 false。
+> - boolean startsWith(String prefix) 如果之前已经插入的字符串 word 的前缀之一为 prefix ，返回 true；否则，返回 false。
+
+## 前缀树
+
+详见[题解](https://leetcode-cn.com/problems/implement-trie-prefix-tree/solution/shi-xian-trie-qian-zhui-shu-by-leetcode-ti500/)
+
+**复杂度分析：**
+
+- 时间复杂度：初始化时间 $O(1)$，其余操作为 $O(|S|)$，|S| 是要操作的字符串的长度。
+- 空间复杂度：$O(|T| \cdot k)$，k 为字符集大小，此处为 26。
+
+```c++
+class Trie {
+public:
+    Trie() : children(26, nullptr), isEnd(false) {
+
+    }
+    
+    void insert(string word) {
+        Trie *cur = this;
+        for (char ch : word) {
+            ch -= 'a';
+            if (cur->children[ch] == nullptr) {
+                cur->children[ch] = new Trie();
+            }
+            cur = cur->children[ch];
+        }
+        cur->isEnd = true;
+    }
+    
+    bool search(string word) {
+        Trie *cur = searchPrefix(word);
+        return cur != nullptr && cur->isEnd;
+    }
+    
+    bool startsWith(string prefix) {
+        return searchPrefix(prefix) != nullptr;
+    }
+
+private:
+    vector<Trie *> children;
+    bool isEnd;
+
+    Trie* searchPrefix(string prefix) {
+        Trie *cur = this;
+        for (char ch : prefix) {
+            ch -= 'a';
+            if (cur->children[ch] == nullptr) {
+                return nullptr;
+            }
+            cur = cur->children[ch];
+        }
+        return cur;
+    }
+};
+```
+
+
+
 # 最长回文串
 
-- 链接
-- code
+- [链接](https://leetcode-cn.com/problems/longest-palindrome/)
+- [code](../cc/str/str.h)
 
 > 给定一个包含大写字母和小写字母的字符串 s，返回 通过这些字母构造成的最长的回文串。
 >
@@ -592,7 +668,68 @@ public:
 
 ## 字典树
 
-TODO
+详见[题解](https://leetcode-cn.com/problems/longest-word-in-dictionary/solution/ci-dian-zhong-zui-chang-de-dan-ci-by-lee-k5gj/)
+
+```c++
+
+class Trie {
+public:
+    Trie() {
+        this->children = vector<Trie *>(26, nullptr);
+        this->isEnd = false;
+    }
+    
+    bool insert(const string & word) {
+        Trie * node = this;
+        for (const auto & ch : word) {
+            int index = ch - 'a';
+            if (node->children[index] == nullptr) {
+                node->children[index] = new Trie();
+            }
+            node = node->children[index];
+        }
+        node->isEnd = true;
+        return true;
+    }
+
+    bool search(const string & word) {
+        Trie * node = this;
+        for (const auto & ch : word) {
+            int index = ch - 'a';
+            if (node->children[index] == nullptr || !node->children[index]->isEnd) {
+                return false;
+            }
+            node = node->children[index];
+        }
+        return node != nullptr && node->isEnd;
+    }
+private:
+    vector<Trie *> children;
+    bool isEnd;
+};
+
+
+class Solution {
+public:
+    string longestWord(vector<string>& words) {
+        Trie trie;
+        for (const string &word : words) {
+            trie.insert(word);
+        }
+        string longest = "";
+        for (const string &word : words) {
+            if (trie.search(word)) {
+                if (word.size() > longest.size() || (word.size() == longest.size() && word < longest)) {
+                    longest = word;
+                }
+            }
+        }
+        return longest;
+    }
+};
+```
+
+
 
 
 
