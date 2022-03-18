@@ -84,6 +84,16 @@ TEST(StrTest, ConvertToTitleTest) {
     EXPECT_EQ(solution.Solution2(701), "ZY");
 }
 
+TEST(StrTest, TrieTest) {
+    Trie solution;
+    solution.Insert("apple");
+    EXPECT_TRUE(solution.Search("apple"));
+    EXPECT_FALSE(solution.Search("app"));
+    EXPECT_TRUE(solution.StartsWith("app"));
+    solution.Insert("app");
+    EXPECT_TRUE(solution.Search("app"));
+}
+
 TEST(StrTest, LongestPalindromeTest) {
     LongestPalindrome solution;
 
@@ -149,6 +159,9 @@ TEST(StrTest, LongestWordTest) {
 
     EXPECT_EQ(solution.Solution1(words[0]), results[0]);
     EXPECT_EQ(solution.Solution1(words[1]), results[1]);
+
+    EXPECT_EQ(solution.Solution2(words[0]), results[0]);
+    EXPECT_EQ(solution.Solution2(words[1]), results[1]);
 }
 
 TEST(StrTest, CommonCharsTest) {
