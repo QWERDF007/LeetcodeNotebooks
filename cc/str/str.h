@@ -112,6 +112,67 @@ public:
     std::string Solution2(int columnNumber);
 };
 
+/**
+ * @brief 208. 实现 Trie (前缀树)
+ * 
+ */
+class Trie : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    Trie();
+
+    /**
+     * @brief 向前缀树中插入字符串
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(mk)
+     * @param word 字符串
+     */
+    void Insert(std::string word);
+
+    /**
+     * @brief 查找 word 是否在前缀树中
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param word 
+     * @return true 
+     * @return false 
+     */
+    bool Search(std::string word);
+
+    /**
+     * @brief 已经插入的字符串的前缀之一是否为 prefix
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param prefix 前缀
+     * @return true 
+     * @return false 
+     */
+    bool StartsWith(std::string prefix);
+
+private:
+    std::vector<Trie *> children;
+
+    bool is_end;
+    
+    /**
+     * @brief 查找前缀
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param prefix 前缀
+     * @return Trie* 前缀的最后一个字符的节点
+     */
+    Trie *SearchPrefix(std::string prefix);
+};
+
 
 class LongestPalindrome : public LeetcodeSolution {
 public:

@@ -19,6 +19,7 @@ void StrSolution(SolutionsId pid) {
         case SolutionsId::ROMAN_TO_INT: solution = new RomanToInt(); break;
         case SolutionsId::ADD_BINARY: solution = new AddBinary(); break;
         case SolutionsId::CONVERT_TO_TITLE: solution = new ConvertToTitle(); break;
+        case SolutionsId::TRIE: solution = new Trie(); break;
         case SolutionsId::LONGEST_PALINDROME: solution = new LongestPalindrome(); break;
         case SolutionsId::FIND_RESTAURANT: solution = new FindRestaurant(); break;
         case SolutionsId::LONGEST_WORD: solution = new LongestWord(); break;
@@ -368,6 +369,78 @@ std::string ConvertToTitle::Solution2(int columnNumber) {
 }
 
 
+std::string Trie::Title() {
+    return "208. 实现 Trie (前缀树)\n";
+}
+
+std::string Trie::Problem() {
+    return 
+        "Trie（发音类似 \"try\"）或者说前缀树是一种树形数据结构，用于高效地存储和检索字符串数据集中的键。这一数据结构有相当多的应用情景，例如自动补完和拼写检查。"
+        "请你实现 Trie 类：\n"
+        "- Trie() 初始化前缀树对象。\n"
+        "- void insert(String word) 向前缀树中插入字符串 word。\n"
+        "- boolean search(String word) 如果字符串 word 在前缀树中，返回 true（即，在检索之前已经插入）；否则，返回 false。\n"
+        "- boolean startsWith(String prefix) 如果之前已经插入的字符串 word 的前缀之一为 prefix ，返回 true；否则，返回 false。\n";
+}
+
+std::string Trie::Link() {
+    return "https://leetcode-cn.com/problems/implement-trie-prefix-tree/";
+}
+
+std::string Trie::Solution() {
+    return "前缀树，时间：O(n)，空间：O(mk)，m 为所有插入的字符串长度之和，k=26 为字符集大小。\n";
+}
+
+void Trie::Benchmark() {
+    benchmark::RegisterBenchmark("BM_Trie", [](benchmark::State &state) {
+        for (auto _ : state) {
+            Trie solution;
+            solution.Insert("apple");
+            solution.Search("app");
+            solution.StartsWith("app");
+            solution.Insert("app");
+            solution.Search("app");
+        }
+    });
+}
+
+Trie::Trie() : children(26, nullptr), is_end(false) {
+}
+
+void Trie::Insert(std::string word) {
+    Trie *cur = this;
+    for (char ch : word) {
+        ch -= 'a';
+        if (cur->children[ch] == nullptr) {
+            cur->children[ch] = new Trie();
+        }
+        cur = cur->children[ch];
+    }
+    cur->is_end = true;
+}
+
+bool Trie::Search(std::string word) {
+    Trie *cur = this->SearchPrefix(word);
+    return cur != nullptr && cur->is_end;
+}
+
+bool Trie::StartsWith(std::string prefix) {
+    return this->SearchPrefix(prefix) != nullptr;
+}
+
+Trie *Trie::SearchPrefix(std::string prefix) {
+    Trie *cur = this;
+    for (char ch : prefix) {
+        ch -= 'a';
+        if (cur->children[ch] == nullptr) {
+            return nullptr;
+        }
+        cur = cur->children[ch];
+    }
+    return cur;
+}
+
+
 std::string LongestPalindrome::Title() {
     return "409. 最长回文串\n";
 }
@@ -619,7 +692,19 @@ std::string LongestWord::Solution1(std::vector<std::string> &words) {
 }
 
 std::string LongestWord::Solution2(std::vector<std::string> &words) {
-    return "字典树，TODO。\n";
+    Trie trie;
+    for (const std::string &word : words) {
+        trie.Insert(word);
+    }
+    std::string longest = "";
+    for (const std::string &word : words) {
+        if (trie.Search(word.substr(0, word.size() - 1))) {
+            if (word.size() > longest.size() || (word.size() == longest.size() && word < longest)) {
+                longest = word;
+            }
+        }
+    }
+    return longest;
 }
 
 
@@ -1014,7 +1099,6 @@ std::vector<int> PlatesBetweenCandles::Solution2(std::string s, std::vector<std:
     }
     return ans;
 }
-
 
 
 } // namespace str
