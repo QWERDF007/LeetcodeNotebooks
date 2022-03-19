@@ -8,6 +8,45 @@ namespace dp {
 
 void DynamicProgrammingSolution(SolutionsId pid);
 
+/**
+ * @brief 96. 不同的二叉搜索树
+ * 
+ */
+class NumTrees : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 动态规划
+     * 时间复杂度：O(n^2)
+     * 空间复杂度：O(n)
+     * @param n 
+     * @return int 符合条件的二叉搜索树的种数
+     */
+    int Solution1(int n);
+
+    /**
+     * @brief 数学，卡特兰数
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param n 
+     * @return int 符合条件的二叉搜索树的种数
+     */
+    int Solution2(int n);
+};
+
+/**
+ * @brief 688. 骑士在棋盘上的概率
+ * 
+ */
 class KnightProbability : public LeetcodeSolution {
 public:
     std::string Title() override;

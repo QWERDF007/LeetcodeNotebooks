@@ -9,6 +9,7 @@ namespace dp {
 void DynamicProgrammingSolution(SolutionsId pid) {
     LeetcodeSolution *solution = nullptr;
     switch (SolutionsId(pid)) {
+        case SolutionsId::NUM_TREES: solution = new NumTrees(); break;
         case SolutionsId::KNIGHT_PROBABILITY: solution = new KnightProbability(); break;
         default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
     }
@@ -25,6 +26,62 @@ void DynamicProgrammingSolution(SolutionsId pid) {
         delete solution;
     }
 }
+
+
+std::string NumTrees::Title() {
+    return "96. 不同的二叉搜索树\n";
+}
+
+std::string NumTrees::Problem() {
+    return "给你一个整数 n，求恰由 n 个节点组成且节点值从 1 到 n 互不相同的二叉搜索树有多少种？返回满足题意的二叉搜索树的种数。\n";
+}
+
+std::string NumTrees::Link() {
+    return "https://leetcode-cn.com/problems/unique-binary-search-trees/";
+}
+
+std::string NumTrees::Solution() {
+    return "数学，时间：O(1)，空间：O(1)。\n";
+}
+
+void NumTrees::Benchmark() {
+    NumTrees solution;
+    benchmark::RegisterBenchmark("BM_NumTrees_DynamicProgramming", [](benchmark::State &state, NumTrees solution) {
+        for (auto _ : state) {
+            solution.Solution1(19);
+        }
+    }, solution);
+
+    benchmark::RegisterBenchmark("BM_NumTrees_Math", [](benchmark::State &state, NumTrees solution) {
+        for (auto _ : state) {
+            solution.Solution2(19);
+        }
+    }, solution);
+}
+
+int NumTrees::Solution1(int n) {
+    if (n <= 1) {
+        return 1;
+    }
+    std::vector<int> g(n + 1, 0);
+    g[0] = 1;
+    g[1] = 1;
+    for (int i = 2; i <= n; ++i) {
+        for (int j = 1; j <= i; ++j) {
+            g[i] += g[j - 1] * g[i - j];
+        }
+    }
+    return g[n];
+}
+
+int NumTrees::Solution2(int n) {
+    long long C = 1;
+    for (int i = 0; i < n; ++i) {
+        C = C * 2 * (2 * i + 1) / (i + 2);
+    }
+    return (int)C;
+}
+
 
 std::string KnightProbability::Title() {
     return "688. 骑士在棋盘上的概率\n";
@@ -88,7 +145,6 @@ double KnightProbability::Solution1(int n, int k, int row, int column) {
     }
     return prob[k][row][column];
 }
-
 
 
 } // namespace dp
