@@ -1,7 +1,7 @@
 | :tiger:                                                | :cat:                                                      | :dog:                                              | :dragon:                                        |
 | ------------------------------------------------------ | ---------------------------------------------------------- | -------------------------------------------------- | ----------------------------------------------- |
 | 144. [二叉树的前序遍历](#二叉树的前序遍历)             | 94.[二叉树的中序遍历](#二叉树的中序遍历)                   | 145. [二叉树的后序遍历](#二叉树的后序遍历)         | 95. [不同的二叉搜索树 II](#不同的二叉搜索树 II) |
-|                                                        |                                                            |                                                    |                                                 |
+|                                                        |                                                            |                                                    | 99. [恢复二叉搜索树](#恢复二叉搜索树)           |
 | 100. [相同的树](#相同的树)                             |                                                            |                                                    |                                                 |
 |                                                        |                                                            |                                                    |                                                 |
 | 110. [平衡二叉树](#平衡二叉树)                         | 111. [二叉树的最小深度](#二叉树的最小深度)                 | 112. [路径总和](#路径总和)                         | 226. [翻转二叉树](#翻转二叉树)                  |
@@ -465,6 +465,162 @@ public:
         }
         return all_trees;
     }
+};
+```
+
+
+
+# 恢复二叉搜索树
+
+- [链接](https://leetcode-cn.com/problems/recover-binary-search-tree/)
+- [code](../cc/tree/binary_tree.h)
+
+> 给你二叉搜索树的根节点 root，该树中的恰好两个节点的值被错误地交换。请在不改变其结构的情况下，恢复这棵树。
+
+## 显示遍历
+
+二叉搜索树的中序遍历得到的结果是一个递增有序序列。对序列进行遍历，寻找两个错误节点的值，若遇到相邻两个值不满足 $a_{n} < a_{n+1}$，则说明找到了错误的节点。需要注意的是两次找到的节点所取的位置不同，第一次遇到不满足 $a_{n} < a_{n+1}$ 的值时需要取 $a_{n}$ 作为错误节点，而第二次遇到需要取 $a_{n+1}$ 作为错误节点。假设有一个递增序列 a = {1,2,3,4,5,6,7}，假如有两个不相邻的节点被交换，例如 2 和 6 被交换，得到交换后的序列 a = {1,6,3,4,5,2,7}，此序列中有两个不满足 $a_n < a_{n+1}$ 条件的，分别是 6 > 3 和 5 > 2，明显可知第一个错误节点 6，而第二个错误节点是 2。
+
+具体实现时，可以用两个变量 x, y 分别记录错误节点的位置，将 x, y 初值设为 -1，若 $a_{n+1} > a_n$，且 `x == -1`，则将 $a_n$ 所在位置赋予 x；若 `x != -1`，说明已经找到了第一个，则将 $a_{n+1}$ 的位置赋予 y，结束遍历，返回序列中 x, y 对应的值。重新遍历二叉树，交换两个错误节点的值。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，中序遍历时间 $O(n)$，遍历序列时间 $O(n)$，遍历树恢复节点时间 $O(n)$
+- 空间复杂度：$O(n)$，递归调用空间 $O(h)$，存储序列空间 $O(n)$
+
+```c++
+class Solution {
+public:
+    void recoverTree(TreeNode* root) {
+        vector<int> nums;
+        inorder(root, nums);
+        int num1, num2;
+        findTwoSwapped(nums, num1, num2);
+        recover(root, 2, num1, num2);
+    }
+
+    void inorder(TreeNode *root, vector<int> &nums) {
+        if (root == nullptr) {
+            return;
+        }
+        inorder(root->left, nums);
+        nums.emplace_back(root->val);
+        inorder(root->right, nums);
+    }
+
+    void findTwoSwapped(vector<int> &nums, int &num1, int &num2) {
+        int n = nums.size();
+        int index1 = -1, index2 = -1;
+        for (int i = 1; i < n; ++i) {
+            if (nums[i] < nums[i-1]) {
+                index2 = i;
+                if (index1 == -1) {
+                    index1 = i - 1;
+                } else {
+                    break;
+                }
+            }
+        }
+        num1 = nums[index1];
+        num2 = nums[index2];
+    }
+
+    void recover(TreeNode *root, int count, int num1, int num2) {
+        if (root == nullptr) {
+            return;
+        }
+        if (root->val == num1 || root->val == num2) {
+            root->val = root->val == num1 ? num2 : num1;
+            if (--count == 0) {
+                return;
+            }
+        }
+        recover(root->left, count, num1, num2);
+        recover(root->right, count, num1, num2);
+    }
+};
+```
+
+## 隐式迭代遍历
+
+寻找错误节点只需要关心相邻两个节点的大小关系是否满足 $a_n < a_{n+1}$，因此可以在中序遍历过程中，使用 pred 记录是一个节点，并用两个变量 x，y 记录错误节点，遍历完后交换两个错误节点的值即可。使用堆栈来显示模拟递归调用。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，遍历全部节点时间 $O(n)$，交换两个节点时间 $O(1)$
+- 空间复杂度：$O(h)$，模拟递归调用空间 $O(h)$, h 为二叉树高度
+
+```c++
+class Solution {
+public:
+    void recoverTree(TreeNode* root) {
+        stack<TreeNode *> stk;
+        TreeNode *cur = root;
+        TreeNode *pred = nullptr;
+        TreeNode *x = nullptr;
+        TreeNode *y = nullptr;
+        while (!stk.empty() || cur) {
+            while (cur) {
+                stk.emplace(cur);
+                cur = cur->left;
+            }
+            cur = stk.top();
+            stk.pop();
+            if (pred && pred->val > cur->val) {
+                y = cur;
+                if (x == nullptr) {
+                    x = pred;
+                } else {
+                    break;
+                }
+            }
+            pred = cur;
+            cur = cur->right;
+        }
+        swap(x->val, y->val);
+    }
+};
+```
+
+## 隐式递归遍历
+
+同上，但是使用递归。
+
+**注意：** 递归调用传入参数的 pred、x、y 需要以引用的方式传入，否则会在递归回溯时，恢复现场导致并未成功记录 pred、x 和 y。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，递归遍历全部节点
+- 空间复杂度：$O(h)$，递归调用空间，h 为二叉树高度
+
+```c++
+class Solution {
+public:
+    void recoverTree(TreeNode* root) {
+        TreeNode *pred = nullptr;
+        TreeNode *x = nullptr;
+        TreeNode *y = nullptr;
+        inorder(root, pred, x, y);
+        swap(x->val, y->val);
+    }
+
+    void inorder(TreeNode *root, TreeNode* &pred, TreeNode* &x, TreeNode* &y) {
+        if (root == nullptr) {
+            return;
+        }
+        inorder(root->left, pred, x, y);
+        if (pred && pred->val > root->val) {
+            y = root;
+            if (x == nullptr) {
+                x = pred;
+            } else {
+                return;
+            }
+        }
+        pred = root;
+        inorder(root->right, pred, x, y);
+    }
+
 };
 ```
 
