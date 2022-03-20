@@ -18,6 +18,7 @@ void TreeSolution(SolutionsId pid) {
         case SolutionsId::INORDER_TRAVERSAL: solution = new InorderTraversal(); break;
         case SolutionsId::POSTORDER_TRAVERSAL: solution = new PostorderTraversal(); break;
         case SolutionsId::GENERATE_TREES: solution = new GenerateTrees(); break;
+        case SolutionsId::RECOVER_TREE: solution = new RecoverTree(); break;
         case SolutionsId::IS_SAME_TREE: solution = new IsSameTree(); break;
         case SolutionsId::IS_BALANCED: solution = new IsBalanced(); break;
         case SolutionsId::MIN_DEPTH: solution = new MinDepth(); break;
@@ -135,6 +136,15 @@ TreeNode *NewBinaryTree(std::vector<std::string> &tree) {
         ++i;
     }
     return root;
+}
+
+void CopyBinaryTree(TreeNode *root, TreeNode *&copy) {
+    if (root == nullptr) {
+        return;
+    }
+    copy = new TreeNode(root->val);
+    CopyBinaryTree(root->left, copy->left);
+    CopyBinaryTree(root->right, copy->right);
 }
 
 
@@ -621,6 +631,165 @@ std::vector<TreeNode *> GenerateTrees::GenTrees(int start, int end) {
     }
     return all_trees;
 }
+
+
+std::string RecoverTree::Title() {
+    return "99. 恢复二叉搜索树\n";
+}
+
+std::string RecoverTree::Problem() {
+    return "给你二叉搜索树的根节点 root，该树中的恰好两个节点的值被错误地交换。请在不改变其结构的情况下，恢复这棵树。\n";
+}
+
+std::string RecoverTree::Link() {
+    return "https://leetcode-cn.com/problems/recover-binary-search-tree/";
+}
+
+std::string RecoverTree::Solution() {
+    return "隐式递归遍历，时间：O(n)，空间：O(h)。\n";
+}
+
+void RecoverTree::Benchmark() {
+    RecoverTree solution;
+    std::vector<std::string> s_tree{
+        "390","255","2266","-273","337","1105","3440","-425","4113","null","null","600","1355","3241","4731",
+        "-488","-367","16","null","565","780","1311","1755","3075","3392","4725","4817","null","null","null",
+        "null","-187","152","395","null","728","977","1270","null","1611","1786","2991","3175","3286","null",
+        "164","null","null","4864","-252","-95","82","null","391","469","638","769","862","1045","1138","null",
+        "1460","1663","null","1838","2891","null","null","null","null","3296","3670","4381","null","4905","null",
+        "null","null","-58","null","null","null","null","null","null","null","null","734","null","843","958",
+        "null","null","null","1163","1445","1533","null","null","null","2111","2792","null","null","null",
+        "3493","3933","4302","4488","null","null","null","null","null","null","819","null","null","null",
+        "null","1216","null","null","1522","null","1889","2238","2558","2832","null","3519","3848","4090",
+        "4165","null","4404","4630","null","null","null","null","null","null","1885","2018","2199","null",
+        "2364","2678","null","null","null","3618","3751","null","4006","null","null","4246","null","null",
+        "4554","null","null","null","1936","null","null","null","null","2444","2642","2732","null","null",
+        "null","null","null","null","null","4253","null","null","null","null","2393","2461","null","null",
+        "null","null","4250","null","null","null","null","2537" 
+    };
+    TreeNode *root = NewBinaryTree(s_tree);
+
+    benchmark::RegisterBenchmark("BM_RecoverTree_ExplicitTraversal", [](benchmark::State &state, RecoverTree solution, TreeNode *root) {
+        for (auto _ : state) {
+            TreeNode *cur = nullptr;
+            CopyBinaryTree(root, cur);
+            solution.Solution1(cur);
+            DeleteBinaryTree(cur);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_RecoverTree_ImplicitIteration", [](benchmark::State &state, RecoverTree solution, TreeNode *root) {
+        for (auto _ : state) {
+            TreeNode *cur = nullptr;
+            CopyBinaryTree(root, cur);
+            solution.Solution2(cur);
+            DeleteBinaryTree(cur);
+        }
+    }, solution, root);
+
+    benchmark::RegisterBenchmark("BM_RecoverTree_ImplicitRecursion", [](benchmark::State &state, RecoverTree solution, TreeNode *root) {
+        for (auto _ : state) {
+            TreeNode *cur = nullptr;
+            CopyBinaryTree(root, cur);
+            solution.Solution3(cur);
+            DeleteBinaryTree(cur);
+        }
+    }, solution, root);
+
+    //DeleteBinaryTree(root);
+}
+
+void RecoverTree::Solution1(TreeNode *root) {
+    std::vector<int> nums;
+    InOrderTraversal(root, nums);
+    int num1, num2;
+    FindTwoSwapped(nums, num1, num2);
+    Recover(root, 2, num1, num2);
+}
+
+void RecoverTree::Solution2(TreeNode *root) {
+    std::stack<TreeNode *> stk;
+    TreeNode *cur = root, *pred = nullptr;
+    TreeNode *x = nullptr, *y = nullptr;
+    while (!stk.empty() || cur) {
+        while (cur) {
+            stk.emplace(cur);
+            cur = cur->left;
+        }
+        cur = stk.top();
+        stk.pop();
+        if (pred && cur->val < pred->val) {
+            y = cur;
+            if (x == nullptr) {
+                x = pred;
+            } else {
+                break;
+            }
+        }
+        pred = cur;
+        cur = cur->right;
+    }
+    if (x && y) {
+        std::swap(x->val, y->val);
+    }
+}
+
+void RecoverTree::Solution3(TreeNode *root) {
+    TreeNode *pred = nullptr, *x = nullptr, *y = nullptr;
+    Inorder(root, pred, x, y);
+    if (x && y) {
+        std::swap(x->val, y->val);
+    }
+}
+
+void RecoverTree::FindTwoSwapped(std::vector<int> &nums, int &num1, int &num2) {
+    int n = nums.size();
+    int index1 = -1, index2 = -1;
+    for (int i = 1; i < n; ++i) {
+        if (nums[i] < nums[i - 1]) {
+            index2 = i;
+            if (index1 == -1) {
+                index1 = i - 1;
+            } else {
+                break;
+            }
+        }
+    }
+    num1 = nums[index1];
+    num2 = nums[index2];
+}
+
+void RecoverTree::Recover(TreeNode *root, int count, int num1, int num2) {
+    if (root == nullptr) {
+        return;
+    }
+    if (root->val == num1 || root->val == num2) {
+        root->val = root->val == num1 ? num2 : num1;
+        if (--count == 0) {
+            return;
+        }
+    }
+    Recover(root->left, count, num1, num2);
+    Recover(root->right, count, num1, num2);
+}
+
+void RecoverTree::Inorder(TreeNode *root, TreeNode *&pred, TreeNode *&x, TreeNode *&y) {
+    if (root == nullptr) {
+        return;
+    }
+    Inorder(root->left, pred, x, y);
+    if (pred && root->val < pred->val) {
+        y = root;
+        if (x == nullptr) {
+            x = pred;
+        } else {
+            return;
+        }
+    }
+    pred = root;
+    Inorder(root->right, pred, x, y);
+}
+
 
 
 std::string IsSameTree::Title() {
@@ -2480,7 +2649,6 @@ int FindSecondMinimumValue::Solution3(TreeNode *root) {
     int ans = std::min(left, right);
     return ans > 0 ? ans : std::max(left, right);
 }
-
 
 
 } // namespace tree

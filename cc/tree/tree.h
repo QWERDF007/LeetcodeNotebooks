@@ -95,6 +95,14 @@ int TreeHeight(TreeNode *root);
 TreeNode *NewBinaryTree(std::vector<std::string> &tree);
 
 /**
+ * @brief 复制二叉树
+ * 
+ * @param root 要复制的二叉树
+ * @param copy 复制的二叉树
+ */
+void CopyBinaryTree(TreeNode *root, TreeNode *&copy);
+
+/**
  * @brief 生成二叉树，随机节点，节点值域 [a,b]
  *
  * @param n 节点数量
@@ -305,6 +313,55 @@ private:
      * @return std::vector<TreeNode *> 所有的二叉搜索树
      */
     std::vector<TreeNode *> GenTrees(int start, int end);
+};
+
+
+/**
+ * @brief 99. 恢复二叉搜索树
+ *
+ */
+class RecoverTree : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 显示遍历
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(n)
+     * @param root 二叉搜索树根节点
+     */
+    void Solution1(TreeNode *root);
+
+    /**
+     * @brief 隐式迭代遍历
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(h)
+     * @param root 二叉搜索树根节点
+     */
+    void Solution2(TreeNode *root);
+
+    /**
+     * @brief 隐式递归遍历
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(h)
+     * @param root 二叉搜索树根节点
+     */
+    void Solution3(TreeNode *root);
+
+private:
+    void FindTwoSwapped(std::vector<int> &nums, int &num1, int &num2);
+
+    void Recover(TreeNode *root, int count, int num1, int num2);
+
+    void Inorder(TreeNode *root, TreeNode *&pred, TreeNode *&x, TreeNode *&y);
 };
 
 /**
