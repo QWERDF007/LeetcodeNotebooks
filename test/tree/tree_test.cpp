@@ -171,6 +171,54 @@ TEST(BinaryTreeTest, GenerateTreesTest) {
     }
 }
 
+TEST(BinaryTreeTest, RecoverTree) {
+    RecoverTree solution;
+    IsSameTree judge;
+
+    std::vector<std::vector<std::string>> s_trees{
+        { "1","3","null","null","2" },
+        { "3","1","4","null","null","2" },
+    };
+
+    std::vector<std::vector<std::string>> res_trees{
+        { "3","1","null","null","2" },
+        { "2","1","4","null","null","3" },
+    };
+
+    std::vector<TreeNode *> roots1, roots2, roots3, result_roots;
+    for (int i = 0; i < s_trees.size(); ++i) {
+        roots1.emplace_back(NewBinaryTree(s_trees[i]));
+        roots2.emplace_back(NewBinaryTree(s_trees[i]));
+        roots3.emplace_back(NewBinaryTree(s_trees[i]));
+        result_roots.emplace_back(NewBinaryTree(res_trees[i]));
+    }
+
+    solution.Solution1(roots1[0]);
+    solution.Solution1(roots1[1]);
+
+    solution.Solution2(roots2[0]);
+    solution.Solution2(roots2[1]);
+
+    //solution.Solution3(roots3[0]);
+    solution.Solution3(roots3[1]);
+
+    EXPECT_TRUE(judge.Solution1(roots1[0], result_roots[0]));
+    EXPECT_TRUE(judge.Solution1(roots1[1], result_roots[1]));
+
+    EXPECT_TRUE(judge.Solution1(roots2[0], result_roots[0]));
+    EXPECT_TRUE(judge.Solution1(roots2[1], result_roots[1]));
+
+    //EXPECT_TRUE(judge.Solution1(roots3[0], result_roots[0]));
+    EXPECT_TRUE(judge.Solution1(roots3[1], result_roots[1]));
+    
+    for (int i = 0; i < s_trees.size(); ++i) {
+        DeleteBinaryTree(roots1[i]);
+        DeleteBinaryTree(roots2[i]);
+        DeleteBinaryTree(roots3[i]);
+        DeleteBinaryTree(result_roots[i]);
+    }
+}
+
 TEST(BinaryTreeTest, IsSameTreeTest) {
     IsSameTree solution;
 
