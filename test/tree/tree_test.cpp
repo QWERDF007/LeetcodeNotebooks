@@ -261,6 +261,32 @@ TEST(BinaryTreeTest, IsSameTreeTest) {
     }
 }
 
+TEST(BinaryTreeTest, ZigzagLevelOrderTest) {
+    ZigzagLevelOrder solution;
+    std::vector<std::vector<std::string>> s_trees{
+        { "3","9","20","null","null","15","7" },
+        { "1" },
+        {},
+    };
+    std::vector<TreeNode *> roots;
+    for (auto &s_tree : s_trees) {
+        roots.emplace_back(NewBinaryTree(s_tree));
+    }
+    std::vector<std::vector<std::vector<int>>> results{
+        { {3},{20,9},{15,7} },
+        { {1} },
+        {},
+    };
+
+    EXPECT_EQ(solution.Solution1(roots[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(roots[1]), results[1]);
+    EXPECT_EQ(solution.Solution1(roots[2]), results[2]);
+
+    for (TreeNode *root : roots) {
+        DeleteBinaryTree(root);
+    }
+}
+
 TEST(BinaryTreeTest, IsBalancedTest) {
     IsBalanced solution;
 
