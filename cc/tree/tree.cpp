@@ -1,5 +1,6 @@
 ﻿#include <stack>
 #include <queue>
+#include <deque>
 #include <random>
 #include <climits>
 #include <iostream>
@@ -20,6 +21,7 @@ void TreeSolution(SolutionsId pid) {
         case SolutionsId::GENERATE_TREES: solution = new GenerateTrees(); break;
         case SolutionsId::RECOVER_TREE: solution = new RecoverTree(); break;
         case SolutionsId::IS_SAME_TREE: solution = new IsSameTree(); break;
+        case SolutionsId::ZIGZAG_LEVEL_ORDER: solution = new ZigzagLevelOrder(); break;
         case SolutionsId::IS_BALANCED: solution = new IsBalanced(); break;
         case SolutionsId::MIN_DEPTH: solution = new MinDepth(); break;
         case SolutionsId::HAS_PATH_SUM: solution = new HasPathSum(); break;
@@ -791,7 +793,6 @@ void RecoverTree::Inorder(TreeNode *root, TreeNode *&pred, TreeNode *&x, TreeNod
 }
 
 
-
 std::string IsSameTree::Title() {
     return "100. 相同的树\n";
 }
@@ -891,6 +892,67 @@ bool IsSameTree::Solution2(TreeNode *p, TreeNode *q) {
     return true;
 }
 
+
+std::string ZigzagLevelOrder::Title() {
+    return "103. 二叉树的锯齿形层序遍历\n";
+}
+
+std::string ZigzagLevelOrder::Problem() {
+    return "给你二叉树的根节点 root，返回其节点值的锯齿形层序遍历。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。\n";
+}
+
+std::string ZigzagLevelOrder::Link() {
+    return "https://leetcode-cn.com/problems/binary-tree-zigzag-level-order-traversal/";
+}
+
+std::string ZigzagLevelOrder::Solution() {
+    return "双端队列，时间：O(n)，空间：O(n)。\n";
+}
+
+void ZigzagLevelOrder::Benchmark() {
+    ZigzagLevelOrder solution;
+    TreeNode *root = NewRandomBinaryTree(2000, -100, 100);
+
+    benchmark::RegisterBenchmark("BM_ZigzagLevelOrder_Deque", [](benchmark::State &state, ZigzagLevelOrder solution, TreeNode *root) {
+        for (auto _ : state) {
+            solution.Solution1(root);
+        }
+    }, solution, root);
+
+    //DeleteBinaryTree(root);
+}
+
+std::vector<std::vector<int>> ZigzagLevelOrder::Solution1(TreeNode *root) {
+    std::vector<std::vector<int>> ans;
+    if (root == nullptr) {
+        return ans;
+    }
+    std::queue<TreeNode *> q;
+    q.emplace(root);
+    bool isReversed = false;
+    while (!q.empty()) {
+        int n = q.size();
+        std::deque<int> layer;
+        for (int i = 0; i < n; ++i) {
+            TreeNode *cur = q.front();
+            q.pop();
+            if (isReversed) {
+                layer.emplace_front(cur->val);
+            } else {
+                layer.emplace_back(cur->val);
+            }
+            if (cur->left) {
+                q.emplace(cur->left);
+            }
+            if (cur->right) {
+                q.emplace(cur->right);
+            }
+        }
+        isReversed = !isReversed;
+        ans.emplace_back(std::vector<int>{ layer.begin(), layer.end() });
+    }
+    return ans;
+}
 
 
 std::string IsBalanced::Title() {
