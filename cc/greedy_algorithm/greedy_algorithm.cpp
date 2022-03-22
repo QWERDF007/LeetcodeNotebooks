@@ -13,6 +13,7 @@ void GreedyAlgorithmSolution(SolutionsId pid) {
     switch (pid) {
         case SolutionsId::FIND_CONTENT_CHILDREN: solution = new FindContentChildren(); break;
         case SolutionsId::PANCAKE_SORT: solution = new PancakeSort(); break;
+        case SolutionsId::WINNER_OF_GAME: solution = new WinnerOfGame(); break;
         default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
     }
     if (solution != nullptr) {
@@ -158,6 +159,65 @@ void PancakeSort::Pancake(std::vector<int> &arr, std::vector<int> &indices) {
         std::reverse(arr.begin(), arr.begin() + k);
     }
 }
+
+
+std::string WinnerOfGame::Title() {
+    return "2038. 如果相邻两个颜色均相同则删除当前颜色\n";
+}
+
+std::string WinnerOfGame::Problem() {
+    return
+        "总共有 n 个颜色片段排成一列，每个颜色片段要么是 'A' 要么是 'B'。给你一个长度为 n 的字符串 colors，其中 colors[i] 表示第 i 个颜色片段的颜色。\n"
+        "Alice 和 Bob 在玩一个游戏，他们轮流从这个字符串中删除颜色。Alice 先手。\n"
+        "- 如果一个颜色片段为 'A' 且相邻两个颜色都是颜色 'A'，那么 Alice 可以删除该颜色片段。Alice 不可以删除任何颜色 'B' 片段。\n"
+        "- 如果一个颜色片段为 'B' 且相邻两个颜色都是颜色 'B'，那么 Bob 可以删除该颜色片段。Bob 不可以删除任何颜色 'A' 片段。\n"
+        "- Alice 和 Bob 不能从字符串两端删除颜色片段。\n"
+        "- 如果其中一人无法继续操作，则该玩家输掉游戏且另一玩家获胜。\n"
+        "假设 Alice 和 Bob 都采用最优策略，如果 Alice 获胜，请返回 true，否则 Bob 获胜，返回 false。\n";
+}
+
+std::string WinnerOfGame::Link() {
+    return "https://leetcode-cn.com/problems/remove-colored-pieces-if-both-neighbors-are-the-same-color/";
+}
+
+std::string WinnerOfGame::Solution() {
+    return "贪心，时间：O(n)，空间：O(1)。\n";
+}
+
+void WinnerOfGame::Benchmark() {
+    WinnerOfGame solution;
+    int n = 1e5;
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis('A', 'B');
+    std::string colors;
+    for (int i = 0; i < n; ++i) {
+        colors += dis(gen);
+    }
+    benchmark::RegisterBenchmark("BM_WinnerOfGame_GreedyAlgorithm", [](benchmark::State &state, WinnerOfGame solution, std::string colors) {
+        for (auto _ : state) {
+            solution.Solution1(colors);
+        }
+    }, solution, colors);
+}
+
+bool WinnerOfGame::Solution1(std::string colors) {
+    int freq[2] = { 0 };
+    int cnt = 0;
+    char cur = 'C';
+    for (char ch : colors) {
+        if (ch != cur) {
+            cur = ch;
+            cnt = 1;
+        } else if (++cnt >= 3) {
+            ++freq[ch - 'A'];
+        }
+    }
+    return freq[0] > freq[1];
+}
+
+
+
 
 } // namespace greedy
 } // namespace leetcode
