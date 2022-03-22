@@ -58,5 +58,17 @@ TEST(GreedyAlgorithmTest, PancakeSortTest) {
     EXPECT_LE(pancake_times[1], 10 * arrs[1].size());
 }
 
+TEST(GreedyAlgorithmTest, WinnerOfGameTest) {
+    WinnerOfGame solution;
+    std::vector<std::string> colors{
+        "AAABABB",
+        "AA",
+        "ABBBBBBBAAA",
+    };
+    EXPECT_TRUE(solution.Solution1(colors[0]));
+    EXPECT_FALSE(solution.Solution1(colors[1]));
+    EXPECT_FALSE(solution.Solution1(colors[2]));
+}
+
 } // namespace test
 } // namespace leetcode
