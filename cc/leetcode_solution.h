@@ -149,6 +149,7 @@ enum class SolutionsId {
     SECOND_HIGHEST = 1796,
     MINIMUM_DIFFERENCE = 1984,
     MAXIMUM_DIFFERENCE = 2016,
+    WINNER_OF_GAME = 2038,
     PLATES_BETWEEN_CANDLES = 2055,
 };
 
@@ -223,6 +224,7 @@ const std::map<SolutionsId, ProblemType> kPidToType{
     { SolutionsId::SECOND_HIGHEST, ProblemType::STR },
     { SolutionsId::MINIMUM_DIFFERENCE, ProblemType::ARRAY },
     { SolutionsId::MAXIMUM_DIFFERENCE, ProblemType::ARRAY },
+    { SolutionsId::WINNER_OF_GAME, ProblemType::GREEDY_ALGORITHM },
     { SolutionsId::PLATES_BETWEEN_CANDLES, ProblemType::STR },
 };
 
