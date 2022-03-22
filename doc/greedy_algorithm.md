@@ -1,6 +1,6 @@
-| :tiger:                    | :cat:                      | :dog: | :dragon: |
-| -------------------------- | -------------------------- | ----- | -------- |
-| 455. [分发饼干](#分发饼干) | 969. [煎饼排序](#煎饼排序) |       |          |
+| :tiger:                    | :cat:                      | :dog:                                                        | :dragon: |
+| -------------------------- | -------------------------- | ------------------------------------------------------------ | -------- |
+| 455. [分发饼干](#分发饼干) | 969. [煎饼排序](#煎饼排序) | 2038. [如果相邻两个颜色均相同则删除当前颜色](#如果相邻两个颜色均相同则删除当前颜色) |          |
 
 
 
@@ -102,6 +102,51 @@ public:
             ans.emplace_back(n);
         }
         return ans;
+    }
+};
+```
+
+
+
+# 如果相邻两个颜色均相同则删除当前颜色
+
+- [链接](https://leetcode-cn.com/problems/remove-colored-pieces-if-both-neighbors-are-the-same-color/)
+- [code](../cc/greedy_algorithm/greedy_algorithm.h)
+
+> 总共有 n 个颜色片段排成一列，每个颜色片段要么是 'A' 要么是 'B'。给你一个长度为 n 的字符串 colors，其中 colors[i] 表示第 i 个颜色片段的颜色。Alice 和 Bob 在玩一个游戏，他们轮流从这个字符串中删除颜色。Alice 先手。
+>
+> - 如果一个颜色片段为 'A' 且相邻两个颜色都是颜色 'A'，那么 Alice 可以删除该颜色片段。Alice 不可以删除任何颜色 'B' 片段。
+> - 如果一个颜色片段为 'B' 且相邻两个颜色都是颜色 'B'，那么 Bob 可以删除该颜色片段。Bob 不可以删除任何颜色 'A' 片段。
+> - Alice 和 Bob 不能从字符串两端删除颜色片段。
+> - 如果其中一人无法继续操作，则该玩家输掉游戏且另一玩家获胜。
+>
+> 假设 Alice 和 Bob 都采用最优策略，如果 Alice 获胜，请返回 true，否则 Bob 获胜，返回 false。
+
+## 贪心算法
+
+根据题意，当 colors 中有一串长度为 LA 的 A 时，Alice 可以删除 LA - 2 个 A，而不能删除两边的 A。且 Bob 删除 B 的操作不会影响 Alice 删除 A 的操作。可以分别计算 Alice 和 Bob 的操作数，当 Alice 的操作数大于 Bob 时，返回 `true`，否则返回 `false`。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，n 是 colors 的长度，需要遍历 colors 来分别统计操作数
+- 空间复杂度：$O(1)$
+
+```c++
+class Solution {
+public:
+    bool winnerOfGame(string colors) {
+        int freq[2] = {0, 0};
+        char cur = 'C';
+        int cnt = 0;
+        for (char c : colors) {
+            if (c != cur) {
+                cur = c;
+                cnt = 1;
+            } else if (++cnt >= 3) {
+                ++freq[cur - 'A'];
+            }
+        }            
+        return freq[0] > freq[1];
     }
 };
 ```
