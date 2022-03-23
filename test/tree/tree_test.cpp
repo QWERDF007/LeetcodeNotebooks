@@ -901,5 +901,40 @@ TEST(BinaryTreeTest, FindSecondMinimumValueTest) {
     }
 }
 
+TEST(BinaryTreeTest, SearchBSTTest) {
+    SearchBST solution;
+    IsSameTree judge;
+    std::vector<std::vector<std::string>> s_trees{
+        { "4","2","7","1","3" },
+        { "4","2","7","1","3" },
+    };
+
+    std::vector<int> vals{
+        2, 5,
+    };
+
+    std::vector<std::vector<std::string>> results_trees{
+        { "2","1","3" },
+        {},
+    };
+
+    std::vector<TreeNode *> roots, results;
+    for (int i = 0; i < s_trees.size(); ++i) {
+        roots.emplace_back(NewBinaryTree(s_trees[i]));
+        results.emplace_back(NewBinaryTree(results_trees[i]));
+    }
+    
+    EXPECT_TRUE(judge.Solution1(solution.Solution1(roots[0], vals[0]), results[0]));
+    EXPECT_TRUE(judge.Solution1(solution.Solution1(roots[1], vals[1]), results[1]));
+
+    EXPECT_TRUE(judge.Solution1(solution.Solution2(roots[0], vals[0]), results[0]));
+    EXPECT_TRUE(judge.Solution1(solution.Solution2(roots[1], vals[1]), results[1]));
+
+    for (int i = 0; i < roots.size(); ++i) {
+        DeleteBinaryTree(roots[i]);
+        DeleteBinaryTree(results[i]);
+    }
+}
+
 } // namespace test
 } // namespace leetcode
