@@ -39,6 +39,7 @@ void TreeSolution(SolutionsId pid) {
         case SolutionsId::AVERAGE_OF_LEVELS: solution = new AverageOfLevels(); break;
         case SolutionsId::FIND_TARGET: solution = new FindTarget(); break;
         case SolutionsId::FIND_SECOND_MINIMUM_VALUE: solution = new FindSecondMinimumValue(); break;
+        case SolutionsId::SEARCH_BST: solution = new SearchBST(); break;
 		default: std::cerr << "no such pid: " << pid << std::endl; exit(EXIT_FAILURE); break;
 	}
 
@@ -2712,6 +2713,83 @@ int FindSecondMinimumValue::Solution3(TreeNode *root) {
     return ans > 0 ? ans : std::max(left, right);
 }
 
+
+std::string SearchBST::Title() {
+    return "700. 二叉搜索树中的搜索\n";
+}
+
+std::string SearchBST::Problem() {
+    return 
+        "给定二叉搜索树（BST）的根节点 root 和一个整数值 val。\n"
+        "你需要在 BST 中找到节点值等于 val 的节点。返回以该节点为根的子树。如果节点不存在，则返回 null。\n";
+}
+
+std::string SearchBST::Link() {
+    return "https://leetcode-cn.com/problems/search-in-a-binary-search-tree/";
+}
+
+std::string SearchBST::Solution() {
+    return "迭代，时间：O(n)，空间：O(1)。\n";
+}
+
+void SearchBST::Benchmark() {
+    SearchBST solution;
+    std::vector<std::string> s_tree{
+        "9980","9740","null","9680","null","9355","null","9309","null","8473","null","8397",
+        "null","8391","null","8326","null","8188","null","7999","null","7950","null","7846",
+        "null","7574","null","7569","null","7386","null","7188","null","7039","null","6723",
+        "null","6706","null","6623","null","6612","null","6480","null","6469","null","6454",
+        "null","6328","null","6286","null","6276","null","5989","null","5928","null","5924",
+        "null","5903","null","5837","null","5635","null","5596","null","5550","null","5495",
+        "null","5465","null","5109","null","4962","null","4687","null","4598","null","4570",
+        "null","4529","null","4426","null","4294","null","4261","null","4180","null","4113",
+        "null","4106","null","4042","null","4023","null","4020","null","3998","null","3864",
+        "null","3863","null","3841","null","3822","null","3700","null","3613","null","3599",
+        "null","3598","null","3561","null","3434","null","3365","null","3318","null","3209",
+        "null","3075","null","2999","null","2876","null","2857","null","2672","null","2538",
+        "null","2518","null","2338","null","2293","null","2265","null","2175","null","2165",
+        "null","1915","null","1579","null","1512","null","1499","null","1404","null","1337",
+        "null","1323","null","975","null","800","null","766","null","671","null","566","null",
+        "555","null","501","null","343","null","279","null","236","null","175","null","117",
+        "null","60","null","19","null","null","null",
+    };
+    int val = 1404;
+    TreeNode *root = NewBinaryTree(s_tree);
+
+    benchmark::RegisterBenchmark("BM_SearchBST_Recursion", [](benchmark::State &state, SearchBST solution, TreeNode *root, int val) {
+        for (auto _ : state) {
+            solution.Solution1(root, val);
+        }
+    }, solution, root, val);
+
+    benchmark::RegisterBenchmark("BM_SearchBST_Iteration", [](benchmark::State &state, SearchBST solution, TreeNode *root, int val) {
+        for (auto _ : state) {
+            solution.Solution2(root, val);
+        }
+    }, solution, root, val);
+    //DeleteBinaryTree(root);
+}
+
+TreeNode *SearchBST::Solution1(TreeNode *root, int val) {
+    if (root == nullptr) {
+        return nullptr;
+    } else if (root->val == val) {
+        return root;
+    } else {
+        return Solution1(val < root->val ? root->left : root->right, val);
+    }
+}
+
+TreeNode *SearchBST::Solution2(TreeNode *root, int val) {
+    TreeNode *cur = root;
+    while (cur) {
+        if (cur->val == val) {
+            return cur;
+        }
+        cur = val < cur->val ? cur->left : cur->right;
+    }
+    return nullptr;
+}
 
 } // namespace tree
 } // namespace leetcode

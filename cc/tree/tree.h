@@ -1270,5 +1270,42 @@ public:
     int Solution3(TreeNode *root);
 };
 
+/**
+ * @brief 700. 二叉搜索树中的搜索
+ * 
+ */
+class SearchBST : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 递归
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(h)
+     * @param root 二叉搜索树根节点
+     * @param val 目标值
+     * @return TreeNode* 以节点值为 val 的节点为跟的子树
+     */
+    TreeNode *Solution1(TreeNode *root, int val);
+
+    /**
+     * @brief 迭代
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param root 二叉搜索树根节点
+     * @param val 目标值
+     * @return TreeNode* 以节点值为 val 的节点为跟的子树
+     */
+    TreeNode *Solution2(TreeNode *root, int val);
+};
+
 } // namespace tree
 } // namespace leetcode
