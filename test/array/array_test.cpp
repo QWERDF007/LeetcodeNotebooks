@@ -333,6 +333,21 @@ TEST(ArrayTest, SingleNonDuplicateTest) {
     EXPECT_EQ(solution.Solution4(nums[2]), results[2]);
 }
 
+TEST(ArrayTest, ImageSmootherTest) {
+    ImageSmoother solution;
+    std::vector<std::vector<std::vector<int>>> imgs{
+        { {1,1,1},{1,0,1},{1,1,1} },
+        { {100,200,100},{200,50,200},{100,200,100} },
+    };
+    std::vector<std::vector<std::vector<int>>> results{
+        { {0,0,0},{0,0,0},{0,0,0} },
+        { {137,141,137},{141,138,141},{137,141,137} }
+    };
+
+    EXPECT_EQ(solution.Solution1(imgs[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(imgs[1]), results[1]);
+}
+
 TEST(ArrayTest, IsOneBitCharacterTest) {
     IsOneBitCharacter solution;
 
