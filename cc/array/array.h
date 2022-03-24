@@ -16,6 +16,10 @@ namespace array{
 void ArraySolution(SolutionsId pid);
 
 
+/**
+ * @brief 1.两数之和
+ * 
+ */
 class TwoSum : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -49,6 +53,10 @@ public:
     std::vector<int> Solution2(std::vector<int> &nums, int target);
 };
 
+/**
+ * @brief 26. 删除有序数组中的重复项
+ * 
+ */
 class RemoveDuplicates : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -81,6 +89,10 @@ public:
 
 };
 
+/**
+ * @brief 163. 缺失的区间
+ * 
+ */
 class FindMissingRanges : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -105,6 +117,10 @@ public:
     std::vector<std::string> Solution1(std::vector<int> &nums, int lower, int upper);
 };
 
+/**
+ * @brief 268. 丢失的数字
+ * 
+ */
 class MissingNumber : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -155,6 +171,10 @@ public:
 
 };
 
+/**
+ * @brief 303. 区域和检索 - 数组不可变
+ * 
+ */
 class NumArray : public LeetcodeSolution {
 public:
     NumArray() {};
@@ -194,6 +214,10 @@ public:
     std::vector<int> nums_, sums_;
 };
 
+/**
+ * @brief 349. 两个数组的交集
+ * 
+ */
 class Intersection : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -227,6 +251,10 @@ public:
     std::vector<int> Solution2(std::vector<int> &nums1, std::vector<int> &nums2);
 };
 
+/**
+ * @brief 350. 两个数组的交集 II
+ * 
+ */
 class Intersect : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -260,6 +288,10 @@ public:
     std::vector<int> Solution2(std::vector<int> &nums1, std::vector<int> &nums2);
 };
 
+/**
+ * @brief 414. 第三大的数
+ * 
+ */
 class ThirdMax : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -300,6 +332,10 @@ public:
     int Solution3(std::vector<int> &nums);
 };
 
+/**
+ * @brief 448. 找到所有数组中消失的数字
+ * 
+ */
 class FindDisappearedNumbers : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -340,6 +376,10 @@ public:
     std::vector<int> Solution3(std::vector<int> &nums);
 };
 
+/**
+ * @brief 453. 最小操作次数使数组元素相等
+ * 
+ */
 class MinMoves : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -362,6 +402,10 @@ public:
     int Solution1(std::vector<int> &nums);
 };
 
+/**
+ * @brief 540. 有序数组中的单一元素
+ * 
+ */
 class SingleNonDuplicate : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -411,6 +455,36 @@ public:
     int Solution4(std::vector<int> &nums);
 };
 
+/**
+ * @brief 661. 图片平滑器
+ * 
+ */
+class ImageSmoother : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 模拟遍历
+     * 时间复杂度：O(mnC^2)
+     * 空间复杂度：O(1)
+     * @param img 
+     * @return std::vector<std::vector<int>> 
+     */
+    std::vector<std::vector<int>> Solution1(std::vector<std::vector<int>> &img);
+};
+
+/**
+ * @brief 717. 1比特与2比特字符
+ * 
+ */
 class IsOneBitCharacter : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -444,6 +518,10 @@ public:
     bool Solution2(std::vector<int> &bits);
 };
 
+/**
+ * @brief 1380. 矩阵中的幸运数
+ * 
+ */
 class LuckyNumbers : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -475,6 +553,10 @@ public:
     std::vector<int> Solution2(std::vector<std::vector<int>> &matrix);
 };
 
+/**
+ * @brief 1706. 球会落何处
+ * 
+ */
 class FindBall : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -497,6 +579,10 @@ public:
     std::vector<int> Solution1(std::vector<std::vector<int>> &grid);
 };
 
+/**
+ * @brief 1984. 学生分数的最小差值
+ * 
+ */
 class MinimumDifference : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -520,6 +606,10 @@ public:
     int Solution1(std::vector<int> &nums, int k);
 };
 
+/**
+ * @brief 2016. 增量元素之间的最大差值
+ * 
+ */
 class MaximumDifference : public LeetcodeSolution {
 public:
     std::string Title() override;

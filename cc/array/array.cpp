@@ -31,6 +31,7 @@ void ArraySolution(SolutionsId pid) {
         case SolutionsId::FIND_DISAPPEARED_NUMBERS: solution = new FindDisappearedNumbers(); break;
         case SolutionsId::MIN_MOVES: solution = new MinMoves(); break;
         case SolutionsId::SINGLE_NON_DUPLICATE: solution = new SingleNonDuplicate(); break;
+        case SolutionsId::IMAGE_SMOOTHER: solution = new ImageSmoother(); break;
         case SolutionsId::IS_ONE_BIT_CHARACTER: solution = new IsOneBitCharacter(); break;
         case SolutionsId::LUCKY_NUMBERS: solution = new LuckyNumbers(); break;
         case SolutionsId::FIND_BALL: solution = new FindBall(); break;
@@ -953,6 +954,65 @@ int SingleNonDuplicate::Solution4(std::vector<int> &nums) {
 }
 
 
+std::string ImageSmoother::Title() {
+    return "661. 图片平滑器\n";
+}
+
+std::string ImageSmoother::Problem() {
+    return 
+        "图像平滑器是大小为 3 x 3 的过滤器，用于对图像的每个单元格平滑处理，平滑处理后单元格的值为该单元格的平均灰度。\n"
+        "每个单元格的平均灰度定义为：该单元格自身及其周围的 8 个单元格的平均值，结果需向下取整。（即，需要计算蓝色平滑器中 9 个单元格的平均值）。\n"
+        "如果一个单元格周围存在单元格缺失的情况，则计算平均灰度时不考虑缺失的单元格（即，需要计算红色平滑器中 4 个单元格的平均值）。\n";
+}
+
+std::string ImageSmoother::Link() {
+    return "https://leetcode-cn.com/problems/image-smoother/";
+}
+
+std::string ImageSmoother::Solution() {
+    return "模拟遍历，时间：O(mnC^2)，空间：O(1)。C 是滤波器大小，此处为 3。\n";
+}
+
+void ImageSmoother::Benchmark() {
+    ImageSmoother solution;
+    int n = 200, m = 200;
+    std::vector<std::vector<int>> img(m, std::vector<int>(n, 0));
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, 255);
+    for (int r = 0; r < m; ++r) {
+        for (int c = 0; c < n; ++c) {
+            img[r][c] = dis(gen);
+        }
+    }
+    benchmark::RegisterBenchmark("BM_ImageSmoother_Iteration", [](benchmark::State &state, ImageSmoother solution, std::vector<std::vector<int>> img) {
+        for (auto _ : state) {
+            solution.Solution1(img);
+        }
+    }, solution, img);
+}
+
+std::vector<std::vector<int>> ImageSmoother::Solution1(std::vector<std::vector<int>> &img) {
+    int m = img.size();
+    int n = m > 0 ? img[0].size() : 0;
+    std::vector<std::vector<int>> ans(m, std::vector<int>(n,0));
+    for (int r = 0; r < m; ++r) {
+        for (int c = 0; c < n; ++c) {
+            int cnt = 0, sum = 0;
+            for (int y = r - 1; y <= r + 1; ++y) {
+                for (int x = c - 1; x <= c + 1; ++x) {
+                    if (x >= 0 && x < n && y >= 0 && y < m) {
+                        sum += img[y][x];
+                        ++cnt;
+                    }
+                }
+            }
+            ans[r][c] = cnt > 0 ? sum / cnt : 0;
+        }
+    }
+    return ans;
+}
+
 std::string IsOneBitCharacter::Title() {
     return "717. 1比特与2比特字符\n";
 }
@@ -1292,6 +1352,7 @@ int MaximumDifference::Solution1(std::vector<int> &nums) {
     }
     return ans;
 }
+
 
 } // namespace array
 } // namespace leetcode
