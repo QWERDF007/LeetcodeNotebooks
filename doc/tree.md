@@ -2495,3 +2495,44 @@ public:
 
 - 时间复杂度：$O(n)$，最差情况下需要遍历全部节点
 - 空间复杂度：$O(h)$，h 为 BST 高度，最差情况下递归空间 $O(n)$
+
+```c++
+class Solution {
+public:
+    TreeNode* searchBST(TreeNode* root, int val) {
+        if (root == nullptr) {
+            return nullptr;
+        } else if (root->val == val) {
+            return root;
+        } else {
+            return searchBST(val < root->val ? root->left : root->right, val);
+        }
+    }
+};
+```
+
+## 迭代
+
+可以通过迭代来遍历 BST，若当前节点值等于 val，则返回当前节点；若当前节点值小于 val，则将当前节点指向其右子节点；若当前节点值大于 val，则将当前节点指向其左子节点。
+
+**复杂度分析：**
+
+- 时间复杂度：$O(n)$，最差情况下需要遍历全部节点
+- 空间复杂度：$O(1)$
+
+```c++
+class Solution {
+public:
+    TreeNode* searchBST(TreeNode* root, int val) {
+        TreeNode *cur = root;
+        while (cur) {
+            if (cur->val == val) {
+                return cur;
+            }
+            cur = val < cur->val ? cur->left : cur->right;
+        }
+        return nullptr;
+    }
+};
+```
+
