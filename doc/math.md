@@ -1,7 +1,9 @@
-| :tiger:                    | :cat:                      | :dog:                       | :dragon:               |
-| -------------------------- | -------------------------- | --------------------------- | ---------------------- |
-| 7. [整数反转](#整数反转)   | 9. [回文数](#回文数)       | 69. [x的平方根](#x的平方根) | 202. [快乐数](#快乐数) |
-| 258. [各位相加](#各位相加) | 504. [七进制数](#七进制数) | 537. [复数乘法](#复数乘法)  |                        |
+| :tiger:                    | :cat:                          | :dog:                       | :dragon:               |
+| -------------------------- | ------------------------------ | --------------------------- | ---------------------- |
+| 7. [整数反转](#整数反转)   | 9. [回文数](#回文数)           | 69. [x的平方根](#x的平方根) |                        |
+|                            | 172. [阶乘后的零](#阶乘后的零) |                             | 202. [快乐数](#快乐数) |
+| 258. [各位相加](#各位相加) | 504. [七进制数](#七进制数)     | 537. [复数乘法](#复数乘法)  |                        |
+|                            |                                |                             |                        |
 
 
 
@@ -269,6 +271,56 @@ public:
     }
 };
 ```
+
+
+
+# 阶乘后的零
+
+- [链接](https://leetcode-cn.com/problems/factorial-trailing-zeroes/)
+- [code](../cc/math/leetcode_math.h)
+
+> 给定一个整数 n，返回 n! 结果中尾随零的数量。
+>
+> 提示 n! = n * (n - 1) * (n - 2) * ... * 3 * 2 * 1
+
+## 数学
+
+见[题解](https://leetcode-cn.com/problems/factorial-trailing-zeroes/solution/jie-cheng-hou-de-ling-by-leetcode-soluti-1egk/)，求 n！中因子 10 的个数，而 10 = 2 x 5，因此转换为求 n！中质因子 2 的个数和质因子 5 的个数的较小值。又可以转换为求 [1,n] 中所有 5 的倍数。
+
+```c++
+class Solution {
+public:
+    int trailingZeroes(int n) {
+        int ans = 0;
+        for (int i = 5; i <= n; i += 5) {
+            for (int x = i; x % 5 == 0; x /= 5) {
+                ++ans;
+            }
+        }
+        return ans;
+    }
+};
+```
+
+## 数学 (优化)
+
+见[题解](https://leetcode-cn.com/problems/factorial-trailing-zeroes/solution/jie-cheng-hou-de-ling-by-leetcode-soluti-1egk/)
+
+```c++
+class Solution {
+public:
+    int trailingZeroes(int n) {
+        int ans = 0;
+        while (n) {
+            n /= 5;
+            ans += n;
+        }
+        return ans;
+    }
+};
+```
+
+
 
 # 快乐数
 
