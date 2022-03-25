@@ -17,6 +17,7 @@ void MathSolution(SolutionsId pid) {
 	switch (pid) {
         case SolutionsId::IS_PALINDROME: solution = new IsPalindrome(); break;
         case SolutionsId::MY_SQRT: solution = new MySqrt(); break;
+        case SolutionsId::TRAILING_ZEROS: solution = new TrailingZeros(); break;
         case SolutionsId::IS_HAPPY: solution = new IsHappy(); break;
         case SolutionsId::ADD_DIGITS: solution = new AddDigits(); break;
         case SolutionsId::CONVERT_TO_BASE_7: solution = new ConvertToBase7(); break;
@@ -238,6 +239,60 @@ int MySqrt::Solution4(int x) {
     }
     int k = exp(0.5 * log(x));
     return (long long)(k + 1) * (k + 1) <= x ? k + 1 : k;
+}
+
+std::string TrailingZeros::Title() {
+    return "172. 阶乘后的零\n";
+}
+
+std::string TrailingZeros::Problem() {
+    return 
+        "给定一个整数 n，返回 n! 结果中尾随零的数量。\n"
+        "提示 n! = n * (n - 1) * (n - 2) * ... * 3 * 2 * 1\n";
+}
+
+std::string TrailingZeros::Link() {
+    return "https://leetcode-cn.com/problems/factorial-trailing-zeroes/";
+}
+
+std::string TrailingZeros::Solution() {
+    return "数学（优化），时间：O(logn)，空间：O(1)。\n";
+}
+
+void TrailingZeros::Benchmark() {
+    TrailingZeros solution;
+    int n = 1e4;
+
+    benchmark::RegisterBenchmark("BM_TrailingZeros_Math", [](benchmark::State &state, TrailingZeros solution, int n) {
+        for (auto _ : state) {
+            solution.Solution1(n);
+        }
+    }, solution, n);
+
+    benchmark::RegisterBenchmark("BM_TrailingZeros_MathFast", [](benchmark::State &state, TrailingZeros solution, int n) {
+        for (auto _ : state) {
+            solution.Solution2(n);
+        }
+    }, solution, n);
+}
+
+int TrailingZeros::Solution1(int n) {
+    int ans = 0;
+    for (int i = 5; i <= n; i += 5) {
+        for (int x = i; x % 5 == 0; x /= 5) {
+            ++ans;
+        }
+    }
+    return ans;
+}
+
+int TrailingZeros::Solution2(int n) {
+    int ans = 0;
+    while (n) {
+        n /= 5;
+        ans += n;
+    }
+    return ans;
 }
 
 std::string IsHappy::Title() {
@@ -521,6 +576,8 @@ std::string ComplexNumberMultiply::Solution2(std::string num1, std::string num2)
     int imag2 = std::stoi(complex2[1]);
     return std::to_string(real1 * real2 - imag1 * imag2) + "+" + std::to_string(real1 * imag2 + real2 * imag1) + "i";
 }
+
+
 
 } // namespace math
 } // namespace leetcode

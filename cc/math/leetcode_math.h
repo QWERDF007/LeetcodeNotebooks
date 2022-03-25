@@ -8,6 +8,10 @@ namespace math {
 
 void MathSolution(SolutionsId pid);
 
+/**
+ * @brief "9. 回文数
+ * 
+ */
 class IsPalindrome : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -61,6 +65,10 @@ public:
     bool Solution4(int x);
 };
 
+/**
+ * @brief 69. x 的平方根
+ * 
+ */
 class MySqrt : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -110,6 +118,45 @@ public:
     int Solution4(int x);
 };
 
+/**
+ * @brief 172. 阶乘后的零
+ * 
+ */
+class TrailingZeros : public LeetcodeSolution {
+public:
+    std::string Title() override;
+
+    std::string Problem() override;
+
+    std::string Link() override;
+
+    std::string Solution() override;
+
+    void Benchmark() override;
+
+    /**
+     * @brief 数学
+     * 时间复杂度：O(n)
+     * 空间复杂度：O(1)
+     * @param n 
+     * @return int 阶乘结果中尾随零的数量
+     */
+    int Solution1(int n);
+
+    /**
+     * @brief 数学 (优化)
+     * 时间复杂度：O(logn)
+     * 空间复杂度：O(1)
+     * @param n 
+     * @return int 阶乘结果中尾随零的数量
+     */
+    int Solution2(int n);
+};
+
+/**
+ * @brief 202. 快乐数
+ * 
+ */
 class IsHappy : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -158,7 +205,10 @@ private:
     std::unordered_set<int> cycle_nums_{ 4, 16, 37, 58, 89, 145, 42, 20 };
 };
 
-
+/**
+ * @brief 258. 各位相加
+ * 
+ */
 class AddDigits : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -199,6 +249,10 @@ public:
     int Solution3(int num);
 };
 
+/**
+ * @brief 504. 七进制数
+ * 
+ */
 class ConvertToBase7 : public LeetcodeSolution {
 public:
     std::string Title() override;
@@ -221,7 +275,10 @@ public:
     std::string Solution1(int num);
 };
 
-
+/**
+ * @brief 537. 复数乘法
+ * 
+ */
 class ComplexNumberMultiply : public LeetcodeSolution {
 public:
     std::string Title() override;
