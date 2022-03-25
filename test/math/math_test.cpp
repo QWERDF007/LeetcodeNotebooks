@@ -55,6 +55,27 @@ TEST(MathTest, MySqrtTest) {
     EXPECT_EQ(solution.Solution4(123336), 351);
 }
 
+TEST(MathTest, TrailingZerosTest) {
+    TrailingZeros solution;
+    std::vector<int> n{
+        3, 5, 0, 30,
+    };
+
+    std::vector<int> results{
+        0, 1, 0, 7,
+    };
+
+    EXPECT_EQ(solution.Solution1(n[0]), results[0]);
+    EXPECT_EQ(solution.Solution1(n[1]), results[1]);
+    EXPECT_EQ(solution.Solution1(n[2]), results[2]);
+    EXPECT_EQ(solution.Solution1(n[3]), results[3]);
+
+    EXPECT_EQ(solution.Solution2(n[0]), results[0]);
+    EXPECT_EQ(solution.Solution2(n[1]), results[1]);
+    EXPECT_EQ(solution.Solution2(n[2]), results[2]);
+    EXPECT_EQ(solution.Solution2(n[3]), results[3]);
+}
+
 TEST(MathTest, IsHappyTest) {
     IsHappy solution;
 
